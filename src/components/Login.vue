@@ -33,7 +33,9 @@ export default {
   },
   methods: {
     Login: function(){
-        
+        axios.get('/teste').then((a) => {
+            console.log(a)
+        });
     }
   }
 }
