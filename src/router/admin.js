@@ -2,8 +2,9 @@ import Dashboard from '@/components/Admin/Dashboard'
 
 var routes = [
     {
-        path: '',
-        component: Dashboard
+        path: 'dashboard',
+        component: Dashboard,
+        name: 'Dashboard'
     }
 ];
 
