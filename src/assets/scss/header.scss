@@ -1,6 +1,7 @@
 .gpp-header{
     width: 100%;
     height: auto;
+    float: left;
     background-color: $primary;
     border-bottom: 3px solid $secondary;
 
@@ -9,7 +10,7 @@
         list-style-type: none;
         li{
             padding: .5rem 0;
-            display-inline: block;
+            display: inline-block;
             a{
                 color: $white;
                 padding: .5rem;
