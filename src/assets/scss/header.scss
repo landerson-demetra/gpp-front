@@ -1,6 +1,6 @@
 .gpp-header{
     width: 100%;
-    height: auto;
+    min-height: 30px;
     float: left;
     background-color: $primary;
     border-bottom: 3px solid $secondary;
@@ -20,6 +20,24 @@
                     background-color: $secondary;
                 }
             }
+        }
+    }
+}
+
+.gpp-admin-header{
+    width: 100%;
+    float: left;
+
+    .header-details{
+        width: 100%;
+        float: left;
+        padding: .3rem;
+        color: $white;
+        border-bottom: 2px solid $secondary;
+
+        p{
+            margin: 0;
+            padding: 0;
         }
     }
 }

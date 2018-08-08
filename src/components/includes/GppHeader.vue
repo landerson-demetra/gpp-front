@@ -1,0 +1,58 @@
+<template>
+    <div class="gpp-admin-header">
+        <div class="header-details bg-primary">
+            <div class="container">
+                <p class="text-left">Olá, {{ profile.name }}! - Ultimo acesso (01/08 ás 15:50) | <router-link tag="a" :to="{ name: 'logout' }" class="badge badge-primary text-white p-1"><i class="fas fa-sign-out-alt"></i> Logout</router-link></p>
+            </div>
+        </div>
+        <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-lg">
+            <div class="container">
+                <a class="navbar-brand" href="#"><img width="100" class="img-fluid" src="../../assets/logo.png" alt="PDG"></a>
+                <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav mr-auto">
+                        <li class="nav-item active">
+                            <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Gestão de Patrimônios</a>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a href="#" class="nav-link dropdown-toggle" id="navbarDropdownCadastro" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Cadastro</a>
+                            <div class="dropdown-menu" aria-labelledby="navbarDropdownCadastro">
+                                <a href="#" class="dropdown-item"><i class="fas fa-handshake"></i> Fornecedores</a>
+                                <a href="#" class="dropdown-item"><i class="fas fa-sync"></i> Vinculação PEP</a>
+                                <a href="#" class="dropdown-item"><i class="fas fa-building"></i> Dados da unidade</a>
+                            </div>
+                        </li>
+                        <li class="nav-item dropdown">
+                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            Importações
+                            </a>
+                            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
+                                <a class="dropdown-item" href="#"><i class="fas fa-file-excel"></i> Importar Excel</a>
+                            </div>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link" href="#">Permissões</a>
+                        </li>
+                    </ul>
+                    <!-- <form class="form-inline my-2 my-lg-0">
+                        <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+                        <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+                    </form> -->
+                </div>
+          </div>
+        </nav>
+    </div>
+</template>
+
+<script>
+export default {
+    name: 'GppHeader',
+    props: ['profile']
+}
+</script>

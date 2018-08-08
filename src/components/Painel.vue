@@ -1,35 +1,45 @@
 <template>
-    <div id="painel" class="wow fadeIn">
-        <div class="gpp-header">
-            <div class="container">
-                <div class="row">
-                    <ul class="col-md-9">
-                        <li><a href="#">Item 1</a></li>
-                        <li><a href="#">Item 2</a></li>
-                        <li><a href="#">Item 3</a></li>
-                        <li><a href="#">Item 4</a></li>
-                        <li><a href="#">Item 5</a></li>
-                        <li><a href="#">Item 6</a></li>
-                    </ul>
-
-                    <ul class="col-md-3">
-                        <li><a href="#"><i class="fas fa-user"></i>  Landerson</a></li>
-                    </ul>
-                </div>
-            </div>
-        </div>
+    <div id="painel" class="wow fadeIn" data-wow-duration="2s">
+        <GppHeader :profile="this.profile"></GppHeader>
 
         <div class="clearfix"></div>
 
-        <div class="mt-5 container">
-           <div class="row"><h3>Dashboard</h3></div>
+        <!-- Body -->
+        <div class="container mt-5">
+            <div class="card shadow border-0">
+                <div class="card-header border-0 bg-white">
+                    <h3 class="mt-0">Gestão de Patrimônios</h3>
+                </div>
+                <div class="card-body">
+                    <form action="#noaction">
+                        <div class="row">
+                            <div class="col-md-3">
+                                <label for="PEP">PEP</label>
+                                <input id="PEP" type="text" class="form-control" placeholder="R.XXXX.99.99.99.9999">
+                            </div>
+                            <div class="col-md-2">
+                                <label for="Contribuinte">Contribuinte</label>
+                                <input id="Contribuinte" type="text" class="form-control" placeholder="NºContribuinte" disabled>
+                            </div>
+                            <div class="col-md-1">
+                                <label for="Vendido">Vendido</label>
+                                <input id="Vendido" type="text" class="form-control" placeholder="Não" disabled>
+                            </div>
+                        </div>
 
-            <div class="row mt-3">
-                <div class="card text-white bg-primary mb-3" style="max-width: 18rem;">
-                    <div class="card-header">Header</div>
-                    <div class="card-body">
-                        <h5 class="card-title">58 Patrimônios</h5>
-                        <p class="card-text">Patrimônios cadastrados nas ultimas 3 semanas</p>
+                    </form>
+                </div>
+                <div class="card-footer bg-primary text-white border-0 text-right">
+                    <div class="btn-group" role="group" aria-label="Basic example">
+                        <button type="button" class="btn btn-primary"><i class="fas fa-print"></i> Imprimir</button>
+                        <div class="dropup">
+                            <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown"><i class="fas fa-file-export"></i> Exportar</button>
+                            <div class="dropdown-menu">
+                                <a class="dropdown-item" href="#"><i class="fas fa-file-pdf"></i> PDF</a>
+                                <a class="dropdown-item" href="#"><i class="fas fa-file-excel"></i> CSV</a>
+                                <a class="dropdown-item" href="#"><i class="fas fa-file-excel"></i> XLSX</a>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -38,8 +48,14 @@
 </template>
 
 <script>
+import GppHeader from './includes/GppHeader'
+
+import { mapState } from 'vuex'
+
 export default {
-  name: 'Painel'
+  name: 'Painel',
+  components: { GppHeader },
+  computed: mapState({profile: state => state.user.profile})
 }
 </script>
 

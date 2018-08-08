@@ -1,6 +1,9 @@
 <template>
   <div id="login" class="wow fadeIn">
     <div class="gpp-header"></div>
+
+    <div class="clearfix"></div>
+
     <div class="container">
         <div class="login-container">
             <div class="row login">
@@ -31,14 +34,16 @@
 </template>
 
 <script>
+import { AUTH_REQUEST } from '../store/actions/auth'
+
 export default {
   name: 'Login',
   data() {
     return {
         authenticating: false,
         errors: [],
-        email: '',
-        password: ''
+        email: 'clandokca@gmail.com',
+        password: '123'
     }
   },
   methods: {
@@ -60,18 +65,14 @@ export default {
         }
     },
     Login: function() {
-        var self = this
-
         this.authenticating = true
 
-        this.$http.post('oauth/token', this.makeauth).then((response) => {
-            localStorage.setItem('gpp_token', response.data.access_token)
-            self.$router.push({name: 'Dashboard'})
-            self.$forceUpdate()
-        }, () => {
+        this.$store.dispatch(AUTH_REQUEST, this.makeauth).then(() => {
+            this.$router.push({ name: 'painel' })
+        }).catch(() => {
             this.authenticating = false
             this.errors.push('E-mail ou senha incorreto(s)')
-        });
+        })
     }
   },
   computed: {

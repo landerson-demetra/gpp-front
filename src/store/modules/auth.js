@@ -1,10 +1,9 @@
 /* eslint-disable promise/param-names */
 import { AUTH_REQUEST, AUTH_ERROR, AUTH_SUCCESS, AUTH_LOGOUT } from '../actions/auth'
+import http from '../../modules/http'
 import { USER_REQUEST } from '../actions/user'
 
-import apiCall from 'utils/api'
-
-const state = { token: localStorage.getItem('user-token') || '', status: '', hasLoadedOnce: false }
+const state = { token: localStorage.getItem('gpp__token') || '', status: '', hasLoadedOnce: false }
 
 const getters = {
   isAuthenticated: state => !!state.token,
@@ -15,19 +14,17 @@ const actions = {
   [AUTH_REQUEST]: ({commit, dispatch}, user) => {
     return new Promise((resolve, reject) => {
       commit(AUTH_REQUEST)
-      apiCall({url: 'auth', data: user, method: 'POST'})
+      http.post('oauth/token', user)
       .then(resp => {
-        localStorage.setItem('user-token', resp.token)
-        // Here set the header of your ajax library to the token value.
-        // example with axios
-        // axios.defaults.headers.common['Authorization'] = resp.token
+        localStorage.setItem('gpp__token', resp.data.access_token)
+        http.defaults.headers.common['Authorization'] = 'Bearer ' + localStorage.getItem('gpp__token')
         commit(AUTH_SUCCESS, resp)
         dispatch(USER_REQUEST)
         resolve(resp)
       })
       .catch(err => {
         commit(AUTH_ERROR, err)
-        localStorage.removeItem('user-token')
+        localStorage.removeItem('gpp__token')
         reject(err)
       })
     })
@@ -35,7 +32,8 @@ const actions = {
   [AUTH_LOGOUT]: ({commit, dispatch}) => {
     return new Promise((resolve, reject) => {
       commit(AUTH_LOGOUT)
-      localStorage.removeItem('user-token')
+      localStorage.removeItem('gpp__token')
+      delete http.defaults.headers.common['Authorization']
       resolve()
     })
   }
@@ -47,7 +45,7 @@ const mutations = {
   },
   [AUTH_SUCCESS]: (state, resp) => {
     state.status = 'success'
-    state.token = resp.token
+    state.token = resp.data.access_token
     state.hasLoadedOnce = true
   },
   [AUTH_ERROR]: (state) => {
