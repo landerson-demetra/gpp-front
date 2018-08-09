@@ -9,7 +9,7 @@ const http = axios.create({
 http.defaults.headers.common['Authorization'] = 'Bearer ' + localStorage.getItem('gpp__token')
 
 http.interceptors.response.use(undefined, (err) => {
-  return new Promise(function (resolve, reject) {
+  return new Promise((resolve, reject) => {
     if (err.status === 401 && err.config && !err.config.__isRetryRequest) {
       this.$store.dispatch(AUTH_LOGOUT)
     }
