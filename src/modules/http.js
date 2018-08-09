@@ -22,7 +22,7 @@ http.interceptors.response.use(undefined, (err) => {
       Bus.$emit('show-errors', err.response.data.messages)
     }
 
-    throw err;
+    throw err
   });
 });
 

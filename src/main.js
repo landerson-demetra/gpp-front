@@ -25,18 +25,10 @@ Vue.use(Notifications)
 Vue.component('v-select', vSelect)
 
 new Vue({
-    router,
-    store,
-    mounted(){
-this.$notify({
-  group: 'normal',
-  title: 'Important message',
-  text: 'Hello user! This is a notification!',
-  position: ['bottom']
-});
-
-
-        new WOW.WOW().init()
-    },
-    render: h => h(App)
+  router,
+  store,
+  mounted(){
+    new WOW.WOW().init()
+  },
+  render: h => h(App)
 }).$mount('#app')

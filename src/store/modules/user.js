@@ -18,7 +18,6 @@ const actions = {
         commit(USER_SUCCESS, resp)
       })
       .catch(() => {
-        console.log('catch user req.')
         commit(USER_ERROR)
         dispatch(AUTH_LOGOUT)
       })
