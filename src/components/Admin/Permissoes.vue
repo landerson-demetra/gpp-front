@@ -76,21 +76,21 @@
                                             <td><switches v-model="enabled" theme="bootstrap" color="primary"></switches></td>
                                             <td><switches v-model="enabled" theme="bootstrap" color="primary"></switches></td>
                                             <td><switches v-model="enabled" theme="bootstrap" color="primary"></switches></td>
-                                            <td><switches v-model="enabled" theme="bootstrap" color="primary"></switches></td>
+                                            <td><switches v-model="disabled" theme="bootstrap" color="primary"></switches></td>
                                         </tr>
                                         <tr>
                                             <td scope="col"><b>Excels</b></td>
                                             <td><switches v-model="enabled" theme="bootstrap" color="primary"></switches></td>
                                             <td><switches v-model="enabled" theme="bootstrap" color="primary"></switches></td>
                                             <td><switches v-model="enabled" theme="bootstrap" color="primary"></switches></td>
-                                            <td><switches v-model="enabled" theme="bootstrap" color="primary"></switches></td>
+                                            <td><switches v-model="disabled" theme="bootstrap" color="primary"></switches></td>
                                         </tr>
                                         <tr>
                                             <td scope="col"><b>Patrimonios</b></td>
                                             <td><switches v-model="enabled" theme="bootstrap" color="primary"></switches></td>
                                             <td><switches v-model="enabled" theme="bootstrap" color="primary"></switches></td>
                                             <td><switches v-model="enabled" theme="bootstrap" color="primary"></switches></td>
-                                            <td><switches v-model="enabled" theme="bootstrap" color="primary"></switches></td>
+                                            <td><switches v-model="disabled" theme="bootstrap" color="primary"></switches></td>
                                         </tr>
                                     </tbody>
                                 </table>

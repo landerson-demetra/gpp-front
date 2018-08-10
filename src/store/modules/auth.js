@@ -5,7 +5,7 @@ import { USER_REQUEST } from '../actions/user'
 import http from '../../modules/http'
 import router from '../../router'
 
-const state = { token: localStorage.getItem('gpp__token') || '', status: '', hasLoadedOnce: false }
+const state = {token: localStorage.getItem('gpp__token') || '', status: '', hasLoadedOnce: false}
 
 const getters = {
   isAuthenticated: state => !!state.token,

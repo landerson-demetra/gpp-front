@@ -3,7 +3,7 @@ import Vue from 'vue'
 import http from '../../modules/http'
 import { AUTH_LOGOUT } from '../actions/auth'
 
-const state = { status: '', profile: {} }
+const state = {status: '', profile: {}}
 
 const getters = {
   getProfile: state => state.profile,
