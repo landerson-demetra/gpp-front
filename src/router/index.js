@@ -4,9 +4,9 @@ import VueRouter from 'vue-router'
 import store from '../store'
 import { AUTH_LOGOUT } from '../store/actions/auth'
 
-import Login from '@/components/Login.vue'
-import Painel from '@/components/Painel.vue'
-import NotFound from '@/components/NotFound.vue'
+import Login from '@/components/Login'
+import Painel from '@/components/Painel'
+import NotFound from '@/components/NotFound'
 
 import AdminRoutes from './admin'
 

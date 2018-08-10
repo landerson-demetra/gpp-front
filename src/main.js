@@ -3,8 +3,7 @@ import Vuex from 'vuex'
 import store from './store'
 import router from './router/index'
 import http from './modules/http'
-import App from './App.vue'
-
+import App from './App'
 
 /* [ Components ] */
 import 'bootstrap'
