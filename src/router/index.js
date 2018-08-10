@@ -29,9 +29,7 @@ const ifAuthenticated = (to, from, next) => {
 }
 
 const Logout = (to, from, next) => {
-  store.dispatch(AUTH_LOGOUT).then(() => {
-    next({ name: 'login' })
-  })
+  store.dispatch(AUTH_LOGOUT)
 }
 
 const router = new VueRouter({

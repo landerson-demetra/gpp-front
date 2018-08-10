@@ -1,7 +1,9 @@
 /* eslint-disable promise/param-names */
 import { AUTH_REQUEST, AUTH_ERROR, AUTH_SUCCESS, AUTH_LOGOUT } from '../actions/auth'
-import http from '../../modules/http'
 import { USER_REQUEST } from '../actions/user'
+
+import http from '../../modules/http'
+import router from '../../router'
 
 const state = { token: localStorage.getItem('gpp__token') || '', status: '', hasLoadedOnce: false }
 
@@ -34,6 +36,7 @@ const actions = {
       commit(AUTH_LOGOUT)
       localStorage.removeItem('gpp__token')
       delete http.defaults.headers.common['Authorization']
+      router.push({ name: 'login' })
       resolve()
     })
   }

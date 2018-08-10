@@ -2,7 +2,7 @@
     <div class="gpp-admin-header">
         <div class="header-details bg-primary">
             <div class="container">
-                <p class="text-left">Olá, {{ profile.name }}! - Ultimo acesso (01/08 ás 15:50) | <router-link tag="a" :to="{ name: 'logout' }" class="badge badge-primary text-white p-1"><i class="fas fa-sign-out-alt"></i> Logout</router-link></p>
+                <p class="text-left">Olá, {{ profile.name }}! - Ultimo acesso (01/08 ás 15:50) | <router-link :to="{ name: 'logout' }" class="badge badge-primary text-white p-1"><i class="fas fa-sign-out-alt"></i> Logout</router-link></p>
             </div>
         </div>
         <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-lg">
@@ -15,10 +15,10 @@
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="navbar-nav mr-auto">
                         <li class="nav-item active">
-                            <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+                            <router-link :to="{ name: 'painel' }" class="nav-link">Home <span class="sr-only">(current)</span></router-link>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#">Gestão de Patrimônios</a>
+                            <router-link :to="{ name: 'GestaoPatromonios' }" class="nav-link">Gestão de Patrimônios</router-link>
                         </li>
                         <li class="nav-item dropdown">
                             <a href="#" class="nav-link dropdown-toggle" id="navbarDropdownCadastro" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Cadastro</a>
@@ -37,7 +37,7 @@
                             </div>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="#">Permissões</a>
+                            <router-link :to="{ name: 'Permissoes' }" class="nav-link">Permissões</router-link>
                         </li>
                     </ul>
                     <!-- <form class="form-inline my-2 my-lg-0">
