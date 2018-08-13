@@ -48,20 +48,20 @@ export default {
   },
   methods: {
     checkForm: function(e) {
-        e.preventDefault();
+        e.preventDefault()
 
-        this.errors = [];
+        this.errors = []
 
         if(this.email && this.password){
-            return this.Login();
+            return this.Login()
         }
 
         if(!this.email){
-            this.errors.push('Você precisa informar um e-mail');
+            this.errors.push('Você precisa informar um e-mail')
         }
 
         if(!this.password){
-            this.errors.push('Você precisa informar uma senha');
+            this.errors.push('Você precisa informar uma senha')
         }
     },
     Login: function() {

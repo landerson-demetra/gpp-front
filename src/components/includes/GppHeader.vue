@@ -2,12 +2,13 @@
     <div class="gpp-admin-header">
         <div class="header-details bg-primary">
             <div class="container">
-                <p class="text-left">Olá, {{ profile.name }}! - Ultimo acesso (01/08 ás 15:50) | <router-link :to="{ name: 'logout' }" class="badge badge-primary text-white p-1"><i class="fas fa-sign-out-alt"></i> Logout</router-link></p>
+                <p class="text-left">Olá, {{ profile.name }}! - Ultimo acesso (01/08 ás 15:50) | <router-link :to="{ name: 'logout' }" title="Sair do sistema" class="badge badge-primary text-white p-1"><i class="fas fa-sign-out-alt"></i> Logout</router-link></p>
             </div>
         </div>
         <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-lg">
             <div class="container">
-                <a class="navbar-brand" href="#"><img width="100" class="img-fluid" src="../../assets/logo.png" alt="PDG"></a>
+                <router-link :to="{ name: 'painel' }" title="Home" class="navbar-brand"><img width="100" class="img-fluid" src="../../assets/logo.png" alt="PDG"></router-link>
+
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
@@ -23,9 +24,9 @@
                         <li class="nav-item dropdown">
                             <a href="#" class="nav-link dropdown-toggle" id="navbarDropdownCadastro" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Cadastro</a>
                             <div class="dropdown-menu" aria-labelledby="navbarDropdownCadastro">
-                                <a href="#" class="dropdown-item"><i class="fas fa-handshake"></i> Fornecedores</a>
-                                <a href="#" class="dropdown-item"><i class="fas fa-sync"></i> Vinculação PEP</a>
-                                <a href="#" class="dropdown-item"><i class="fas fa-building"></i> Dados da unidade</a>
+                                <router-link :to="{ name: 'Fornecedores' }" class="dropdown-item"><i class="fas fa-handshake"></i> Fornecedores</router-link>
+                                <router-link :to="{ name: 'Vinculacao' }" class="dropdown-item"><i class="fas fa-sync"></i> Vinculação PEP</router-link>
+                                <router-link :to="{ name: 'DadosUnidade' }" class="dropdown-item"><i class="fas fa-building"></i> Dados da Unidade</router-link>
                             </div>
                         </li>
                         <li class="nav-item dropdown">
