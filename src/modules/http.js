@@ -2,13 +2,13 @@ import axios from 'axios'
 import Bus from '../bus'
 import store from '../store'
 
+import config from '../config'
+
 import { AUTH_LOGOUT } from '../store/actions/auth'
 
-const http = axios.create({
-    baseURL: window.location.protocol + '//' + window.location.hostname + '/api/v1/'
-})
+const http = axios.create({ baseURL: config.base_url })
 
-http.defaults.headers.common['Authorization'] = 'Bearer ' + localStorage.getItem('gpp__token')
+http.defaults.headers.common['Authorization'] = 'Bearer ' + localStorage.getItem(config.token_name)
 
 http.interceptors.response.use(undefined, (err) => {
   return new Promise((resolve, reject) => {

@@ -1,39 +1,40 @@
 <template>
-  <div id="login" class="wow fadeIn">
-    <div class="gpp-header"></div>
+    <div id="login" class="wow fadeIn">
+        <div class="gpp-header"></div>
 
-    <div class="clearfix"></div>
+        <div class="clearfix"></div>
 
-    <div class="container">
-        <div class="login-container">
-            <div class="row login">
-                <div class="card col-md-4 col-12 offset-md-4 align-self-center">
-                    <div class="card-body">
-                        <img class="img-fluid mx-auto d-block mb-3" src="https://upload.wikimedia.org/wikipedia/commons/1/18/Pdg.jpg" alt="PDG">
-                        <form v-on:submit="checkForm" action="" method="POST">
-                            <div class="form-group">
-                                <input v-model="email" type="email" class="form-control" aria-describedby="emailHelp" placeholder="Digite seu email">
+        <div class="container">
+            <div class="login-container">
+                <div class="row login">
+                    <div class="card col-md-4 col-12 offset-md-4 align-self-center">
+                        <div class="card-body">
+                            <img class="img-fluid mx-auto d-block mb-3" src="https://upload.wikimedia.org/wikipedia/commons/1/18/Pdg.jpg" alt="PDG">
+                            <form v-on:submit="checkForm" action="" method="POST">
+                                <div class="form-group">
+                                    <input v-model="email" type="email" class="form-control" aria-describedby="emailHelp" placeholder="Digite seu email">
+                                </div>
+                                <div class="form-group">
+                                    <input v-model="password" type="password" class="form-control" aria-describedby="passwordHelp" placeholder="Digite a sua senha">
+                                </div>
+
+                                <button :disabled="this.authenticating" type="submit" class="btn mt-4 btn-block btn-primary">Entrar</button>
+                            </form>
+
+                            <!-- Erros -->
+                            <div v-for="error in errors" class="alert alert-secondary mt-3 " role="alert">
+                               <i class="fas fa-exclamation-triangle"></i> {{ error }}
                             </div>
-                            <div class="form-group">
-                                <input v-model="password" type="password" class="form-control" aria-describedby="passwordHelp" placeholder="Digite a sua senha">
-                            </div>
-
-                            <button :disabled="this.authenticating" type="submit" class="btn mt-4 btn-block btn-primary">Entrar</button>
-                        </form>
-
-                        <!-- Erros -->
-                        <div v-for="error in errors" class="alert alert-secondary mt-3 " role="alert">
-                           <i class="fas fa-exclamation-triangle"></i> {{ error }}
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-  </div>
 </template>
 
 <script>
+import config from '../config'
 import { AUTH_REQUEST } from '../store/actions/auth'
 
 export default {
@@ -81,8 +82,8 @@ export default {
             grant_type: 'password',
             username: this.email,
             password: this.password,
-            client_id: 2,
-            client_secret: 'Z5wTea348gA7xkBHXQZKhxk0FcuUMtXma8E0Oicx'
+            client_id: config.client_id,
+            client_secret: config.client_secret
         }
     }
   }

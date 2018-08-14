@@ -4,6 +4,8 @@ import VueRouter from 'vue-router'
 import store from '../store'
 import { AUTH_LOGOUT } from '../store/actions/auth'
 
+import config from '../config'
+
 import Login from '@/components/Login'
 import Painel from '@/components/Painel'
 import NotFound from '@/components/NotFound'
@@ -33,7 +35,7 @@ const Logout = (to, from, next) => {
 }
 
 const router = new VueRouter({
-    mode: 'history',
+    mode: config.route_mode,
     base: __dirname,
     routes: [
         {
