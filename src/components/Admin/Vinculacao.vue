@@ -9,7 +9,7 @@
                     <div class="row">
                         <div class="form-group col-md-6">
                             <label for="PEP">PEP</label>
-                            <input type="text" class="form-control" placeholder="R.XXXX.99.99">
+                            <input v-model="pep" type="text" class="form-control" placeholder="R.XXXX.99.99">
                         </div>
                         <div class="form-group col-md-6">
                             <label for="Empreendimento">Empreendimento</label>
@@ -68,7 +68,66 @@
                     </table>
 
                     <div class="col text-right">
-                        <button class="btn btn btn-success" data-toggle="modal" data-target="#modalContato"><i class="fas fa-plus"></i> Adicionar</button>
+                        <button class="btn btn btn-success" data-toggle="modal" data-target="#addVinc"><i class="fas fa-plus"></i> Adicionar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal -->
+        <div class="modal fade" id="addVinc" tabindex="-1" role="dialog" aria-labelledby="addVincLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg shadow" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="addVincLabel">Administração</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <form action="" v-on:submit.prevent>
+                            <div class="row">
+                                <div class="form-group col-md-6">
+                                    <label for="PEP">PEP</label>
+                                    <input :value="pep" disabled="" id="PEP" type="text" class="form-control">
+                                </div>
+                                <div class="form-group col-md-4">
+                                    <label for="Individualizado">Individualizado</label>
+                                    <select class="form-control">
+                                        <option value="">Selecione</option>
+                                        <option value="">Sim</option>
+                                        <option value="">Não</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="row">
+
+
+
+                                <div class="form-group col-md-4">
+                                    <label for="ADM">ADM</label>
+                                    <v-select id="ADM" placeholder="Selecione..." :options="this.administradoras">
+                                        <span slot="no-options">Nenhuma administradora encontrada.</span>
+                                    </v-select>
+                                </div>
+                                <div class="form-group col-md-4">
+                                    <label for="Fornecedor">Fornecedor</label>
+                                    <v-select id="ADM" placeholder="Selecione..." :options="this.fornecedores">
+                                        <span slot="no-options">Nenhum fornecedor encontrado.</span>
+                                    </v-select>
+                                </div>
+                                <div class="form-group col-md-4">
+                                    <label for="Prefeitura">Prefeitura</label>
+                                    <v-select id="ADM" placeholder="Selecione..." :options="this.prefeituras">
+                                        <span slot="no-options">Nenhuma prefeitura encontrada</span>
+                                    </v-select>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary"><i class="fas fa-check"></i> Salvar</button>
                     </div>
                 </div>
             </div>
@@ -81,7 +140,8 @@ export default {
     name: 'Vinculacao',
     data() {
         return {
-
+            show: true,
+            pep: '',
         }
     }
 }

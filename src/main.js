@@ -1,8 +1,9 @@
-import Vue from 'vue'
+import Vue from 'vue' 
 import Vuex from 'vuex'
 import store from './store'
 import router from './router/index'
 import http from './modules/http'
+import config from './config'
 import App from './App'
 
 /* [ Components ] */
@@ -14,6 +15,7 @@ import WOW from 'wowjs'
 
 window.$ = require('jquery')
 
+Vue.prototype.$config = config
 Vue.prototype.$http = http
 Vue.config.productionTip = false
 

@@ -3,6 +3,7 @@ import Fornecedores from '@/components/Admin/Fornecedores'
 import Vinculacao from '@/components/Admin/Vinculacao'
 import DadosUnidade from '@/components/Admin/DadosUnidade'
 import GestaoPatrimonios from '@/components/Admin/GestaoPatrimonios'
+import Empreendimentos from '@/components/Admin/Empreendimentos'
 import Permissoes from '@/components/Admin/Permissoes'
 
 export default [
@@ -25,6 +26,11 @@ export default [
         path: 'gestao-patrimonios',
         component: GestaoPatrimonios,
         name: 'GestaoPatromonios'
+    },
+    {
+        path: 'empreendimentos',
+        component: Empreendimentos,
+        name: 'Empreendimentos'
     },
     {
         path: 'permissoes',

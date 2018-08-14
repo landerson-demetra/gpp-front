@@ -38,6 +38,9 @@
                             </div>
                         </li>
                         <li class="nav-item">
+                            <router-link :to="{ name: 'Empreendimentos' }" class="nav-link">Empreendimentos</router-link>
+                        </li>
+                        <li class="nav-item">
                             <router-link :to="{ name: 'Permissoes' }" class="nav-link">Permissões</router-link>
                         </li>
                     </ul>

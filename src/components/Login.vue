@@ -34,7 +34,6 @@
 </template>
 
 <script>
-import config from '../config'
 import { AUTH_REQUEST } from '../store/actions/auth'
 
 export default {
@@ -82,8 +81,8 @@ export default {
             grant_type: 'password',
             username: this.email,
             password: this.password,
-            client_id: config.client_id,
-            client_secret: config.client_secret
+            client_id: this.$config.client_id,
+            client_secret: this.$config.client_secret
         }
     }
   }
