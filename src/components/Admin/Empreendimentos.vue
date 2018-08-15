@@ -6,7 +6,7 @@
 
         <div class="row">
             <div class="col-12">
-                <table class="table table-responsive-sm table-striped table-borderless table-hover">
+                <table class="table table-responsive-md table-striped table-borderless table-hover">
                     <thead>
                         <tr>
                             <th>
@@ -23,7 +23,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr v-for="data in datas">
+                        <tr v-on:click="selectEmpre" v-for="data in datas">
                             <th>
                                 <div class="checkbox checkbox-success">
                                     <input type="checkbox" :id="data.id" class="styled">
@@ -77,6 +77,9 @@ export default {
         }
     },
     methods: {
+        selectEmpre: function(){
+            console.log(event)
+        },
         changePage: function(e){
             this.paginator.current_page = e
             this.fetchdatas(e)
