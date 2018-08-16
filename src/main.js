@@ -13,6 +13,8 @@ import Datatable from 'vue2-datatable-component'
 import Notifications from 'vue-notification'
 import WOW from 'wowjs'
 
+/* [ Globals ] */
+window._ = require('lodash')
 window.$ = require('jquery')
 
 Vue.prototype.$config = config

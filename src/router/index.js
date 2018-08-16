@@ -64,4 +64,12 @@ const router = new VueRouter({
     ]
 })
 
+router.beforeEach((to, from, next) => {
+  let oldtitle = document.title
+
+  document.title = oldtitle.substring(0, oldtitle.indexOf(' - ')) + ' - ' + to.name
+
+  next()
+})
+
 export default router

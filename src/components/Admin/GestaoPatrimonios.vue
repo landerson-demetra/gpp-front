@@ -30,7 +30,7 @@
                                     <label class="invisible">Ação</label>
                                     <div class="input-group">
                                         <div class="input-group-prepend">
-                                            <button class="btn btn-primary" type="button" data-toggle="modal" data-target="#exampleModal">Administração</button>
+                                            <button class="btn btn-primary" type="button" data-toggle="modal" data-target="#exampleModal">ADM</button>
                                         </div>
                                     </div>
                                 </div>
@@ -151,6 +151,8 @@
 <script>
 import { mapState } from 'vuex'
 import GppResumo from '../includes/GppResumo'
+
+/* [ PARCELAS AGUA LUZ ] */
 
 export default {
   name: 'GestaoPatrimonios',
