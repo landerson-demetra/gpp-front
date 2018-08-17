@@ -2,15 +2,28 @@
     <div id="empreendimento" class="wow fadeIn" data-wow-duration="2s">
         <h3 class="mt-3">Empreendimentos<span class="selecteds text-muted" v-if="this.empreendimentos.checkeds.length"> ({{ this.empreendimentos.checkeds.length }} Selecionados)</span></h3>
         <hr>
-
+        
         <div class="row">
-            <div class="col-12">
+            <div class="col-12" v-if="!this.empreendimentos.datas.length">
+                <clip-loader class="my-5" :loading="true" :color="'#26256A'" :size="'70px'"></clip-loader>
+            </div>
+            <div class="col-12" v-else>
+                <div class="row my-3 justify-content-end">
+                    <div class="input-group col-md-2">
+                        <select v-model="empreendimentos.paginator.per_page" class="form-control">
+                            <option value="5">Mostrar: 5</option>
+                            <option value="15">Mostrar: 15</option>
+                            <option value="25">Mostrar: 25</option>
+                            <option value="50">Mostrar: 25</option>
+                        </select>
+                    </div>
+                </div>
                 <table :class="{'is-fetching': isFetching}" class="table table-responsive-md table-borderless table-hover">
                     <thead>
                         <tr>
                             <th>
                                 <div class="checkbox checkbox-success">
-                                    <input type="checkbox" id="checkbox2" class="styled">
+                                    <input v-model="check_all" type="checkbox" id="checkbox2" class="styled">
                                     <label></label>
                                 </div>
                             </th>
@@ -23,7 +36,8 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr :id="data.id" v-on:click="checkTr(data.id)" v-for="data in empreendimentos.datas">
+                        <!-- Listagem -->
+                        <tr :id="data.id" v-on:click="checkUncheckTr(data.id)" v-for="data in empreendimentos.datas">
                             <th>
                                 <div class="checkbox checkbox-success" style="pointer-events: none">
                                     <input type="checkbox" :value="data.id" class="styled">
@@ -43,13 +57,15 @@
                         </tr>
                     </tbody>
                 </table>
-
+                
+                <!-- Paginação -->
                 <div :class="{'is-fetching': isFetching}">
-                    <Paginator :paginator="this.empreendimentos.paginator" :limit="5" v-on:changePage="onPageChange"></Paginator>
+                    <Paginator :paginator="this.empreendimentos.paginator" :limit="this.empreendimentos.paginator.limit_pages" v-on:changePage="$onEmpredsPageChange"></Paginator>
                 </div>
             </div>
         </div>
-
+        
+        <!-- Vinculações -->
         <div v-if="this.empreendimentos.checkeds.length">
             <h3 class="mt-3">Vinculação</h3>
 
@@ -57,7 +73,7 @@
 
             <div class="row mb-5">
                 <div class="col-md-12">
-                    <form action="" method="POST">
+                    <form action="" method="POST" v-on:submit.prevent="">
                         <div class="row">
                             <div class="form-group col-md-3">
                                 <v-select name="Administrador" placeholder="Administrador" :options="[]">
@@ -96,29 +112,44 @@
         </div>
 
         <div :class="{'is-fetching': isFetching}" v-if="this.activeEmpre">
-            <h3 id="unidades" class="mt-3">{{ this.unidades.datas.length }} Unidades ({{ activeEmpre.spe_cod }} - {{ activeEmpre.empreendimento_nome }})</h3>
+            <h3 id="unidades" class="mt-3">{{ this.unidades.datas.length }} Unidades ({{ activeEmpre.spe_cod }} - {{ activeEmpre.empreendimento_nome }}) <small class="text-muted" v-if="this.unidades.searchTxt.length > 2">( Resultados para '{{ this.unidades.searchTxt }}' )</small>  </h3>
 
             <hr>
 
             <clip-loader class="my-5" :loading="isFetching" :color="'#26256A'" :size="'70px'"></clip-loader>
 
+            <!-- Busca -->
             <div class="row my-3 justify-content-end" v-if="!isFetching">
                 <div class="input-group mb-3 col-md-6">
-                    <input v-model="unidades.searchTxt" type="text" class="form-control" placeholder="Busque por uma unidade (Bloco, unidade, e.t.c)">
+                    <input v-model="unidades.searchTxt" type="text" class="form-control" placeholder="Busque por uma unidade (Bloco/Unidade)">
                     <div class="input-group-append">
                         <button class="btn btn-outline-primary" type="button"><i class="fas fa-search"></i></button>
                     </div>
                 </div>
             </div>
 
-            <div class="row" v-if="!isFetching">
-                <div v-for="unidade in this.unidades.datas" class="col-md-2 mb-3">
-                    <div  class="card shadow-sm border-secondary bg-primary text-white">
-                        <div class="card-body">
-                            <p>Bloco: {{ unidade.bloco_nome }}</p>
-                            <p>Unidade: {{ unidade.unidade_nome }}</p>
+            <!-- Nenhum resultado encontrado -->
+            <div v-if="unidades.notfound">
+                <div class="alert alert-secondary" role="alert">Nenhuma unidade encontrada para <b>{{ this.unidades.searchTxt }}</b></div>
+            </div>
+
+            <!-- Listagem -->
+            <div v-if="!unidades.notfound">
+                <div class="row" v-if="!isFetching">
+                    <div v-for="unidade in this.unidades.datasShow" class="col-xl-2 col-lg-3 col-md-4 col-sm-12 mb-3">
+                        <div  class="card shadow bg-white">
+                            <ul class="list-group list-group-flush">
+                                <li class="list-group-item"><b>Bloco:</b> {{ unidade.bloco_nome }}</li>
+                                <li class="list-group-item"><b>Unidade:</b> {{ unidade.unidade_nome }}</li>
+                                <router-link :to="{ name: 'GestaoPatromonios', params: { pep: unidade.pep } }" title="Gerenciar PEP" class="btn btn-primary btn-block">Gerir</router-link>
+                            </ul>
                         </div>
                     </div>
+                </div>
+                
+                <!-- Paginação -->
+                <div :class="{'is-fetching': isFetching}">
+                    <Paginator :paginator="this.unidades.paginator" :limit="this.unidades.limit_pages" v-on:changePage="$onUnidsPageChange"></Paginator>
                 </div>
             </div>
         </div>
@@ -126,6 +157,7 @@
 </template>
 
 <script>
+import Bus from '../../bus'
 import Paginator from '../includes/Paginator'
 import ClipLoader from 'vue-spinner/src/ClipLoader'
 
@@ -134,39 +166,76 @@ export default {
     components: { Paginator, ClipLoader },
     data() {
         return {
+            check_all: false,
             activeEmpre: '',
             empreendimentos: {
                 datas: [],
                 checkeds: [],
-                paginator: {
-                    current_page: 1,
-                }
+                paginator: { current_page: 1, per_page: 5, limit_pages: 6 }
             },
             unidades: {
                 datas: [],
                 datasShow: [],
+                datasSearch: [],
                 checkeds: [],
-                searchTxt: ''
+                searchTxt: '',
+                notfound: false,
+                paginator: { per_page: 12, limit_pages: 6, current_page: 1 }
             },
-            isFetching: false,
+            isFetching: undefined
         }
     },
     watch: {
+        check_all: function(v){
+            var self = this,
+                table = $('.table')
+
+            table.find('th').first().toggleClass('checked')
+
+            table.find('tbody tr').each((i, elem) => {
+                let el = $(elem), input = el.find('input')
+
+                el.toggleClass('checked')
+
+                if(!input.is(':checked')){
+                    input.attr('checked', true)
+                    self.empreendimentos.checkeds.push(input.attr('value'))
+                }else{
+                    input.attr('checked', false)
+                    let index = self.empreendimentos.checkeds.indexOf(input.attr('value'))
+                    self.empreendimentos.checkeds.splice(index, 1)
+                }
+            })
+        },
+        'empreendimentos.paginator.per_page': function(){
+            this.empreendimentos.paginator.current_page = 1
+            this.fetchEmpreds()
+        },
         'unidades.searchTxt': function(newv){
+            if(this.unidades.searchTxt !== '' && this.unidades.searchTxt.length < 2) return
+
             var self = this
 
-            let datas = _.filter(this.unidades.datas, function(a){
+            this.unidades.datasSearch = _.filter(this.unidades.datas, function(a){
                 let searchlower = self.unidades.searchTxt.toLowerCase()
 
                 return a.bloco_nome.toLowerCase().includes(searchlower)
                     || a.unidade_nome.toLowerCase().includes(searchlower)
             })
 
-            console.log(datas)
+            if(this.unidades.datasSearch.length){
+                this.unidades.notfound = false
+
+                this.unidades.paginator.current_page = 1
+                this._setPaginateUnids()
+            }else{
+                this.unidades.notfound = true
+            }
         }
     },
     methods: {
-        checkTr: function(id){
+        /*----------  Check/uncheck empreendimento  ----------*/
+        checkUncheckTr: function(id){
             if(event.target.nodeName == 'BUTTON' || event.target.nodeName == 'I')
                 return
 
@@ -184,7 +253,37 @@ export default {
                 this.empreendimentos.checkeds.splice(index, 1)
             }
         },
-        onPageChange: function(e){
+
+        /*----------  Mostrar unidades  ----------*/
+        viewUnidades: function(spe_cod) {
+            this.$resetUnids()
+
+            let found = _.filter(this.empreendimentos.datas, (o) => {
+                return o.spe_cod == spe_cod
+            })
+
+            this.activeEmpre = found[0]
+            this.fetchUnids(spe_cod)
+        },
+
+        /*----------  Fetch datas  ----------*/
+        fetchEmpreds: function(page = 1) {
+            this.$http.get('/empreendimentos', { params: { page: page, per_page: this.empreendimentos.paginator.per_page } }).then((response) => {
+                let resp = response.data
+                this.empreendimentos.datas = resp.data
+
+                this._setPaginateEmpreds(resp)
+            })
+        },
+        fetchUnids: function(spe_cod) {
+            this.$http.get('/unidades', { params: { spe_cod: spe_cod } }).then((response) => {
+                this.unidades.datas = response.data
+                this._setPaginateUnids()
+            })
+        },
+
+        /*----------  Events  ----------*/
+        $onEmpredsPageChange: function(e){
             let tr = $('.table').find('tr'),
                 input = tr.find('input')
 
@@ -198,48 +297,52 @@ export default {
             this.empreendimentos.paginator.current_page = e
             this.fetchEmpreds(e)
         },
-        viewUnidades: function(spe_cod) {
-            let found = _.filter(this.empreendimentos.datas, function(o){
-                return o.spe_cod == spe_cod
-            })
 
-            this.activeEmpre = found[0]
-            this.fetchUnids(spe_cod)
-
-            try{
-                $('html, body').animate({scrollTop: $('#unidades').offset().top - 10}, 1000)
-            }catch(E){}
+        $onUnidsPageChange: function(e){
+            this.unidades.paginator.current_page = e
+            this._setPaginateUnids()
         },
-        fetchEmpreds: function(page) {
-            this.isFetching = true
 
-            this.$http.get('/empreendimentos', { params: { page: page ? page : 1 } }).then((response) => {
-                this.isFetching = false
-
-                let resp = response.data
-                this.empreendimentos.datas = resp.data
-
-                this.empreendimentos.paginator = {
-                    per_page: resp.per_page,
-                    limit_pages: this.empreendimentos.paginator.limit_pages,
-                    total: resp.total,
-                    last_page: Math.ceil(resp.total / resp.per_page),
-                    current_page: this.empreendimentos.paginator.current_page
-                }
-            })
+        /*----------  Pagination  ----------*/
+        _setPaginateEmpreds: function(resp){
+            this.empreendimentos.paginator = {
+                per_page: this.empreendimentos.paginator.per_page,
+                limit_pages: this.empreendimentos.paginator.limit_pages,
+                total: resp.total,
+                last_page: Math.ceil(resp.total / this.empreendimentos.paginator.per_page),
+                current_page: this.empreendimentos.paginator.current_page
+            }
         },
-        fetchUnids: function(spe_cod) {
-            this.isFetching = true
+        _setPaginateUnids: function(){
+            let datas = (this.unidades.datasSearch.length ? this.unidades.datasSearch : this.unidades.datas)
+            let total = datas.length
 
-            this.$http.get('/unidades', { params: { spe_cod: spe_cod } }).then((response) => {
-                this.isFetching = false
 
-                this.unidades.datas = response.data
-            })
-        }
+            this.unidades.paginator = {
+                per_page: this.unidades.paginator.per_page,
+                limit_pages: this.unidades.paginator.limit_pages,
+                total: total,
+                last_page: Math.ceil(total / this.unidades.paginator.per_page),
+                current_page: this.unidades.paginator.current_page
+            }
+
+            let offset = (this.unidades.paginator.current_page - 1) * this.unidades.paginator.per_page
+            this.unidades.datasShow = datas.slice(offset, offset + this.unidades.paginator.per_page)
+        },
+
+        /*----------  Resets  ----------*/
+        $resetUnids: function(){
+            this.unidades.searchTxt = ''
+            this.unidades.datas = []
+            this.unidades.datasShow = []
+            this.unidades.datasSearch = []
+            this.unidades.notfound = false
+            this.unidades.paginator.current_page = 1
+        }, 
     },
     mounted() {
         this.fetchEmpreds()
+        Bus.$on('isFetching', is => this.isFetching = is)
     }
 }
 </script>
@@ -256,7 +359,7 @@ export default {
     padding: .6rem;
 }
 
-.table tr.checked{
+.checked{
     background-color: #F1F1F1;
     box-shadow: 0 0 .3em #CCC;
 }

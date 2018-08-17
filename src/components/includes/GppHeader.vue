@@ -2,7 +2,7 @@
     <div class="gpp-admin-header">
         <div class="header-details bg-primary">
             <div class="container">
-                <p class="text-left">Olá, {{ profile.name }}! - Ultimo acesso (01/08 ás 15:50) | <router-link :to="{ name: 'logout' }" title="Sair do sistema" class="badge badge-primary text-white p-1"><i class="fas fa-sign-out-alt"></i> Logout</router-link></p>
+                <p class="text-left">Olá, {{ profile.name }}! - Ultimo acesso (01/08 ás 15:50) | <a href="#meudadados" class="badge badge-primary text-white p-1"><i class="fas fa-user"></i> Meu dados</a> | <router-link :to="{ name: 'logout' }" title="Sair do sistema" class="badge badge-primary text-white p-1"><i class="fas fa-sign-out-alt"></i> Logout</router-link></p>
             </div>
         </div>
         <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-lg">

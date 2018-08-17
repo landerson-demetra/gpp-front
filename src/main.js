@@ -17,14 +17,19 @@ import WOW from 'wowjs'
 window._ = require('lodash')
 window.$ = require('jquery')
 
+/* [ Extends ] */
 Vue.prototype.$config = config
 Vue.prototype.$http = http
+
+/* [ Configs ] */
 Vue.config.productionTip = false
 
+/* [ Use's ] */
 Vue.use(Vuex)
 Vue.use(Datatable)
 Vue.use(Notifications)
 
+/* [ Register components ] */
 Vue.component('v-select', vSelect)
 
 new Vue({

@@ -1,13 +1,17 @@
 <template>
     <ul class="pagination justify-content-end disabled" v-if="paginator.total > paginator.per_page">
         <li v-if="paginator.current_page != 1" class="page-item" title="Anterior">
-            <a href="#" class="page-link" aria-label="Anterior" v-on:click.prevent="selectPage(--paginator.current_page)"><span aria-hidden="true">&laquo;</span></a>
+            <a href="#" class="page-link" aria-label="Anterior" v-on:click.prevent="selectPage(paginator.current_page - 1)"><span aria-hidden="true">&laquo;</span></a>
         </li>
 
         <li v-for="n in getPages()" class="page-item" :class="{ 'active': n == paginator.current_page }"><a v-on:click.prevent="selectPage(n)" class="page-link" href="#" >{{ n }}</a></li>
 
+        <li v-if="paginator.current_page != paginator.last_page" class="page-item" title="Última">
+            <a class="page-link" href="#" aria-label="Última" v-on:click.prevent="selectPage(paginator.last_page)">Última</a>
+        </li>
+
         <li v-if="paginator.current_page != paginator.last_page" class="page-item" title="Próxima">
-            <a class="page-link" href="#" aria-label="Próxima" v-on:click.prevent="selectPage(++paginator.current_page)"><span aria-hidden="true">&raquo;</span></a>
+            <a class="page-link" href="#" aria-label="Próxima" v-on:click.prevent="selectPage(paginator.current_page + 1)"><span aria-hidden="true">&raquo;</span></a>
         </li>
     </ul>
 </template>
@@ -26,7 +30,7 @@ export default {
 
     methods: {
         selectPage: function(page){
-            if(page == this.paginator.current_page) return;
+            if(page == this.paginator.current_page) return
 
             this.$emit('changePage', page)
             this.paginator.current_page = page

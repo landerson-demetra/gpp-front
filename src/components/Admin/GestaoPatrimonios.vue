@@ -16,7 +16,7 @@
                             <div class="row">
                                 <div class="form-group col-md-4">
                                     <label for="PEP">PEP</label>
-                                    <input id="PEP" type="text" class="form-control" placeholder="R.XXXX.99.99.99.9999">
+                                    <input v-model="pep" id="PEP" type="text" class="form-control" placeholder="R.XXXX.99.99.99.9999">
                                 </div>
                                 <div class="form-group col-md-2">
                                     <label for="Contribuinte">Contribuinte</label>
@@ -26,7 +26,7 @@
                                     <label for="Vendido">Vendido</label>
                                     <input id="Vendido" type="text" class="form-control" placeholder="Não" disabled>
                                 </div>
-                                <div class="form-group col-md-2">
+                                <!-- <div class="form-group col-md-2">
                                     <label class="invisible">Ação</label>
                                     <div class="input-group">
                                         <div class="input-group-prepend">
@@ -41,7 +41,7 @@
                                             <button class="btn btn-primary" type="button">Jurídico</button>
                                         </div>
                                     </div>
-                                </div>
+                                </div> -->
                             </div>
                             <div class="row">
                                 <div class="form-group col-md-4">
@@ -90,7 +90,13 @@
                                 <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">Condominios [{{ this.condominios.data.length }}]</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" id="profile-tab" data-toggle="tab" href="#profile" role="tab" aria-controls="profile" aria-selected="false">IPTUs [{{ this.condominios.data.length }}]</a>
+                                <a class="nav-link" id="iptus-tab" data-toggle="tab" href="#iptus" role="tab" aria-controls="profile" aria-selected="false">IPTUs [15]</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" id="agua-tab" data-toggle="tab" href="#agua" role="tab" aria-controls="profile" aria-selected="false">Água [2]</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" id="luz-tab" data-toggle="tab" href="#luz" role="tab" aria-controls="profile" aria-selected="false">Luz [0]</a>
                             </li>
                         </ul>
                         <div class="tab-content" id="myTabContent">
@@ -98,6 +104,8 @@
                                 <datatable :Pagination="false" :HeaderSettings="false" v-bind="$data.condominios"/>
                             </div>
                             <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">...</div>
+                            <div class="tab-pane fade" id="agua" role="tabpanel" aria-labelledby="agua-tab">...</div>
+                            <div class="tab-pane fade" id="luz" role="tabpanel" aria-labelledby="luz-tab">...</div>
                         </div>
                     </div>
                     <div class="card-footer bg-primary text-white border-0 text-right">
@@ -158,6 +166,7 @@ export default {
   name: 'GestaoPatrimonios',
   data() {
     return {
+        pep: this.$route.params.pep || '',
         gestExpanded: false,
 
         // DTables
@@ -244,6 +253,9 @@ export default {
     }
   },
   components: { GppResumo },
-  computed: mapState({profile: state => state.user.profile})
+  computed: mapState({profile: state => state.user.profile}),
+  mounted(){
+
+  }
 }
 </script>

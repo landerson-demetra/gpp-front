@@ -1,6 +1,6 @@
 export default {
     // Route
-    'route_mode': 'history',
+    'route_mode': 'hash',
 
     // Http
     'base_url': window.location.protocol + '//' + window.location.hostname + '/api/v1/',

@@ -23,7 +23,7 @@ export default [
         name: 'DadosUnidade'
     },
     {
-        path: 'gestao-patrimonios',
+        path: 'gestao-patrimonios/:pep?',
         component: GestaoPatrimonios,
         name: 'GestaoPatromonios'
     },
