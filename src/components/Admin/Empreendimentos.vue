@@ -2,7 +2,7 @@
     <div id="empreendimento" class="wow fadeIn" data-wow-duration="2s">
         <h3 class="mt-3">Empreendimentos<span class="selecteds text-muted" v-if="this.empreendimentos.checkeds.length"> ({{ this.empreendimentos.checkeds.length }} Selecionados)</span></h3>
         <hr>
-        
+
         <div class="row">
             <div class="col-12" v-if="!this.empreendimentos.datas.length">
                 <clip-loader class="my-5" :loading="true" :color="'#26256A'" :size="'70px'"></clip-loader>
@@ -30,8 +30,6 @@
                             <th>PEP</th>
                             <th>SPE</th>
                             <th>Empreendimento</th>
-                            <th>Fase</th>
-                            <th>Bloco</th>
                             <th></th>
                         </tr>
                     </thead>
@@ -44,14 +42,14 @@
                                     <label></label>
                                 </div>
                             </th>
-                            <th>{{ data.pep }}</th>
-                            <th>[{{ data.spe_cod }}] {{ data.spe_cnpj }}</th>
+                            <th>{{ data.PEP }}</th>
+                            <th>[{{ data.spe }}] {{ data.spe_cnpj }}</th>
                             <th>[{{ data.empreendimento_cod }}] {{ data.empreendimento_nome }}</th>
-                            <th>{{ data.fase }}</th>
-                            <th>[{{ data.bloco_cod }}] {{ data.bloco_nome }}</th>
                             <th>
-                                <div class="action-buttons">
-                                    <button class="btn btn-primary" v-on:click="viewUnidades(data.spe_cod)"><i class="fa fa-building"></i></button>
+                                <div class="action-buttons text-right">
+                                    <button class="btn btn-primary" v-on:click="viewUnidades(data.PEP)"><i class="fas fa-building"></i></button>
+                                    <button class="btn btn-secondary"><i class="fas fa-edit"></i></button>
+                                    <button class="btn btn-danger"><i class="fas fa-trash-alt"></i></button>
                                 </div>
                             </th>
                         </tr>
@@ -112,7 +110,7 @@
         </div>
 
         <div :class="{'is-fetching': isFetching}" v-if="this.activeEmpre">
-            <h3 id="unidades" class="mt-3">{{ this.unidades.datas.length }} Unidades ({{ activeEmpre.spe_cod }} - {{ activeEmpre.empreendimento_nome }}) <small class="text-muted" v-if="this.unidades.searchTxt.length > 2">( Resultados para '{{ this.unidades.searchTxt }}' )</small>  </h3>
+            <h3 id="unidades" class="mt-3">{{ this.unidades.datas.length }} Unidades ({{ activeEmpre.spe }} - {{ activeEmpre.empreendimento_nome }}) <small class="text-muted" v-if="this.unidades.searchTxt.length > 2">( Resultados para '{{ this.unidades.searchTxt }}' )</small>  </h3>
 
             <hr>
 
@@ -129,8 +127,8 @@
             </div>
 
             <!-- Nenhum resultado encontrado -->
-            <div v-if="unidades.notfound">
-                <div class="alert alert-secondary" role="alert">Nenhuma unidade encontrada para <b>{{ this.unidades.searchTxt }}</b></div>
+            <div v-if="unidades.notfound || !this.unidades.datas.length">
+                <div class="alert alert-secondary" role="alert">Nenhuma unidade encontrada <span v-if="this.unidades.searchTxt.length">para <b>{{ this.unidades.searchTxt }}</b></span></div>
             </div>
 
             <!-- Listagem -->
@@ -141,15 +139,15 @@
                             <ul class="list-group list-group-flush">
                                 <li class="list-group-item"><b>Bloco:</b> {{ unidade.bloco_nome }}</li>
                                 <li class="list-group-item"><b>Unidade:</b> {{ unidade.unidade_nome }}</li>
-                                <router-link :to="{ name: 'GestaoPatromonios', params: { pep: unidade.pep } }" title="Gerenciar PEP" class="btn btn-primary btn-block">Gerir</router-link>
+                                <router-link :to="{name: 'GestaoPatromonios', params: {pep: unidade.PEP}}" title="Gerenciar Patrimônios" class="btn btn-primary btn-block">Gerir</router-link>
                             </ul>
                         </div>
                     </div>
                 </div>
-                
+
                 <!-- Paginação -->
                 <div :class="{'is-fetching': isFetching}">
-                    <Paginator :paginator="this.unidades.paginator" :limit="this.unidades.limit_pages" v-on:changePage="$onUnidsPageChange"></Paginator>
+                    <Paginator :paginator="this.unidades.paginator" :limit="this.unidades.paginator.limit_pages" v-on:changePage="$onUnidsPageChange"></Paginator>
                 </div>
             </div>
         </div>
@@ -186,6 +184,14 @@ export default {
         }
     },
     watch: {
+        unidades: {
+            handler: function(){
+                try{
+                    $('html,body').animate({scrollTop: $('#unidades').offset().top}, 1300).stop()
+                }catch(e){}
+            },
+            deep: true
+        },
         check_all: function(v){
             var self = this,
                 table = $('.table')
@@ -255,15 +261,15 @@ export default {
         },
 
         /*----------  Mostrar unidades  ----------*/
-        viewUnidades: function(spe_cod) {
+        viewUnidades: function(PEP) {
             this.$resetUnids()
 
             let found = _.filter(this.empreendimentos.datas, (o) => {
-                return o.spe_cod == spe_cod
+                return o.PEP == PEP
             })
 
             this.activeEmpre = found[0]
-            this.fetchUnids(spe_cod)
+            this.fetchUnids(PEP)
         },
 
         /*----------  Fetch datas  ----------*/
@@ -275,8 +281,8 @@ export default {
                 this._setPaginateEmpreds(resp)
             })
         },
-        fetchUnids: function(spe_cod) {
-            this.$http.get('/unidades', { params: { spe_cod: spe_cod } }).then((response) => {
+        fetchUnids: function(PEP) {
+            this.$http.get('/unidades', { params: { PEP: PEP } }).then((response) => {
                 this.unidades.datas = response.data
                 this._setPaginateUnids()
             })
@@ -316,7 +322,6 @@ export default {
         _setPaginateUnids: function(){
             let datas = (this.unidades.datasSearch.length ? this.unidades.datasSearch : this.unidades.datas)
             let total = datas.length
-
 
             this.unidades.paginator = {
                 per_page: this.unidades.paginator.per_page,

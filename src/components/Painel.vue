@@ -1,5 +1,6 @@
 <template>
     <div id="painel" class="wow fadeIn" data-wow-duration="2s">
+        <!-- Header -->
         <GppHeader :profile="this.profile"></GppHeader>
 
         <div class="clearfix"></div>
@@ -8,6 +9,9 @@
         <div class="container mt-5">
             <router-view class="view"></router-view>
         </div>
+
+        <!-- Footer -->
+        <footer>.</footer>
     </div>
 </template>
 
