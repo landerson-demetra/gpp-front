@@ -12,7 +12,7 @@
                             <img class="img-fluid mx-auto d-block mb-3" src="https://upload.wikimedia.org/wikipedia/commons/1/18/Pdg.jpg" alt="PDG">
                             <form v-on:submit="checkForm" action="" method="POST">
                                 <div class="form-group">
-                                    <input v-model="email" type="email" class="form-control" aria-describedby="emailHelp" placeholder="Digite seu email">
+                                    <input v-model="email" type="email" class="form-control" aria-describedby="emailHelp" placeholder="Digite seu email" autofocus>
                                 </div>
                                 <div class="form-group">
                                     <input v-model="password" type="password" class="form-control" aria-describedby="passwordHelp" placeholder="Digite a sua senha">

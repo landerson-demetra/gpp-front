@@ -90,7 +90,7 @@
                             </div>
                             <div class="form-group col-md-3">
                                 <select class="form-control" name="individualizado" id="individualizado">
-                                    <option value="0">Individualizado</option> 
+                                    <option value="null">Individualizado</option> 
                                     <option value="0">Não</option> 
                                     <option value="1">Sim</option> 
                                 </select>
@@ -187,7 +187,7 @@ export default {
         unidades: {
             handler: function(){
                 try{
-                    $('html,body').animate({scrollTop: $('#unidades').offset().top}, 1300).stop()
+                    $('html,body').animate({scrollTop: $('#unidades').offset().top}, 1300)
                 }catch(e){}
             },
             deep: true
