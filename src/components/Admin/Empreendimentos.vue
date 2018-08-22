@@ -368,10 +368,4 @@ export default {
     background-color: #F1F1F1;
     box-shadow: 0 0 .3em #CCC;
 }
-
-.is-fetching{
-    opacity: .5;
-    pointer-events: none;
-    cursor: default;
-}
 </style>

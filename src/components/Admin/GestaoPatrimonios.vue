@@ -5,13 +5,13 @@
                 <div class="card shadow border-0">
                     <div class="card-header border-0 bg-primary text-white">
                         <div class="row">
-                            <h3 class="col-md-10 mt-0">Gestão de Patrimônios <span v-if="this.isFetching">[ Aguarde... ]</span></h3>
+                            <h3 class="col-md-10 mt-0">Gestão de Patrimônios <span v-if="this.isFetching">[Aguarde...]</span></h3>
                             <div class="col-md-2 text-right d-none d-lg-block">
                                 <button class="btn btn-primary border border-dark" v-on:click="gestExpanded = !gestExpanded"><i class="fas" :class="{ 'fa-forward': !gestExpanded, 'fa-backward': gestExpanded }"></i></button>
                             </div>
                         </div>
                     </div>
-                    <div class="card-body">
+                    <div class="card-body" :class="{'is-fetching': this.isFetching}">
                         <form action="#noaction">
                             <div class="row">
                                 <div class="form-group col-md-4">
