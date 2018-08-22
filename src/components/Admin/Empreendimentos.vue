@@ -119,7 +119,7 @@
             <!-- Busca -->
             <div class="row my-3 justify-content-end" v-if="!isFetching">
                 <div class="input-group mb-3 col-md-6">
-                    <input v-model="unidades.searchTxt" type="text" class="form-control" placeholder="Busque por uma unidade (Bloco/Unidade)">
+                    <input v-model="unidades.searchTxt" type="text" class="form-control" placeholder="Busque por uma unidade (Bloco/Unidade) min.2">
                     <div class="input-group-append">
                         <button class="btn btn-outline-primary" type="button"><i class="fas fa-search"></i></button>
                     </div>

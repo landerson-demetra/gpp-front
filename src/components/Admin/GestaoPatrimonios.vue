@@ -3,11 +3,11 @@
         <div class="row">
             <div class="content-gest mb-5 col-md-12" :class="{ 'col-lg-9': !gestExpanded, 'col-lg-12': gestExpanded }">
                 <div class="card shadow border-0">
-                    <div class="card-header border-0 bg-white">
+                    <div class="card-header border-0 bg-primary text-white">
                         <div class="row">
                             <h3 class="col-md-10 mt-0">Gestão de Patrimônios <span v-if="this.isFetching">[ Aguarde... ]</span></h3>
                             <div class="col-md-2 text-right d-none d-lg-block">
-                                <button class="btn-primary" v-on:click="gestExpanded = !gestExpanded"><i class="fas" :class="{ 'fa-forward': !gestExpanded, 'fa-backward': gestExpanded }"></i></button>
+                                <button class="btn btn-primary border border-dark" v-on:click="gestExpanded = !gestExpanded"><i class="fas" :class="{ 'fa-forward': !gestExpanded, 'fa-backward': gestExpanded }"></i></button>
                             </div>
                         </div>
                     </div>
@@ -25,6 +25,14 @@
                                 <div class="form-group col-md-2">
                                     <label for="Vendido">Vendido</label>
                                     <input id="Vendido" type="text" class="form-control" placeholder="Não" disabled>
+                                </div>
+                                <div class="form-group col-md-3">
+                                    <label for="Invadido">Invadido</label>
+                                    <select :disabled="pepParsed.is !== 'unidade'" name="invadido" id="Invadido" class="form-control">
+                                        <option value="">N/Definido</option>
+                                        <option>Sim</option>
+                                        <option>Não</option>
+                                    </select>
                                 </div>
                                 <!-- <div class="form-group col-md-2">
                                     <label class="invisible">Ação</label>
@@ -50,30 +58,24 @@
                                         <span slot="no-options">Nenhum empreendimento encontrado.</span>
                                     </v-select>
                                 </div>
-                                <div class="form-group col-md-2">
+                                <div class="form-group col-md-3">
                                     <label for="Bloco">Bloco</label>
                                     <select :disabled="bloco_blocked" v-model="bloco_selected" name="bloco" id="Bloco" class="form-control">
-                                        <option value="">Selecione</option> 
+                                        <option value="" selected>Selecione</option> 
                                         <option v-for="bloco in blocos" :value="bloco.value">{{ bloco.text }}</option>
                                     </select>
                                 </div>
                                 <div class="form-group col-md-2">
                                     <label for="Unidade">Unidade</label>
                                     <select :disabled="unidade_blocked" v-model="unidade_selected" name="unidade" id="Unidade" class="form-control">
-                                        <option value="">Selecione</option>
+                                        <option value="">N°</option>
                                         <option v-for="unidade in unidades" :value="unidade.value">{{ unidade.text }}</option>
                                     </select>
                                 </div>
-                                <div class="form-group col-md-2">
-                                    <label for="Invadido">Invadido</label>
-                                    <select :disabled="pepParsed.is !== 'unidade'" name="invadido" id="Invadido" class="form-control">
-                                        <option>Sim</option>
-                                        <option>Não</option>
-                                    </select>
-                                </div>
-                                <div class="form-group col-md-2">
+                                <div class="form-group col-md-3">
                                     <label for="Status">Status</label>
-                                    <select :disabled="pepParsed.is !== 'unidade'" name="status" id="Status" class="form-control">
+                                    <select :disabled="pepIs !== 'unidade'" name="status" id="Status" class="form-control">
+                                        <option value="">N/Definido</option>
                                         <option>Estoque</option>
                                         <option>Pré-distrato</option>
                                     </select>
@@ -81,33 +83,39 @@
                             </div>
                         </form>
 
-                        <h4 class="pb-3 text-muted border-bottom">Históricos e status</h4>
+                        <h4 class="my-3 text-muted">Históricos e Status</h4>
 
-                        
+                        <datatable :HeaderSettings="false" :Pagination="false" v-bind="$data.contratos" />
 
-                        <h4 class="mt-4 pb-3 text-muted">Condominios e IPTUs</h4>
+                        <h4 class="my-4 text-muted">Condomínios e IPTUs</h4>
 
                         <ul class="nav nav-tabs" id="myTab" role="tablist">
                             <li class="nav-item">
-                                <a class="nav-link active" id="home-tab" data-toggle="tab" href="#home" role="tab" aria-controls="home" aria-selected="true">Condominios [?]</a>
+                                <a class="nav-link active" id="condominios-tab" data-toggle="tab" href="#condominios" role="tab" aria-controls="home" aria-selected="true">Condominios [{{ this.condominios.total }}]</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" id="iptus-tab" data-toggle="tab" href="#iptus" role="tab" aria-controls="profile" aria-selected="false">IPTUs [?]</a>
+                                <a class="nav-link" id="iptus-tab" data-toggle="tab" href="#iptus" role="tab" aria-controls="profile" aria-selected="false">IPTUs [{{ this.iptus.total }}]</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" id="agua-tab" data-toggle="tab" href="#agua" role="tab" aria-controls="profile" aria-selected="false">Água [?]</a>
+                                <a class="nav-link" id="agua-tab" data-toggle="tab" href="#agua" role="tab" aria-controls="profile" aria-selected="false">Água [{{ this.aguas.total }}]</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" id="luz-tab" data-toggle="tab" href="#luz" role="tab" aria-controls="profile" aria-selected="false">Luz [?]</a>
+                                <a class="nav-link" id="luz-tab" data-toggle="tab" href="#luz" role="tab" aria-controls="profile" aria-selected="false">Luz [{{ this.luzes.total }}]</a>
                             </li>
                         </ul>
                         <div class="tab-content" id="myTabContent">
-                            <div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="home-tab">
-                                
+                            <div class="tab-pane fade show active" id="condominios" role="tabpanel" aria-labelledby="home-tab">
+                                <datatable :HeaderSettings="false" :Pagination="false" v-bind="$data.condominios" />
                             </div>
-                            <div class="tab-pane fade" id="profile" role="tabpanel" aria-labelledby="profile-tab">...</div>
-                            <div class="tab-pane fade" id="agua" role="tabpanel" aria-labelledby="agua-tab">...</div>
-                            <div class="tab-pane fade" id="luz" role="tabpanel" aria-labelledby="luz-tab">...</div>
+                            <div class="tab-pane fade" id="iptus" role="tabpanel" aria-labelledby="iptus-tab">
+    
+                            </div>
+                            <div class="tab-pane fade" id="agua" role="tabpanel" aria-labelledby="agua-tab">
+
+                            </div>
+                            <div class="tab-pane fade" id="luz" role="tabpanel" aria-labelledby="luz-tab">
+
+                            </div>
                         </div>
                     </div>
                     <div class="card-footer bg-primary text-white border-0 text-right">
@@ -171,9 +179,9 @@ export default {
     components: { GppResumo },
     data() {
         return {
-            PEP: this.$route.params.pep || '',
+            PEP: this.$route.params.pep || null,
             pepParsed: {},
-            pepIs: '',
+            pepIs: null,
             gestExpanded: false,
             datas: {},
 
@@ -185,13 +193,95 @@ export default {
             bloco_blocked: false,
 
             unidades: [],
+            unidade_datas: [],
             unidade_selected: '',
             unidade_blocked: false,
 
             isFetching: undefined,
 
+            // Resumo
+            resumo: {},
+
             // DTables
-            
+            contratos: {
+                tblClass: 'table-bordered table-responsive w-100 d-block d-md-table',
+                columns: [
+                    { title: 'Contrato', field: 'contrato' },
+                    { title: 'Nome', field: 'nome' },
+                    { title: 'CPF/CNPJ', field: 'cnpj_cpf'},
+                    { title: 'V.Contrato', field: 'vlcontrato'},
+                    { title: 'D.Contrato', field: 'dtcontrato'},
+                    { title: 'Status', field: 'status'},
+                ],
+                data: [],
+                total: 0,
+                query: {}
+            },
+
+            condominios: {
+                tblClass: 'table-bordered table-responsive',
+                columns: [
+                    { title: 'Status', field: 'status' },
+                    { title: 'Periodo', field: 'periodo' },
+                    { title: 'Vencimento', field: 'vencimento'},
+                    { title: 'Valor', field: 'valor'},
+                    { title: 'V.Pago', field: 'valor_pago'},
+                    { title: 'Multa', field: 'multa'},
+                    { title: 'Juros', field: 'juros'},
+                    { title: 'Correção', field: 'correcao'},
+                    { title: 'Fonte', field: 'fonte'},
+                    { title: 'Total', field: 'total'},
+                    { title: 'Data Pgto', field: 'data_pgto'},
+                ],
+                data: [],
+                total: 0,
+                query: {}
+            },
+
+            iptus: {
+                tblClass: 'table-bordered table-responsive',
+                columns: [
+                    { title: 'Contrato', field: 'contrato' },
+                    { title: 'Nome', field: 'nome' },
+                    { title: 'CPF/CNPJ', field: 'cpfcnpj'},
+                    { title: 'Valor contrato', field: 'vlcontrato', sortable: true},
+                    { title: 'Data do contrato', field: 'drcontrato'},
+                    { title: 'Status', field: 'status', sortable: true},
+                ],
+                data: [],
+                total: 0,
+                query: {}
+            },
+
+            aguas: {
+                tblClass: 'table-bordered table-responsive-sm',
+                columns: [
+                    { title: 'Contrato', field: 'contrato' },
+                    { title: 'Nome', field: 'nome' },
+                    { title: 'CPF/CNPJ', field: 'cpfcnpj'},
+                    { title: 'Valor contrato', field: 'vlcontrato', sortable: true},
+                    { title: 'Data do contrato', field: 'drcontrato'},
+                    { title: 'Status', field: 'status', sortable: true},
+                ],
+                data: [],
+                total: 0,
+                query: {}
+            },
+
+            luzes: {
+                tblClass: 'table-bordered table-responsive-sm',
+                columns: [
+                    { title: 'Contrato', field: 'contrato' },
+                    { title: 'Nome', field: 'nome' },
+                    { title: 'CPF/CNPJ', field: 'cpfcnpj'},
+                    { title: 'Valor contrato', field: 'vlcontrato', sortable: true},
+                    { title: 'Data do contrato', field: 'drcontrato'},
+                    { title: 'Status', field: 'status', sortable: true},
+                ],
+                data: [],
+                total: 0,
+                query: {}
+            },
         }
     },
     watch: {
@@ -199,7 +289,12 @@ export default {
             this.$initPep(pep)
         },
         empreendimento_selected: function(empreendimento){
-            this.bloco_blocked = !empreendimento
+            if(!empreendimento){
+                this.bloco_blocked = true
+                return
+            }else{
+                this.bloco_blocked = false
+            }
 
             let datas = this.pepParsed
             datas.empreendimento = empreendimento.value
@@ -236,21 +331,52 @@ export default {
             this.pepParsed = parsed
             this.pepIs = (Object.keys(parsed).length <= 4 ? 'empreendimento' : 'unidade')
 
-            if(this.pepIs == 'empreendimento') {
-                // [ ? ]
-            }
+            // Reset unidade datas
+            this.$resetUnidadeDatas()
 
             // Fetching the datas
             this.fetchDatas()
+        },
+        $resetUnidadeDatas(){
+            this.contratos.data = []
+            this.contratos.total = 0
+
+            this.condominios.data = []
+            this.condominios.total = 0
+
+            this.unidade_datas = []
         },
         fetchDatas(){
             this.$http.post('/gestao', { PEP: this.PEP }).then((response) => {
                 this.datas = response.data
 
-                // Assinging values to the fields
-                this.assignValues()
+               if(this.datas.length){
+                    // Assinging values to the fields
+                    this.assignValues()
+
+                    this.$notify({
+                        group: 'normal',
+                        type: 'success',
+                        text: 'Dados listados com sucesso',
+                        duration: 5000
+                     })
+               } else {
+                    this.$notify({
+                        group: 'normal',
+                        type: 'warn',
+                        text: 'Nenhum dado encontrado para PEP <b>' + this.PEP + '</b>'
+                    })
+               }
             }).catch((e) =>{
                 console.log('err:', e)
+            })
+        },
+        fetchUnidadeDatas(){
+            this.$http.post('/unidade-datas', { PEP: this.PEP }).then((response) => {
+                this.unidade_datas = response.data
+
+                // Assigning values to the fields
+                this.assignUnidadeValues()
             })
         },
         assignValues(){
@@ -298,15 +424,76 @@ export default {
 
             if(this.pepParsed.unidade_cod)
                 this.unidade_selected = parseInt(this.pepParsed.unidade_cod)
+
+            // Caso a PEP pertencer a uma únidade,
+            // Procura por contrato, condominios, iptus, aguas e luzes.
+            if(this.pepIs == 'unidade')
+                this.fetchUnidadeDatas()
+            else
+                this.$resetUnidadeDatas()
+
+            // Resumo de patrimônios
+
+
+        },
+        assignUnidadeValues(){
+            if(!this.unidade_datas.contratos.length)
+                this.$notify({
+                    group: 'normal',
+                    type: 'info',
+                    text: 'Não há contratos para PEP'
+                })
+
+            if(!this.unidade_datas.condominios.length)
+                this.$notify({
+                    group: 'normal',
+                    type: 'info',
+                    text: 'Não há condominios para PEP'
+                })
+
+            /* [ Contratos ] */
+            formated = []
+            _.forEach(this.unidade_datas.contratos, function(v,k){
+                formated.push({
+                    contrato: v.id,
+                    nome: v.nome,
+                    vlcontrato: v.valor_contrato,
+                    cnpj_cpf: v.cnpj_cpf,
+                    dtcontrato: v.data_contrato,
+                    status: v.status_contrato,
+                })
+            })
+
+            this.contratos.total = formated.length
+            this.contratos.data = formated
+
+            /* [ Condominios ] */
+            var formated = []
+            _.forEach(this.unidade_datas.condominios, function(v,k){
+                formated.push({
+                    status: 'R',
+                    periodo: v.periodo,
+                    vencimento: v.vencimento,
+                    valor: v.valor,
+                    valor_pago: v.valor_pago,
+                    multa: v.multa,
+                    juros: v.juros,
+                    correcao: v.correcao,
+                    fonte: v.fonte,
+                    total: '?',
+                    data_pgto: v.data_pagamento
+                })
+            })
+
+            this.condominios.total = formated.length
+            this.condominios.data = formated
         }
     },
-    computed: {
-        
-    },
+    computed: { },
     mounted(){
         Bus.$on('isFetching', is => this.isFetching = is)
 
-        if(this.PEP !== '')
+        if(this.PEP)
             this.$initPep(this.PEP)
     }
 }

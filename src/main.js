@@ -10,6 +10,7 @@ import App from './App'
 import 'bootstrap'
 import vSelect from 'vue-select'
 import Datatable from 'vue2-datatable-component'
+import locale from 'vue2-datatable-component/locale/pt-br'
 import Notifications from 'vue-notification'
 import WOW from 'wowjs'
 
@@ -26,7 +27,7 @@ Vue.config.productionTip = false
 
 /* [ Use's ] */
 Vue.use(Vuex)
-Vue.use(Datatable)
+Vue.use(Datatable, { locale })
 Vue.use(Notifications)
 
 /* [ Register components ] */
