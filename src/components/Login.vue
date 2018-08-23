@@ -52,17 +52,14 @@ export default {
 
         this.errors = []
 
-        if(this.email && this.password){
+        if(this.email && this.password)
             return this.Login()
-        }
 
-        if(!this.email){
+        if(!this.email)
             this.errors.push('Você precisa informar um e-mail')
-        }
 
-        if(!this.password){
+        if(!this.password)
             this.errors.push('Você precisa informar uma senha')
-        }
     },
     Login: function() {
         this.authenticating = true
