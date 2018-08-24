@@ -42,7 +42,7 @@ export default {
     return {
         authenticating: false,
         errors: [],
-        email: 'clandokca@gmail.com',
+        email: 'admin@pdg.com.br',
         password: '123'
     }
   },
@@ -64,7 +64,7 @@ export default {
     Login: function() {
         this.authenticating = true
 
-        this.$store.dispatch(AUTH_REQUEST, this.makeauth).then(() => {
+        this.$store.dispatch(AUTH_REQUEST, this.makeAuth).then(() => {
             this.$router.push({ name: 'painel' })
         }).catch(() => {
             this.authenticating = false
@@ -73,7 +73,7 @@ export default {
     }
   },
   computed: {
-    makeauth: function() {
+    makeAuth: function() {
         return {
             grant_type: 'password',
             username: this.email,

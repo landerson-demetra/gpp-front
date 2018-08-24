@@ -9,5 +9,8 @@ export default {
     'oauth_route': 'oauth/token',
     'token_name': 'gpp__token',
     'client_id': 2,
-    'client_secret': 'Z5wTea348gA7xkBHXQZKhxk0FcuUMtXma8E0Oicx'
+    'client_secret': 'Z5wTea348gA7xkBHXQZKhxk0FcuUMtXma8E0Oicx',
+
+    // Cep
+    'cep_url': 'http://republicavirtual.com.br/web_cep.php?cep={cep}&formato=json'
 }

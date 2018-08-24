@@ -254,10 +254,10 @@ export default {
                     { title: 'Periodo', field: 'periodo' },
                     { title: 'Parcela', field: 'parcela' },
                     { title: 'Vencimento', field: 'vencimento', sortable: true },
-                    { title: 'V.Principal', field: 'valor_principal', sortable: true},
-                    { title: 'Multa', field: 'multa', sortable: true},
-                    { title: 'Juros', field: 'juros', sortable: true},
-                    { title: 'Correção Monetária', field: 'correcao_monetaria', sortable: true},
+                    { title: 'V.Principal', field: 'valor_principal', sortable: true },
+                    { title: 'Multa', field: 'multa', sortable: true },
+                    { title: 'Juros', field: 'juros', sortable: true },
+                    { title: 'Correção Monetária', field: 'correcao_monetaria', sortable: true },
                     { title: 'Dívida ativa', field: 'divida_ativa'},
                     { title: 'Fonte', field: 'fonte'},
                 ],
@@ -398,7 +398,11 @@ export default {
 
             // Assign empreendimentos
             this.empreendimentos = _.toArray(_.mapValues(this.datas, (o) => {
-                return {'label': o.empreendimento_nome, 'value': o.empreendimento_cod, 'PEP': o.PEP}
+                return {
+                    'label': o.empreendimento_nome,
+                    'value': o.empreendimento_cod,
+                    'PEP': o.PEP
+                }
             }))
             this.empreendimento_selected = _.find(this.empreendimentos, (f) => {
                 return f.value == self.pepParsed.empreendimento
@@ -451,19 +455,17 @@ export default {
 
         },
         assignUnidadeValues(){
+            // - Não há contratos
             if(!this.unidade_datas.contratos.length)
-                this.$notify({
-                    group: 'normal',
-                    type: 'info',
-                    text: 'Não há contratos para PEP'
-                })
+                this.$notify({ group: 'normal', type: 'info', text: 'Não há contratos para PEP' })
 
+            // - Não há condominios
             if(!this.unidade_datas.condominios.length)
-                this.$notify({
-                    group: 'normal',
-                    type: 'info',
-                    text: 'Não há condominios para PEP'
-                })
+                this.$notify({ group: 'normal', type: 'info', text: 'Não há condominios para PEP' })
+
+            // - Não há IPTUS
+            if(!this.unidade_datas.iptus.length)
+                this.$notify({ group: 'normal', type: 'info', text: 'Não há IPTUs para PEP' })
 
             /* [ Contratos ] */
             var formated = []
