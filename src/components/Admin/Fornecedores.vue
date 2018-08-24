@@ -10,9 +10,9 @@
                         <div class="form-group col-md-4">
                             <label for="SAP">Número SAP</label>
                             <select name="SAP" id="SAP" class="form-control">
-                                <option value="1">5121</option>
-                                <option value="2">5326</option>
-                                <option value="3">5878</option>
+                                <option value="5121">5121</option>
+                                <option value="5326">5326</option>
+                                <option value="5878">5878</option>
                             </select>
                         </div>
                         <div class="form-group col-md-6">
@@ -121,7 +121,7 @@
                                 </div>
                                  <div class="form-group col-md-5">
                                     <label for="Segmento">Segmento(s) <span class="text-danger">*</span></label>
-                                    <v-select multiple v-model="segmento" :options="segmentos"></v-select>
+                                    <v-select :placeholder="'Selecione um ou mais segmento(s)...'" multiple v-model="segmento" :options="segmentos"></v-select>
                                 </div>
 
                                 <div class="col-12"><h5>Endereço</h5><hr></div>
