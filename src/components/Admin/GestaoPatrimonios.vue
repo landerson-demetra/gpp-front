@@ -182,8 +182,6 @@ import { mapState } from 'vuex'
 import { parsePEP, reMountPEP } from '../../modules/pep'
 import GppResumo from '../includes/GppResumo'
 
-/* [ PARCELAS AGUA LUZ ] */
-
 export default {
     name: 'GestaoPatrimonios',
     components: { GppResumo },

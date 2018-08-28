@@ -274,8 +274,8 @@ export default {
 
         /*----------  Fetch datas  ----------*/
         fetchEmpreds: function(page = 1) {
-            this.$http.get('/empreendimentos', { params: { page: page, per_page: this.empreendimentos.paginator.per_page } }).then((response) => {
-                let resp = response.data
+            this.$http.get('/empreendimento', { params: { page: page, per_page: this.empreendimentos.paginator.per_page } }).then((response) => {
+                let resp = response.data.results
                 this.empreendimentos.datas = resp.data
 
                 this._setPaginateEmpreds(resp)
