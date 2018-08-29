@@ -9,7 +9,11 @@ function reMountPEP(parsed){
         }
         if(_.isNumber(v)) {
             if(k == 'unidade_cod') {
-                if(v <= 99) parsed[k] = '00'+v
+                if(v <= 99){
+                    parsed[k] = '00'+v
+                } else if(v > 99 && v <= 999) {
+                    parsed[k] = '0'+v
+                }
                 // <= 999 ? 00999 ! 0999 -> 9999
             }else if(v <= 9) {
                 parsed[k] = '0'+v
