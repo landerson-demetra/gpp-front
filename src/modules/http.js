@@ -25,11 +25,11 @@ http.interceptors.response.use((response) => {
         }
 
         if (err.response.status == 422) {
-            Bus.$emit('response-errors', err.response.data.messages.errors)
+            Bus.$emit('response-errors', { messages: err.response.data.messages.errors, code: 422 })
         }
 
         if (err.response.status == 409) {
-            Bus.$emit('response-errors', err.response.data.messages)
+            Bus.$emit('response-errors', { messages: err.response.data.messages, code: 409 })
         }
 
         throw err

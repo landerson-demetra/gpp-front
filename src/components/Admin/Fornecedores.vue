@@ -23,7 +23,7 @@
                         </div>
                         <div class="form-group col-md-2 mt-1">
                             <label for=""></label>
-                            <button href="#" class="btn btn-block btn-primary" data-toggle="modal" data-target="#exampleModal"><i class="fas fa-plus"></i> Novo</button>
+                            <button href="#" class="btn btn-block btn-primary" data-toggle="modal" data-target="#modalNovoFornecedor"><i class="fas fa-plus"></i> Novo</button>
                         </div>
                     </div>
                 </form>
@@ -95,33 +95,33 @@
         </div>
 
         <!-- Modal Novo Fornecedor -->
-        <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal fade" id="modalNovoFornecedor" tabindex="-1" role="dialog" aria-labelledby="modalNovoFornecedorLabel" aria-hidden="true">
             <div class="modal-dialog modal-lg shadow" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">Fornecedor</h5>
+                        <h5 class="modal-title" id="modalNovoFornecedorLabel">Fornecedor</h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
                     <div class="modal-body">
-                        <form action="">
+                        <form action="" v-on:submit.prevent="saveFornecedor()">
                             <div class="row">
                                 <div class="form-group col-md-12">
-                                    <label for="">Nome <span class="text-danger">*</span></label>
-                                     <input type="text" class="form-control" placeholder="Nome do fornecedor..." required="">
+                                    <label for="name">Nome <span class="text-danger">*</span></label>
+                                     <input v-model="Nome" id="name" type="text" class="form-control" placeholder="Nome do fornecedor..." required="">
                                 </div>
                                 <div class="form-group col-md-3">
-                                    <label for="">Número SAP <span class="text-danger">*</span></label>
-                                     <input type="text" placeholder="Número SAP..." class="form-control" required="">
+                                    <label for="numero_sap">Número SAP <span class="text-danger">*</span></label>
+                                     <input v-model="NumeroSAP" type="text" id="numero_sap" placeholder="Número SAP..." class="form-control" required="">
                                 </div>
                                 <div class="form-group col-md-4">
-                                    <label for="">CNPJ/CPF <span class="text-danger">*</span></label>
-                                    <input type="text" placeholder="CNPJ/CPF do fornecedor..." class="form-control" required="">
+                                    <label for="cpf_cnpj">CNPJ/CPF <span class="text-danger">*</span></label>
+                                    <input v-model="cpf_cnpj" id="cpf_cnpj" type="text" placeholder="CNPJ/CPF do fornecedor..." class="form-control" required="">
                                 </div>
                                  <div class="form-group col-md-5">
                                     <label for="Segmento">Segmento(s) <span class="text-danger">*</span></label>
-                                    <v-select :placeholder="'Selecione um ou mais segmento(s)...'" multiple v-model="segmento" :options="segmentos"></v-select>
+                                    <v-select :placeholder="'Selecione um ou mais segmento(s)...'" multiple v-model="Segmentos" :options="['Prefeitura', 'Administradora', 'Fornecedor']"></v-select>
                                 </div>
 
                                 <div class="col-12"><h5>Endereço</h5><hr></div>
@@ -152,7 +152,7 @@
                                 </div>
                                 <div class="form-group col-md-12">
                                     <label for="Responsavel">Responsável</label>
-                                    <v-select name="Nome" id="Nome" placeholder="Selecione um responsável..." :options="[]">
+                                    <v-select name="Nome" id="Nome" v-model="Responsavel" placeholder="Selecione um responsável..." :options="[]">
                                         <span slot="no-options">Nenhum responsável encontrado.</span>
                                     </v-select>
                                 </div>
@@ -161,7 +161,7 @@
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button>
-                        <button type="button" class="btn btn-primary"><i class="fas fa-check"></i> Salvar</button>
+                        <button v-on:click="saveFornecedor()" type="button" class="btn btn-primary"><i class="fas fa-check"></i> Salvar</button>
                     </div>
                 </div>
             </div>
@@ -177,7 +177,7 @@
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
-                    <div class="modal-body ">
+                    <div class="modal-body">
                         <form action="">
                             <div class="row">
                                 <div class="form-group col-md-12">
@@ -214,20 +214,20 @@
 </template>
 
 <script>
+import { get, store, update } from '../../api/fornecedor'
+
 export default {
     name: 'Fornecedores',
     data() {
         return  {
             fornecedor_selected: false,
-            fornecedores: [
-                {label: 'Fornecedor 1', value: 1},
-                {label: 'Fornecedor 2', value: 2},
-                {label: 'Fornecedor 3', value: 3},
-                {label: 'Fornecedor 4', value: 4},
-                {label: 'Fornecedor 5', value: 5}
-            ],
+            fornecedores: [],
 
             // Form
+            Nome: '',
+            NumeroSAP: '',
+            cpf_cnpj: '',
+            Segmentos: [],
 
             CEPHasError: false,
 
@@ -238,8 +238,9 @@ export default {
             Estado: '',
             Cidade: '',
 
-            segmento: null,
-            segmentos: ['Prefeitura', 'Administradora', 'Fornecedor'],
+            Responsavel: '',
+
+            segmento: null
         }
     },
     watch: {
@@ -257,6 +258,7 @@ export default {
                 this.Bairro = ''
                 this.Estado = ''
                 this.Cidade = ''
+                this.Responsavel = ''
 
                 return
             }
@@ -267,8 +269,49 @@ export default {
             this.Bairro = r.bairro
             this.Estado = r.uf
             this.Cidade = r.cidade
-        }
-    }
+        },
+        saveFornecedor(){
+            store(this.getFields).then(r => {
+                this.fornecedores.push({ label: r.results.nome, value: r.results.id })
+                this.fornecedor_selected = r.results.nome
 
+                this.$notify({group: 'normal', type: 'success', text: 'Fornecedor cadastrado com sucesso' })
+
+                /* # Closing the modal # */
+                $('#modalNovoFornecedor').modal('hide')
+            }).catch(e => {
+                if(e.response.status < 423) return
+                this.$notify({group: 'normal', type: 'error', title: 'Ops :/', text: 'Ocorreu um erro inesperado'})
+            })
+        },
+        updateFornecedor(){
+            /*----------  TODO  ----------*/
+            update(this.getFields).then().catch()
+        }
+    },
+    computed: {
+        getFields() {
+            return {
+                'nome': this.Nome,
+                'numero_sap': this.NumeroSAP,
+                'segmentos': this.Segmentos,
+                'cnpj_cpf': this.cpf_cnpj,
+                'end_cep': this.CEP,
+                'end_logradouro': this.Logradouro,
+                'end_numero': this.Numero,
+                'end_bairro': this.Bairro,
+                'end_estado': this.Estado,
+                'end_cidade': this.Cidade,
+            }
+        }
+    },
+    mounted() {
+        /* Obtendo a lista de fornecedores */
+        get().then(r => {
+            _.forEach(r.results, (v,k) => {
+                this.fornecedores.push({ label: v.nome, value: v.id })
+            })
+        })
+    }
 }
 </script>
