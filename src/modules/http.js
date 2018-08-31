@@ -19,6 +19,8 @@ http.interceptors.response.use((response) => {
     Bus.$emit('isFetching', false)
     return response
 }, (err) => {
+    Bus.$emit('isFetching', false)
+
     return new Promise((resolve, reject) => {
         if (err.response.status === 401 && err.config && !err.config.__isRetryRequest) {
             store.dispatch(AUTH_LOGOUT)

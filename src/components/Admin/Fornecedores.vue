@@ -10,9 +10,7 @@
                         <div class="form-group col-md-4">
                             <label for="SAP">Número SAP</label>
                             <select name="SAP" id="SAP" class="form-control">
-                                <option value="5121">5121</option>
-                                <option value="5326">5326</option>
-                                <option value="5878">5878</option>
+                                <option value="">N/Informado</option>
                             </select>
                         </div>
                         <div class="form-group col-md-6">
@@ -32,61 +30,62 @@
 
                 <div v-if="!fornecedor_selected" class="alert alert-secondary text-center"><i class="fas fa-exclamation-circle"></i> Nenhum fornecedor selecionado</div>
 
-                <div class="row" v-if="fornecedor_selected">
-                    <div class="form-group col-lg-6"><b>CPF/CNPJ:</b> 09.476.577/0001-49</div>
-                    <div class="form-group col-lg-6"><b>Segmento:</b></div>
-                    <div class="form-group col-lg-6"><b>Endereço:</b></div>
-                    <div class="form-group col-lg-6"><b>CEP:</b></div>
-                    <div class="form-group col-lg-6"><b>Município:</b></div>
-                    <div class="form-group col-lg-6"><b>Estado:</b></div>
-                    <div class="form-group col-lg-6"><b>Site:</b></div>
-                    <div class="form-group col-lg-6"><b>Responsável:</b></div>
-                </div>
-
-                <div class="row mb-4">
-                    <div class="col text-right">
-                        <button class="btn btn btn-warning mr-1"><i class="fas fa-edit"></i> Editar</button>
-                        <button class="btn btn btn-danger"><i class="fas fa-trash"></i> Excluir</button>
+                <div v-else>
+                    <div class="row fornecedor-infos" :class="{'is-fetching': isFetching}">
+                        <div class="form-group col-lg-6"><b>CPF/CNPJ:</b> <span>{{ this.fornecedor_selected_datas.cnpj_cpf }}</span></div>
+                        <div class="form-group col-lg-6"><b>Segmento:</b> <span v-if="this.fornecedor_selected_datas.segmentos">{{ this.fornecedor_selected_datas.segmentos.join(', ') }}</span></div>
+                        <div class="form-group col-lg-6"><b>Endereço:</b> <span>{{ this.mountEndereco }}</span></div>
+                        <div class="form-group col-lg-6"><b>CEP:</b> <span>{{ this.fornecedor_selected_datas.end_cep }}</span></div>
+                        <div class="form-group col-lg-6"><b>Cidade:</b> <span>{{ this.fornecedor_selected_datas.end_cidade }}</span></div>
+                        <div class="form-group col-lg-6"><b>Estado:</b> <span>{{ this.fornecedor_selected_datas.end_estado }}</span></div>
+                        <div class="form-group col-lg-6"><b>Site:</b> <span>{{ this.fornecedor_selected_datas.site }}</span></div>
+                        <div class="form-group col-lg-6"><b>Responsável:</b> <span>{{ this.fornecedor_selected_datas.responsavel_id }}</span></div>
                     </div>
+
+                    <div class="row mb-4">
+                        <div class="col text-right">
+                            <button class="btn btn btn-warning mr-1" data-toggle="modal" data-target="#modalEditarFornecedor"><i class="fas fa-edit"></i> Editar</button>
+                            <button class="btn btn btn-danger"><i class="fas fa-trash"></i> Excluir</button>
+                        </div>
+                    </div>
+
+                    <hr>
                 </div>
 
-                <hr>
+                <div v-if="fornecedor_selected" :class="{'is-fetching': isFetching}">
+                    <div v-if="!this.fornecedor_selected_contatos.length">
+                        <h3 class="p-3 text-muted text-center">Nenhum contato cadastrado</h3>
+                    </div>
+                    <div v-else>
+                        <h5 class="my-4">Dados de contato</h5>
 
-                <div v-if="fornecedor_selected">
-                    <h5 class="my-4">Dados de contato</h5>
-                    <div class="row mt-3 no-gutters">
-                        <table class="table table-hover table-responsive-sm table-bordered table-striped border-top-0">
-                            <thead>
-                                <tr>
-                                <th scope="col">Nome</th>
-                                <th scope="col">Departamento</th>
-                                <th scope="col">Email</th>
-                                <th scope="col">Telefone</th>
-                                <th scope="col">Celular</th>
-                                <th scope="col">Ações</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <th>Nome</th>
-                                    <td>Departamento</td>
-                                    <td>Email</td>
-                                    <td>Telefone</td>
-                                    <td>Celular</td>
-                                    <td><div class="action-buttons"><button class="btn btn-warning"><i class="fa fa-edit"></i></button><button class="btn btn-danger"><i class="fa fa-trash"></i></button></div></td>
-                                </tr>
-                                <tr>
-                                    <th>Nome</th>
-                                    <td>Departamento</td>
-                                    <td>Email</td>
-                                    <td>Telefone</td>
-                                    <td>Celular</td>
-                                    <td><div class="action-buttons"><button class="btn btn-warning"><i class="fa fa-edit"></i></button><button class="btn btn-danger"><i class="fa fa-trash"></i></button></div></td>
-                                </tr>
-                            </tbody>
-                        </table>
-
-                        <div class="col text-right">
+                        <div class="row mt-3 no-gutters">
+                            <table class="table table-hover table-bordered table-responsive w-100 d-block d-md-table table-striped border-top-0">
+                                <thead>
+                                    <tr>
+                                    <th scope="col">Nome</th>
+                                    <th scope="col">Departamento</th>
+                                    <th scope="col">Email</th>
+                                    <th scope="col">Telefone</th>
+                                    <th scope="col">Celular</th>
+                                    <th scope="col">Ações</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr v-for="contato in this.fornecedor_selected_contatos">
+                                        <th>{{ contato.nome }}</th>
+                                        <td>{{ (contato.departamento ? contato.departamento : 'N/Informado') }}</td>
+                                        <td>{{ (contato.email ? contato.email : 'N/Informado') }}</td>
+                                        <td>{{ (contato.telefone ? contato.telefone : 'N/Informado') }}</td>
+                                        <td>{{ (contato.celular ? contato.celular : 'N/Informado') }}</td>
+                                        <td><div class="action-buttons"><button class="btn btn-warning"><i class="fa fa-edit"></i></button><button class="btn btn-danger"><i class="fa fa-trash"></i></button></div></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col no-gutters text-right">
                             <button class="btn btn btn-success" data-toggle="modal" data-target="#modalContato"><i class="fas fa-plus"></i> Adicionar</button>
                         </div>
                     </div>
@@ -105,59 +104,7 @@
                         </button>
                     </div>
                     <div class="modal-body">
-                        <form action="" v-on:submit.prevent="saveFornecedor()">
-                            <div class="row">
-                                <div class="form-group col-md-12">
-                                    <label for="name">Nome <span class="text-danger">*</span></label>
-                                     <input v-model="Nome" id="name" type="text" class="form-control" placeholder="Nome do fornecedor..." required="">
-                                </div>
-                                <div class="form-group col-md-3">
-                                    <label for="numero_sap">Número SAP <span class="text-danger">*</span></label>
-                                     <input v-model="NumeroSAP" type="text" id="numero_sap" placeholder="Número SAP..." class="form-control" required="">
-                                </div>
-                                <div class="form-group col-md-4">
-                                    <label for="cpf_cnpj">CNPJ/CPF <span class="text-danger">*</span></label>
-                                    <input v-model="cpf_cnpj" id="cpf_cnpj" type="text" placeholder="CNPJ/CPF do fornecedor..." class="form-control" required="">
-                                </div>
-                                 <div class="form-group col-md-5">
-                                    <label for="Segmento">Segmento(s) <span class="text-danger">*</span></label>
-                                    <v-select :placeholder="'Selecione um ou mais segmento(s)...'" multiple v-model="Segmentos" :options="['Prefeitura', 'Administradora', 'Fornecedor']"></v-select>
-                                </div>
-
-                                <div class="col-12"><h5>Endereço</h5><hr></div>
-
-                                <div class="form-group col-md-4">
-                                   <label for="CEP">CEP</label>
-                                   <input :class="{'is-invalid': CEPHasError}" v-model="CEP" type="text" placeholder="CEP..." class="form-control">
-                                </div>
-                                <div class="form-group col-md-4">
-                                   <label for="Logradouro">Logradouro</label>
-                                   <input v-model="Logradouro" type="text" placeholder="Logradouro..." class="form-control">
-                                </div>
-                                <div class="form-group col-md-4">
-                                   <label for="Numero">Número</label>
-                                   <input v-model="Numero" type="text" placeholder="Número..." class="form-control">
-                                </div>
-                                <div class="form-group col-md-4">
-                                    <label for="Estado">Bairro</label>
-                                    <input v-model="Bairro" type="text" placeholder="Bairro..." class="form-control">
-                                </div>
-                                <div class="form-group col-md-4">
-                                    <label for="Estado">Estado</label>
-                                    <input v-model="Estado" type="text" placeholder="Estado..." class="form-control">
-                                </div>
-                                <div class="form-group col-md-4">
-                                    <label for="Cidade">Cidade</label>
-                                    <input v-model="Cidade" type="text" placeholder="Cidade..." class="form-control">
-                                </div>
-                                <div class="form-group col-md-12">
-                                    <label for="Responsavel">Responsável</label>
-                                    <v-select name="Nome" id="Nome" v-model="Responsavel" placeholder="Selecione um responsável..." :options="[]">
-                                        <span slot="no-options">Nenhum responsável encontrado.</span>
-                                    </v-select>
-                                </div>
-                            </div>
-                        </form>
+                        <FornecedorForm></FornecedorForm>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button>
@@ -178,30 +125,7 @@
                         </button>
                     </div>
                     <div class="modal-body">
-                        <form action="">
-                            <div class="row">
-                                <div class="form-group col-md-12">
-                                    <label for="Nome">Nome <span class="text-danger">*</span></label>
-                                    <input id="Nome" type="text" placeholder="Nome..." class="form-control" required="">
-                                </div>
-                                <div class="form-group col-md-6">
-                                    <label for="Departamento">Departamento</label>
-                                    <input id="Departamento" type="text" placeholder="Departamento..." class="form-control" required="">
-                                </div>
-                                <div class="form-group col-md-6">
-                                    <label for="Email">Email</label>
-                                    <input id="Email" type="text" placeholder="Email..." class="form-control" required="">
-                                </div>
-                                <div class="form-group col-md-6">
-                                    <label for="Telefone">Telefone</label>
-                                    <input id="Telefone" type="text" placeholder="Telefone..." class="form-control" required="">
-                                </div>
-                                <div class="form-group col-md-6">
-                                    <label for="Celular">Celular</label>
-                                    <input id="Celular" type="text" placeholder="Celular..." class="form-control" required="">
-                                </div>
-                            </div>
-                        </form>
+                        ...
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button>
@@ -210,23 +134,63 @@
                 </div>
             </div>
         </div>
+
+        <!-- Modal Editar Fornecedor -->
+        <div class="modal fade" id="modalEditarFornecedor" tabindex="-1" role="dialog" aria-labelledby="modalEditarFornecedorLabel" aria-hidden="true">
+            <div class="modal-dialog modal-lg shadow" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="modalEditarFornecedorLabel">Dados de contato</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <FornecedorForm></FornecedorForm>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button>
+                        <button v-on:click="updateFornecedor()" type="button" class="btn btn-primary"><i class="fas fa-check"></i> Salvar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </template>
 
 <script>
-import { get, store, update } from '../../api/fornecedor'
+import Bus from '../../bus'
+import FornecedorForm from '../includes/FornecedorForm'
+import {
+    get,
+    store, 
+    update,
+    deletedata
+} from '../../api/fornecedor'
+import {
+    get as getC,
+    store as storeC,
+    update as updateC, 
+    deletedatas as deleteC
+} from '../../api/fornecedor-contato'
 
 export default {
     name: 'Fornecedores',
+    components: { FornecedorForm },
     data() {
         return  {
-            fornecedor_selected: false,
-            fornecedores: [],
+            isFetching: false,
 
-            // Form
+            fornecedores: [],
+            fornecedor_selected: false,
+            fornecedor_selected_datas: [],
+            fornecedor_selected_contatos: [],
+
+            // Form fornecedor
             Nome: '',
             NumeroSAP: '',
             cpf_cnpj: '',
+            Site: '',
             Segmentos: [],
 
             CEPHasError: false,
@@ -240,10 +204,27 @@ export default {
 
             Responsavel: '',
 
-            segmento: null
+            // Form novo contato
+            NomeC: '',
+            DepartamentoC: '',
+            EmailC: '',
+            TelefoneC: '',
+            CelularC: '',
         }
     },
     watch: {
+        fornecedor_selected(selected){
+            if(!selected) return
+
+            // Devemos resetar os contatos
+            this.fornecedor_selected_contatos = []
+
+            // Dados do fornecedor
+            get({ id: selected.value }).then(r => this.fornecedor_selected_datas = r.results)
+
+            // Contatos do fornecedor
+            getC({ fornecedor_id: selected.value }).then(r => this.fornecedor_selected_contatos = r.results)
+        },
         CEP(cep){
             if(cep.length == 8)
                 this.$http.get(_.replace(this.$config.cep_url, '{cep}', cep)).then(r => this.assignCepValues(r.data))
@@ -273,7 +254,10 @@ export default {
         saveFornecedor(){
             store(this.getFields).then(r => {
                 this.fornecedores.push({ label: r.results.nome, value: r.results.id })
+
+                // Dados do fornecedor recém criado
                 this.fornecedor_selected = r.results.nome
+                this.fornecedor_selected_datas = r.results
 
                 this.$notify({group: 'normal', type: 'success', text: 'Fornecedor cadastrado com sucesso' })
 
@@ -286,16 +270,38 @@ export default {
         },
         updateFornecedor(){
             /*----------  TODO  ----------*/
-            update(this.getFields).then().catch()
+            let fields = this.getFields
+            fields.id = this.fornecedor_selected.value
+
+            update(fields).then(r => {
+                console.log()
+            }).catch(e => {
+                console.log(e)
+            })
         }
     },
     computed: {
+        mountEndereco() {
+            if(
+                !this.fornecedor_selected_datas.end_logradouro ||
+                !this.fornecedor_selected_datas.end_bairro ||
+                !this.fornecedor_selected_datas.end_cidade ||
+                !this.fornecedor_selected_datas.end_estado
+            )
+                return 'N/Informado'
+
+            return  this.fornecedor_selected_datas.end_logradouro + ', ' + 
+                    this.fornecedor_selected_datas.end_bairro + ', ' +
+                    this.fornecedor_selected_datas.end_cidade + ' - ' +
+                    this.fornecedor_selected_datas.end_estado
+        },
         getFields() {
             return {
                 'nome': this.Nome,
                 'numero_sap': this.NumeroSAP,
                 'segmentos': this.Segmentos,
                 'cnpj_cpf': this.cpf_cnpj,
+                'site': this.Site,
                 'end_cep': this.CEP,
                 'end_logradouro': this.Logradouro,
                 'end_numero': this.Numero,
@@ -306,6 +312,8 @@ export default {
         }
     },
     mounted() {
+        Bus.$on('isFetching', is => this.isFetching = is)
+
         /* Obtendo a lista de fornecedores */
         get().then(r => {
             _.forEach(r.results, (v,k) => {
@@ -315,3 +323,11 @@ export default {
     }
 }
 </script>
+
+<style lang="scss">
+    .fornecedor-infos{
+        span{
+            margin-left: 5px;
+        }
+    }
+</style>

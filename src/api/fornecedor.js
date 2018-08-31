@@ -2,12 +2,10 @@ import http from '../modules/http'
 
 const get = (params = {}) => {
     return new Promise((resolve, reject) => {
-        if(!params.id) {
+        if(!params.id)
             http.get('/fornecedor', {params: params}).then(r => resolve(r.data)).catch(e => reject(e))
-        } else {
+        else
             http.get('/fornecedor/' + params.id).then(r => resolve(r.data)).catch(e => reject(e))
-        }
-        
     })
 }
 
@@ -18,8 +16,9 @@ const store = (datas) => {
 }
 
 const update = (datas) => {
+    datas._method = 'PATCH' // transforming the request
     return new Promise((resolve, reject) => {
-        http.patch('/fornecedor/' + datas.id, datas).then(r => resolve(r.data)).catch(e => reject(e))
+        http.post('/fornecedor/' + datas.id, datas).then(r => resolve(r.data)).catch(e => reject(e))
     })
 }
 

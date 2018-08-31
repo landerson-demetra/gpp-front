@@ -85,7 +85,7 @@
                         </button>
                     </div>
                     <div class="modal-body">
-                        <form action="" v-on:submit.prevent>
+                        <form v-on:submit.prevent>
                             <div class="row">
                                 <div class="form-group col-md-6">
                                     <label for="PEP">PEP</label>
@@ -95,8 +95,8 @@
                                     <label for="Individualizado">Individualizado</label>
                                     <select class="form-control">
                                         <option value="">Selecione</option>
-                                        <option value="">Sim</option>
-                                        <option value="">Não</option>
+                                        <option value="1">Sim</option>
+                                        <option value="0">Não</option>
                                     </select>
                                 </div>
                             </div>
