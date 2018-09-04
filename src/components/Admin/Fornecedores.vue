@@ -94,73 +94,18 @@
         </div>
 
         <!-- Modal Novo Fornecedor -->
-        <div class="modal fade" id="modalNovoFornecedor" tabindex="-1" role="dialog" aria-labelledby="modalNovoFornecedorLabel" aria-hidden="true">
-            <div class="modal-dialog modal-lg shadow" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="modalNovoFornecedorLabel">Fornecedor</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <FornecedorForm></FornecedorForm>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button>
-                        <button v-on:click="saveFornecedor()" type="button" class="btn btn-primary"><i class="fas fa-check"></i> Salvar</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Modal Novo Contato -->
-        <div class="modal fade" id="modalContato" tabindex="-1" role="dialog" aria-labelledby="modalContatoLabel" aria-hidden="true">
-            <div class="modal-dialog modal-lg shadow" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="modalContatoLabel">Dados de contato</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        ...
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button>
-                        <button type="button" class="btn btn-primary"><i class="fas fa-check"></i> Salvar</button>
-                    </div>
-                </div>
-            </div>
-        </div>
+        <FornecedorModal :action="'New'" :name="'NovoFornecedor'" :title="'Cadastrar Fornecedor'"></FornecedorModal>
 
         <!-- Modal Editar Fornecedor -->
-        <div class="modal fade" id="modalEditarFornecedor" tabindex="-1" role="dialog" aria-labelledby="modalEditarFornecedorLabel" aria-hidden="true">
-            <div class="modal-dialog modal-lg shadow" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="modalEditarFornecedorLabel">Dados de contato</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <FornecedorForm></FornecedorForm>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button>
-                        <button v-on:click="updateFornecedor()" type="button" class="btn btn-primary"><i class="fas fa-check"></i> Salvar</button>
-                    </div>
-                </div>
-            </div>
-        </div>
+        <FornecedorModal :action="'Edit'" :datas="this.fornecedor_selected_datas" :name="'EditarFornecedor'" :title="'Editar Fornecedor'"></FornecedorModal>
+
+        <!-- Modal Novo Contato -->
+        <FornecedorContato></FornecedorContato>
     </div>
 </template>
 
 <script>
 import Bus from '../../bus'
-import FornecedorForm from '../includes/FornecedorForm'
 import {
     get,
     store, 
@@ -174,9 +119,13 @@ import {
     deletedatas as deleteC
 } from '../../api/fornecedor-contato'
 
+// Components
+import FornecedorModal from '../includes/Modals/FornecedorModal'
+import FornecedorContato from '../includes/Modals/FornecedorContato'
+
 export default {
     name: 'Fornecedores',
-    components: { FornecedorForm },
+    components: { FornecedorModal, FornecedorContato },
     data() {
         return  {
             isFetching: false,
@@ -185,31 +134,46 @@ export default {
             fornecedor_selected: false,
             fornecedor_selected_datas: [],
             fornecedor_selected_contatos: [],
+        }
+    },
+    methods: {
+        saveFornecedor(datas){
+            store(datas).then(r => {
+                // Adicionando o forncedor recém criado á lista de fornecedores
+                this.fornecedores.push({ label: r.results.nome, value: r.results.id })
 
-            // Form fornecedor
-            Nome: '',
-            NumeroSAP: '',
-            cpf_cnpj: '',
-            Site: '',
-            Segmentos: [],
+                // Atribuindo os dados do fornecedor recém criado
+                this.fornecedor_selected = this.fornecedores[this.fornecedores.length - 1]
+                this.fornecedor_selected_datas = r.results
 
-            CEPHasError: false,
+                // Notificando o usuário
+                this.$notify({group: 'normal', type: 'success', text: 'Fornecedor cadastrado com sucesso'})
 
-            CEP: '',
-            Logradouro: '',
-            Numero: '',
-            Bairro: '',
-            Estado: '',
-            Cidade: '',
+                // Fechando a modal
+                $('.modal').modal('hide')
+            }).catch(e => {
+                if(e.response.status < 423) return
+                this.$notify({group: 'normal', type: 'error', title: 'Ops :/', text: 'Ocorreu um erro inesperado'})
+            })
+        },
+        updateFornecedor(fields){
+            /*----------  DOING  ----------*/
+            fields.id = this.fornecedor_selected.value
 
-            Responsavel: '',
+            update(fields).then(r => {
+                // Atualizando os dados novos
+                this.fornecedor_selected.label = r.results.nome
+                this.fornecedor_selected_datas = r.results
 
-            // Form novo contato
-            NomeC: '',
-            DepartamentoC: '',
-            EmailC: '',
-            TelefoneC: '',
-            CelularC: '',
+                // Notificando o usuário
+                this.$notify({group: 'normal', type: 'success', text: 'Fornecedor editado com sucesso'})
+
+                // Fechando a modal
+                $('.modal').modal('hide')
+            }).catch(e => {
+                if(e.response.status < 423) return
+                this.$notify({group: 'normal', type: 'error', title: 'Ops :/', text: 'Ocorreu um erro inesperado'})
+            })
         }
     },
     watch: {
@@ -224,60 +188,6 @@ export default {
 
             // Contatos do fornecedor
             getC({ fornecedor_id: selected.value }).then(r => this.fornecedor_selected_contatos = r.results)
-        },
-        CEP(cep){
-            if(cep.length == 8)
-                this.$http.get(_.replace(this.$config.cep_url, '{cep}', cep)).then(r => this.assignCepValues(r.data))
-        },
-    },
-    methods: {
-        assignCepValues(r){
-            if(r.resultado == 0){
-                this.CEPHasError = true
-
-                this.Logradouro = ''
-                this.Bairro = ''
-                this.Estado = ''
-                this.Cidade = ''
-                this.Responsavel = ''
-
-                return
-            }
-
-            this.CEPHasError = false
-
-            this.Logradouro = r.tipo_logradouro + ' ' + r.logradouro
-            this.Bairro = r.bairro
-            this.Estado = r.uf
-            this.Cidade = r.cidade
-        },
-        saveFornecedor(){
-            store(this.getFields).then(r => {
-                this.fornecedores.push({ label: r.results.nome, value: r.results.id })
-
-                // Dados do fornecedor recém criado
-                this.fornecedor_selected = r.results.nome
-                this.fornecedor_selected_datas = r.results
-
-                this.$notify({group: 'normal', type: 'success', text: 'Fornecedor cadastrado com sucesso' })
-
-                /* # Closing the modal # */
-                $('#modalNovoFornecedor').modal('hide')
-            }).catch(e => {
-                if(e.response.status < 423) return
-                this.$notify({group: 'normal', type: 'error', title: 'Ops :/', text: 'Ocorreu um erro inesperado'})
-            })
-        },
-        updateFornecedor(){
-            /*----------  TODO  ----------*/
-            let fields = this.getFields
-            fields.id = this.fornecedor_selected.value
-
-            update(fields).then(r => {
-                console.log()
-            }).catch(e => {
-                console.log(e)
-            })
         }
     },
     computed: {
@@ -294,31 +204,24 @@ export default {
                     this.fornecedor_selected_datas.end_bairro + ', ' +
                     this.fornecedor_selected_datas.end_cidade + ' - ' +
                     this.fornecedor_selected_datas.end_estado
-        },
-        getFields() {
-            return {
-                'nome': this.Nome,
-                'numero_sap': this.NumeroSAP,
-                'segmentos': this.Segmentos,
-                'cnpj_cpf': this.cpf_cnpj,
-                'site': this.Site,
-                'end_cep': this.CEP,
-                'end_logradouro': this.Logradouro,
-                'end_numero': this.Numero,
-                'end_bairro': this.Bairro,
-                'end_estado': this.Estado,
-                'end_cidade': this.Cidade,
-            }
         }
     },
     mounted() {
         Bus.$on('isFetching', is => this.isFetching = is)
 
+        // Save events
+        Bus.$on('NovoFornecedor-onOk', datas => {
+            this.saveFornecedor(datas)
+        })
+
+        // Edit events
+        Bus.$on('EditarFornecedor-onOk', datas => {
+            this.updateFornecedor(datas)
+        })
+
         /* Obtendo a lista de fornecedores */
         get().then(r => {
-            _.forEach(r.results, (v,k) => {
-                this.fornecedores.push({ label: v.nome, value: v.id })
-            })
+            _.forEach(r.results, (v,k) => this.fornecedores.push({ label: v.nome, value: v.id }))
         })
     }
 }
