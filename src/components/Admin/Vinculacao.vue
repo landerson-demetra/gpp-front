@@ -8,14 +8,14 @@
                 <form action="">
                     <div class="row">
                         <div class="form-group col-md-6">
-                            <label for="PEP">PEP</label>
-                            <input v-model="pep" type="text" class="form-control" placeholder="R.XXXX.99.99">
-                        </div>
-                        <div class="form-group col-md-6">
                             <label for="Empreendimento">Empreendimento</label>
                             <v-select name="Empreendimento" id="Empreendimento" placeholder="Selecione..." :options="[]">
                                 <span slot="no-options">Nenhum empreendimento encontrado.</span>
                             </v-select>
+                        </div>
+                        <div class="form-group col-md-6">
+                            <label for="PEP">Condominio</label>
+                            <input v-model="pep" type="text" class="form-control" placeholder="R.XXXX.99.99">
                         </div>
                     </div>
                 </form>

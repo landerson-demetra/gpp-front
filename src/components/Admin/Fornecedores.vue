@@ -5,7 +5,7 @@
                 <h3 class="mt-0">Fornecedores</h3>
             </div>
             <div class="card-body">
-                <form action="" method="POST" v-on:submit.prevent>
+                <form method="POST" v-on:submit.prevent>
                     <div class="row">
                         <div class="form-group col-md-4">
                             <label for="SAP">Número SAP</label>
@@ -33,19 +33,19 @@
                 <div v-else>
                     <div class="row fornecedor-infos" :class="{'is-fetching': isFetching}">
                         <div class="form-group col-lg-6"><b>CPF/CNPJ:</b> <span>{{ this.fornecedor_selected_datas.cnpj_cpf }}</span></div>
-                        <div class="form-group col-lg-6"><b>Segmento:</b> <span v-if="this.fornecedor_selected_datas.segmentos">{{ this.fornecedor_selected_datas.segmentos.join(', ') }}</span></div>
+                        <div class="form-group col-lg-6"><b>Segmento(s):</b> <span v-if="this.fornecedor_selected_datas.segmentos">{{ this.fornecedor_selected_datas.segmentos.join(', ') }}</span></div>
                         <div class="form-group col-lg-6"><b>Endereço:</b> <span>{{ this.mountEndereco }}</span></div>
                         <div class="form-group col-lg-6"><b>CEP:</b> <span>{{ this.fornecedor_selected_datas.end_cep }}</span></div>
                         <div class="form-group col-lg-6"><b>Cidade:</b> <span>{{ this.fornecedor_selected_datas.end_cidade }}</span></div>
                         <div class="form-group col-lg-6"><b>Estado:</b> <span>{{ this.fornecedor_selected_datas.end_estado }}</span></div>
-                        <div class="form-group col-lg-6"><b>Site:</b> <span>{{ this.fornecedor_selected_datas.site }}</span></div>
+                        <div class="form-group col-lg-6"><b>Site:</b> <span><a :href="this.fornecedor_selected_datas.site" target="_blank">{{ this.fornecedor_selected_datas.site }}</a></span></div>
                         <div class="form-group col-lg-6"><b>Responsável:</b> <span>{{ this.fornecedor_selected_datas.responsavel_id }}</span></div>
                     </div>
 
                     <div class="row mb-4">
                         <div class="col text-right">
                             <button class="btn btn btn-warning mr-1" data-toggle="modal" data-target="#modalEditarFornecedor"><i class="fas fa-edit"></i> Editar</button>
-                            <button class="btn btn btn-danger"><i class="fas fa-trash"></i> Excluir</button>
+                            <button class="btn btn btn-danger" data-toggle="modal" data-target="#modalDeletarFornecedor"><i class="fas fa-trash"></i> Excluir</button>
                         </div>
                     </div>
 
@@ -53,6 +53,8 @@
                 </div>
 
                 <div v-if="fornecedor_selected" :class="{'is-fetching': isFetching}">
+                    <clip-loader class="my-5" :loading="isFetching" :color="'#26256A'" :size="'70px'"></clip-loader>
+
                     <div v-if="!this.fornecedor_selected_contatos.length">
                         <h3 class="p-3 text-muted text-center">Nenhum contato cadastrado</h3>
                     </div>
@@ -78,7 +80,12 @@
                                         <td>{{ (contato.email ? contato.email : 'N/Informado') }}</td>
                                         <td>{{ (contato.telefone ? contato.telefone : 'N/Informado') }}</td>
                                         <td>{{ (contato.celular ? contato.celular : 'N/Informado') }}</td>
-                                        <td><div class="action-buttons"><button class="btn btn-warning"><i class="fa fa-edit"></i></button><button class="btn btn-danger"><i class="fa fa-trash"></i></button></div></td>
+                                        <td>
+                                            <div class="action-buttons">
+                                                <button v-on:click="setContatoDatas(contato)" data-toggle="modal" data-target="#modalEditarContato" class="btn btn-warning"><i class="fa fa-edit"></i></button>
+                                                <button v-on:click="setContatoDatas(contato)" data-toggle="modal" data-target="#modalDeletarContato" class="btn btn-danger"><i class="fa fa-trash"></i></button>
+                                            </div>
+                                        </td>
                                     </tr>
                                 </tbody>
                             </table>
@@ -86,7 +93,7 @@
                     </div>
                     <div class="row">
                         <div class="col no-gutters text-right">
-                            <button class="btn btn btn-success" data-toggle="modal" data-target="#modalContato"><i class="fas fa-plus"></i> Adicionar</button>
+                            <button class="btn btn btn-success" data-toggle="modal" data-target="#modalNovoContato"><i class="fas fa-plus"></i> Adicionar</button>
                         </div>
                     </div>
                 </div>
@@ -94,13 +101,22 @@
         </div>
 
         <!-- Modal Novo Fornecedor -->
-        <FornecedorModal :action="'New'" :name="'NovoFornecedor'" :title="'Cadastrar Fornecedor'"></FornecedorModal>
+        <FornecedorModal action="New" name="NovoFornecedor" title="Cadastrar Fornecedor"></FornecedorModal>
 
         <!-- Modal Editar Fornecedor -->
-        <FornecedorModal :action="'Edit'" :datas="this.fornecedor_selected_datas" :name="'EditarFornecedor'" :title="'Editar Fornecedor'"></FornecedorModal>
+        <FornecedorModal action="Edit" name="EditarFornecedor" title="Editar Fornecedor" :datas="this.fornecedor_selected_datas"></FornecedorModal>
+
+        <!-- Modal Deletar Fornecedor -->
+        <FornecedorModal action="Delete" name="DeletarFornecedor" title="Deletar Fornecedor" :datas="this.fornecedor_selected_datas"></FornecedorModal>
 
         <!-- Modal Novo Contato -->
-        <FornecedorContato></FornecedorContato>
+        <FornecedorContato action="New" name="NovoContato" title="Adicionar um contato"></FornecedorContato>
+
+        <!-- Modal Editar Contato -->
+        <FornecedorContato action="Edit" name="EditarContato" title="Editar contato" :datas="this.fornecedor_selected_contatos_clicked"></FornecedorContato>
+
+        <!-- Modal Delete Contato -->
+        <FornecedorContato action="Delete" name="DeletarContato" title="Deletar Contato" :datas="this.fornecedor_selected_contatos_clicked"></FornecedorContato>
     </div>
 </template>
 
@@ -116,7 +132,7 @@ import {
     get as getC,
     store as storeC,
     update as updateC, 
-    deletedatas as deleteC
+    deletedata as deleteC
 } from '../../api/fornecedor-contato'
 
 // Components
@@ -125,7 +141,10 @@ import FornecedorContato from '../includes/Modals/FornecedorContato'
 
 export default {
     name: 'Fornecedores',
-    components: { FornecedorModal, FornecedorContato },
+    components: {
+        FornecedorModal,
+        FornecedorContato
+    },
     data() {
         return  {
             isFetching: false,
@@ -134,9 +153,13 @@ export default {
             fornecedor_selected: false,
             fornecedor_selected_datas: [],
             fornecedor_selected_contatos: [],
+            fornecedor_selected_contatos_clicked: []
         }
     },
     methods: {
+        /*==================================
+        =            Fornecedor            =
+        ==================================*/
         saveFornecedor(datas){
             store(datas).then(r => {
                 // Adicionando o forncedor recém criado á lista de fornecedores
@@ -157,7 +180,6 @@ export default {
             })
         },
         updateFornecedor(fields){
-            /*----------  DOING  ----------*/
             fields.id = this.fornecedor_selected.value
 
             update(fields).then(r => {
@@ -172,9 +194,103 @@ export default {
                 $('.modal').modal('hide')
             }).catch(e => {
                 if(e.response.status < 423) return
-                this.$notify({group: 'normal', type: 'error', title: 'Ops :/', text: 'Ocorreu um erro inesperado'})
+
+                this.$notify(this.$config.errors.unexpected)
             })
+        },
+        deleteFornecedor(){
+            deletedata(this.fornecedor_selected.value).then(r => {
+                // Removendo o fornecedor deletado da lista de fornecedores
+                let index = this.fornecedores.map((e) => e.value).indexOf(this.fornecedor_selected.value)
+                this.fornecedores.splice(index, 1)
+
+                // Resetando os dados do fornecedor selecionado
+                this.fornecedor_selected = false
+                this.fornecedor_selected_datas = []
+                this.fornecedor_selected_contatos = []
+
+                // Notificando o usuário
+                this.$notify({group: 'normal', type: 'success', text: 'Fornecedor deletado com sucesso'})
+            }).catch(e => {
+                if(e.response.status < 423) return
+                this.$notify(this.$config.errors.unexpected)
+            })
+
+            // Fechando a modal
+            $('.modal').modal('hide')
+        },
+        /*=====  End of Fornecedor  ======*/
+
+        /*==============================================
+        =            Contatos do fornecedor            =
+        ==============================================*/
+        saveContato(datas){
+            datas.fornecedor_id = this.fornecedor_selected.value
+
+            storeC(datas).then(r => {
+                this.fornecedor_selected_contatos.push({
+                    nome: r.results.nome,
+                    email: r.results.email,
+                    departamento: r.results.departamento,
+                    telefone: r.results.telefone,
+                    celular: r.results.celular
+                })
+
+                // Notifica o usuário
+                this.$notify({group: 'normal', type: 'success', text: 'Contato do forencedor criado com sucesso'})
+
+                // Fechando a modal
+                $('.modal').modal('hide')
+            }).catch(e => {
+                if(e.response.status < 423) return
+                this.$notify(this.$config.errors.unexpected)
+            })
+        },
+        updateContato(fields){
+            fields.id = this.fornecedor_selected_contatos_clicked.id
+
+            updateC(fields).then(r => {
+                // Encontrando o índice do contato recém atualizado na lista de fornecedores
+                let index = this.fornecedor_selected_contatos.map((e) => e.id).indexOf(this.fornecedor_selected_contatos_clicked.id)
+                this.fornecedor_selected_contatos[index] = r.results
+
+                // Forçando a atualização de DOM
+                this.$forceUpdate()
+
+                // Notificando o usuário
+                this.$notify({group: 'normal', type: 'success', text: 'Contato do fornecedor editado com sucesso'})
+
+                // Fechando a modal
+                $('.modal').modal('hide')
+            }).catch(e => {
+                if(e.response.status < 423) return
+
+                this.$notify(this.$config.errors.unexpected)
+            })
+        },
+        deleteContato(){
+            deleteC(this.fornecedor_selected_contatos_clicked.id).then(r => {
+                // Removendo o fornecedor deletado da lista de fornecedores
+                let index = this.fornecedores.map((e) => e.value).indexOf(this.fornecedor_selected.value)
+                this.fornecedor_selected_contatos.splice(index, 1)
+
+                // Resetando
+                this.fornecedor_selected_contatos_clicked = ''
+
+                // Notificando o usuário
+                this.$notify({group: 'normal', type: 'success', text: 'Contato do fornecedor deletado com sucesso'})
+
+                $('.modal').modal('hide')
+            }).catch(e => {
+                if(e.response.status < 423) return
+
+                this.$notify(this.$config.errors.unexpected)
+            })
+        },
+        setContatoDatas(datas){
+            this.fornecedor_selected_contatos_clicked = datas
         }
+        /*=====  End of Contatos do fornecedor  ======*/
     },
     watch: {
         fornecedor_selected(selected){
@@ -200,29 +316,35 @@ export default {
             )
                 return 'N/Informado'
 
-            return  this.fornecedor_selected_datas.end_logradouro + ', ' + 
+            return  this.fornecedor_selected_datas.end_logradouro + ' - ' + 
+                    this.fornecedor_selected_datas.end_numero + ', ' +
                     this.fornecedor_selected_datas.end_bairro + ', ' +
                     this.fornecedor_selected_datas.end_cidade + ' - ' +
                     this.fornecedor_selected_datas.end_estado
         }
     },
     mounted() {
-        Bus.$on('isFetching', is => this.isFetching = is)
+        var self = this
+
+        // Lista de fornecedores
+        get().then(r => {
+            _.forEach(r.results, (v,k) => self.fornecedores.push({ label: v.nome, value: v.id }))
+        })
+
+        // isFetching trick
+        Bus.$on('isFetching', is => self.isFetching = is)
 
         // Save events
-        Bus.$on('NovoFornecedor-onOk', datas => {
-            this.saveFornecedor(datas)
-        })
+        Bus.$on('NovoFornecedor-onOk', datas => self.saveFornecedor(datas))
+        Bus.$on('NovoContato-onOk', datas => self.saveContato(datas))
 
         // Edit events
-        Bus.$on('EditarFornecedor-onOk', datas => {
-            this.updateFornecedor(datas)
-        })
+        Bus.$on('EditarFornecedor-onOk', datas => self.updateFornecedor(datas))
+        Bus.$on('EditarContato-onOk', datas => self.updateContato(datas))
 
-        /* Obtendo a lista de fornecedores */
-        get().then(r => {
-            _.forEach(r.results, (v,k) => this.fornecedores.push({ label: v.nome, value: v.id }))
-        })
+        // Delete events
+        Bus.$on('DeletarFornecedor-onOk', r => self.deleteFornecedor())
+        Bus.$on('DeletarContato-onOk', r => self.deleteContato())
     }
 }
 </script>
