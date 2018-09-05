@@ -144,7 +144,7 @@ export default {
 
             this.CEPHasError = false
 
-            this.Logradouro = r.tipo_logradouro + ' ' + r.logradouro
+            this.Logradouro = (r.tipo_logradouro + ' ' + r.logradouro).trim()
             this.Bairro = r.bairro
             this.Estado = r.uf
             this.Cidade = r.cidade
