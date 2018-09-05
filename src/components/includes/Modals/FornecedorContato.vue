@@ -81,6 +81,8 @@ export default {
         },
         emitOkEvent(){
             Bus.$emit(this.name + '-onOk', (this.action !== 'Delete' ? this.getFields : true))
+
+            this.reset()
         },
         closeEvent(){
             if(this.action == 'New')

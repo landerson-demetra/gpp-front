@@ -101,9 +101,6 @@
                                 </div>
                             </div>
                             <div class="row">
-
-
-
                                 <div class="form-group col-md-4">
                                     <label for="ADM">ADM</label>
                                     <v-select id="ADM" placeholder="Selecione..." :options="this.administradoras">

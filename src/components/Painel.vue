@@ -11,7 +11,7 @@
         </div>
 
         <!-- Footer -->
-        <footer>.</footer>
+        <footer></footer>
     </div>
 </template>
 

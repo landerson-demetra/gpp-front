@@ -53,8 +53,6 @@
                 </div>
 
                 <div v-if="fornecedor_selected" :class="{'is-fetching': isFetching}">
-                    <clip-loader class="my-5" :loading="isFetching" :color="'#26256A'" :size="'70px'"></clip-loader>
-
                     <div v-if="!this.fornecedor_selected_contatos.length">
                         <h3 class="p-3 text-muted text-center">Nenhum contato cadastrado</h3>
                     </div>
@@ -170,13 +168,13 @@ export default {
                 this.fornecedor_selected_datas = r.results
 
                 // Notificando o usuário
-                this.$notify({group: 'normal', type: 'success', text: 'Fornecedor cadastrado com sucesso'})
+                this.$notify({group:'normal', type:'success', text:'Fornecedor cadastrado com sucesso'})
 
                 // Fechando a modal
                 $('.modal').modal('hide')
             }).catch(e => {
                 if(e.response.status < 423) return
-                this.$notify({group: 'normal', type: 'error', title: 'Ops :/', text: 'Ocorreu um erro inesperado'})
+                this.$notify({group:'normal', type:'error', title:'Ops :/', text:'Ocorreu um erro inesperado'})
             })
         },
         updateFornecedor(fields){
@@ -188,7 +186,7 @@ export default {
                 this.fornecedor_selected_datas = r.results
 
                 // Notificando o usuário
-                this.$notify({group: 'normal', type: 'success', text: 'Fornecedor editado com sucesso'})
+                this.$notify({group:'normal', type:'success', text:'Fornecedor editado com sucesso'})
 
                 // Fechando a modal
                 $('.modal').modal('hide')
@@ -210,7 +208,7 @@ export default {
                 this.fornecedor_selected_contatos = []
 
                 // Notificando o usuário
-                this.$notify({group: 'normal', type: 'success', text: 'Fornecedor deletado com sucesso'})
+                this.$notify({group:'normal', type:'success', text:'Fornecedor deletado com sucesso'})
             }).catch(e => {
                 if(e.response.status < 423) return
                 this.$notify(this.$config.errors.unexpected)
@@ -237,7 +235,7 @@ export default {
                 })
 
                 // Notifica o usuário
-                this.$notify({group: 'normal', type: 'success', text: 'Contato do forencedor criado com sucesso'})
+                this.$notify({group:'normal', type:'success', text:'Contato do forencedor criado com sucesso'})
 
                 // Fechando a modal
                 $('.modal').modal('hide')
@@ -258,7 +256,7 @@ export default {
                 this.$forceUpdate()
 
                 // Notificando o usuário
-                this.$notify({group: 'normal', type: 'success', text: 'Contato do fornecedor editado com sucesso'})
+                this.$notify({group:'normal', type:'success', text:'Contato do fornecedor editado com sucesso'})
 
                 // Fechando a modal
                 $('.modal').modal('hide')
@@ -271,7 +269,7 @@ export default {
         deleteContato(){
             deleteC(this.fornecedor_selected_contatos_clicked.id).then(r => {
                 // Removendo o fornecedor deletado da lista de fornecedores
-                let index = this.fornecedores.map((e) => e.value).indexOf(this.fornecedor_selected.value)
+                let index = this.fornecedor_selected_contatos.map((e) => e.id).indexOf(this.fornecedor_selected_contatos_clicked.id)
                 this.fornecedor_selected_contatos.splice(index, 1)
 
                 // Resetando
@@ -288,6 +286,7 @@ export default {
             })
         },
         setContatoDatas(datas){
+            console.log('set: ', datas)
             this.fornecedor_selected_contatos_clicked = datas
         }
         /*=====  End of Contatos do fornecedor  ======*/
@@ -300,10 +299,12 @@ export default {
             this.fornecedor_selected_contatos = []
 
             // Dados do fornecedor
-            get({ id: selected.value }).then(r => this.fornecedor_selected_datas = r.results)
+            get({ id: selected.value })
+                .then(r => this.fornecedor_selected_datas = r.results)
 
             // Contatos do fornecedor
-            getC({ fornecedor_id: selected.value }).then(r => this.fornecedor_selected_contatos = r.results)
+            getC({ fornecedor_id: selected.value })
+                .then(r => this.fornecedor_selected_contatos = r.results)
         }
     },
     computed: {
@@ -327,9 +328,7 @@ export default {
         var self = this
 
         // Lista de fornecedores
-        get().then(r => {
-            _.forEach(r.results, (v,k) => self.fornecedores.push({ label: v.nome, value: v.id }))
-        })
+        get().then(r => _.forEach(r.results, v => self.fornecedores.push({ label: v.nome, value: v.id })))
 
         // isFetching trick
         Bus.$on('isFetching', is => self.isFetching = is)

@@ -39,11 +39,11 @@
                 <table class="table table-hover table-responsive-sm table-bordered table-striped border-top-0">
                     <thead>
                         <tr>
-                        <th scope="col">PEP</th>
-                        <th scope="col">Nº do Contribuinte</th>
-                        <th scope="col">Usuário</th>
-                        <th scope="col">Senha</th>
-                        <th scope="col">Ações</th>
+                            <th scope="col">PEP</th>
+                            <th scope="col">Nº do Contribuinte</th>
+                            <th scope="col">Usuário</th>
+                            <th scope="col">Senha</th>
+                            <th scope="col">Ações</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -71,5 +71,21 @@
 </template>
 
 <script>
-    
+export default {
+    name: 'DadosUnidade',
+    data(){
+        return {
+            
+        }
+    },
+    methods: {
+        
+    },
+    watch: {
+
+    },
+    mounted(){
+
+    }
+}
 </script>
