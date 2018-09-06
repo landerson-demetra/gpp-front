@@ -5,10 +5,10 @@ historicos: {
     columns: [
         { title: 'Contrato', field: 'contrato',  fixed: true },
         { title: 'Nome', field: 'nome' },
-        { title: 'CPF/CNPJ', field: 'cpfcnpj'},
-        { title: 'Tipo de contrato', field: 'vlcontrato', sortable: true},
-        { title: 'Data do contrato', field: 'drcontrato', sortable: true},
-        { title: 'Status', field: 'status', sortable: true},
+        { title: 'CPF/CNPJ', field: 'cpfcnpj' },
+        { title: 'Tipo de contrato', field: 'vlcontrato', sortable: true },
+        { title: 'Data do contrato', field: 'drcontrato', sortable: true },
+        { title: 'Status', field: 'status', sortable: true },
     ].map(col => (col.colStyle = { width: '200px', height: '20px' }, col)),
     data: [
         {
@@ -28,14 +28,14 @@ condominios: {
     fixHeaderAndSetBodyMaxHeight: 160,
     tblClass: 'table-borderless table-sm table-responsive-sm border border-top-0',
     columns: [
-        { title: 'Status', field: 'status', sortable: true},
-        { title: 'Periodo', field: 'periodo', sortable: true},
-        { title: 'Valor', field: 'valor', sortable: true},
-        { title: 'Juros', field: 'juros', sortable: true},
-        { title: 'Multa', field: 'multa', sortable: true},
-        { title: 'Correção', field: 'correcao', sortable: true},
-        { title: 'Total', field: 'total', sortable: true},
-        { title: 'Data pgto.', field: 'datapgto', sortable: true},
+        { title: 'Status', field: 'status', sortable: true },
+        { title: 'Periodo', field: 'periodo', sortable: true },
+        { title: 'Valor', field: 'valor', sortable: true },
+        { title: 'Juros', field: 'juros', sortable: true },
+        { title: 'Multa', field: 'multa', sortable: true },
+        { title: 'Correção', field: 'correcao', sortable: true },
+        { title: 'Total', field: 'total', sortable: true },
+        { title: 'Data pgto.', field: 'datapgto', sortable: true },
         { title: 'Ações', field: 'acoes'},
     ].map(col => (col.colStyle = { width: '200px', height: '20px' }, col)),
     data: [

@@ -1,7 +1,7 @@
 <template>
     <div id="painel" class="wow fadeIn" data-wow-duration="2s">
         <!-- Header -->
-        <GppHeader :profile="this.profile"></GppHeader>
+        <GppHeader></GppHeader>
 
         <div class="clearfix"></div>
 
@@ -16,23 +16,16 @@
 </template>
 
 <script>
-import { mapState } from 'vuex'
 import GppHeader from './includes/GppHeader'
 
 export default {
   name: 'Painel',
-  components: { GppHeader },
-  computed: mapState({profile: state => state.user.profile})
+  components: { GppHeader }
 }
 </script>
 
 <style lang="scss">
     @import "../assets/scss/app";
-
-    .content-gest{
-        -webkit-transition: all .3s;
-        transition: all .3s;
-    }
 
     .show-resumo-body{
         max-height: 250px;

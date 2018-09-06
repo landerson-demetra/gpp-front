@@ -5,7 +5,7 @@
                 <h3 class="mt-0">Vinculação PEP</h3>
             </div>
             <div class="card-body">
-                <form action="">
+                <form>
                     <div class="row">
                         <div class="form-group col-md-6">
                             <label for="Empreendimento">Empreendimento</label>
@@ -26,13 +26,13 @@
                     <table class="table table-hover table-responsive-sm table-bordered table-striped border-top-0">
                         <thead>
                             <tr>
-                            <th scope="col">PEP</th>
-                            <th scope="col">ADM</th>
-                            <th scope="col">Fornecedor</th>
-                            <th scope="col">Prefeitura</th>
-                            <th scope="col">Responsável</th>
-                            <th scope="col">Individualizado</th>
-                            <th scope="col">Ações</th>
+                                <th scope="col">PEP</th>
+                                <th scope="col">ADM</th>
+                                <th scope="col">Fornecedor</th>
+                                <th scope="col">Prefeitura</th>
+                                <th scope="col">Responsável</th>
+                                <th scope="col">Individualizado</th>
+                                <th scope="col">Ações</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -89,7 +89,7 @@
                             <div class="row">
                                 <div class="form-group col-md-6">
                                     <label for="PEP">PEP</label>
-                                    <input :value="pep" disabled="" id="PEP" type="text" class="form-control">
+                                    <input :value="PEP" disabled="" id="PEP" type="text" class="form-control">
                                 </div>
                                 <div class="form-group col-md-4">
                                     <label for="Individualizado">Individualizado</label>
@@ -138,10 +138,8 @@ export default {
     data() {
         return {
             show: true,
-            pep: '',
+            PEP: '',
         }
     }
 }
-
-
 </script>

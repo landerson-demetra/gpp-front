@@ -123,7 +123,7 @@ export default {
         emitOkEvent(){
             Bus.$emit(this.name + '-onOk', (this.action !== 'Delete' ? this.getFields : true))
 
-            this.reset()
+            // ??? this.reset()
         },
         closeEvent(){
             if(this.action == 'New')
@@ -141,6 +141,8 @@ export default {
 
                 return
             }
+
+            this.$refs.numero.focus()
 
             this.CEPHasError = false
 
@@ -183,10 +185,7 @@ export default {
         CEP(cep){
             if(cep && cep.length < 9) return
 
-            this.$http.get(_.replace(this.$config.cep_url, '{cep}', cep)).then(r => {
-                this.assignCepValues(r.data)
-                this.$refs.numero.focus()
-            })
+            this.$http.get(_.replace(this.$config.cep_url, '{cep}', cep)).then(r => this.assignCepValues(r.data))
         },
         datas(){
             if(this.action == 'Edit')

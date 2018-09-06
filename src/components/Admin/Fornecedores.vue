@@ -111,10 +111,10 @@
         <FornecedorContato action="New" name="NovoContato" title="Adicionar um contato"></FornecedorContato>
 
         <!-- Modal Editar Contato -->
-        <FornecedorContato action="Edit" name="EditarContato" title="Editar contato" :datas="this.fornecedor_selected_contatos_clicked"></FornecedorContato>
+        <FornecedorContato action="Edit" name="EditarContato" title="Editar contato" :datas="this.fornecedor_selected_contatos_active"></FornecedorContato>
 
         <!-- Modal Delete Contato -->
-        <FornecedorContato action="Delete" name="DeletarContato" title="Deletar Contato" :datas="this.fornecedor_selected_contatos_clicked"></FornecedorContato>
+        <FornecedorContato action="Delete" name="DeletarContato" title="Deletar Contato" :datas="this.fornecedor_selected_contatos_active"></FornecedorContato>
     </div>
 </template>
 
@@ -151,7 +151,7 @@ export default {
             fornecedor_selected: false,
             fornecedor_selected_datas: [],
             fornecedor_selected_contatos: [],
-            fornecedor_selected_contatos_clicked: []
+            fornecedor_selected_contatos_active: []
         }
     },
     methods: {
@@ -234,7 +234,7 @@ export default {
                     celular: r.results.celular
                 })
 
-                // Notifica o usuário
+                // Notificando o usuário
                 this.$notify({group:'normal', type:'success', text:'Contato do forencedor criado com sucesso'})
 
                 // Fechando a modal
@@ -245,14 +245,14 @@ export default {
             })
         },
         updateContato(fields){
-            fields.id = this.fornecedor_selected_contatos_clicked.id
+            fields.id = this.fornecedor_selected_contatos_active.id
 
             updateC(fields).then(r => {
                 // Encontrando o índice do contato recém atualizado na lista de fornecedores
-                let index = this.fornecedor_selected_contatos.map((e) => e.id).indexOf(this.fornecedor_selected_contatos_clicked.id)
+                let index = this.fornecedor_selected_contatos.map((e) => e.id).indexOf(this.fornecedor_selected_contatos_active.id)
                 this.fornecedor_selected_contatos[index] = r.results
 
-                // Forçando a atualização de DOM
+                // Forçando a atualização da DOM
                 this.$forceUpdate()
 
                 // Notificando o usuário
@@ -267,13 +267,13 @@ export default {
             })
         },
         deleteContato(){
-            deleteC(this.fornecedor_selected_contatos_clicked.id).then(r => {
+            deleteC(this.fornecedor_selected_contatos_active.id).then(r => {
                 // Removendo o fornecedor deletado da lista de fornecedores
-                let index = this.fornecedor_selected_contatos.map((e) => e.id).indexOf(this.fornecedor_selected_contatos_clicked.id)
+                let index = this.fornecedor_selected_contatos.map((e) => e.id).indexOf(this.fornecedor_selected_contatos_active.id)
                 this.fornecedor_selected_contatos.splice(index, 1)
 
                 // Resetando
-                this.fornecedor_selected_contatos_clicked = ''
+                this.fornecedor_selected_contatos_active = ''
 
                 // Notificando o usuário
                 this.$notify({group: 'normal', type: 'success', text: 'Contato do fornecedor deletado com sucesso'})
@@ -286,8 +286,7 @@ export default {
             })
         },
         setContatoDatas(datas){
-            console.log('set: ', datas)
-            this.fornecedor_selected_contatos_clicked = datas
+            this.fornecedor_selected_contatos_active = datas
         }
         /*=====  End of Contatos do fornecedor  ======*/
     },
@@ -309,26 +308,24 @@ export default {
     },
     computed: {
         mountEndereco() {
-            if(
-                !this.fornecedor_selected_datas.end_logradouro ||
-                !this.fornecedor_selected_datas.end_bairro ||
-                !this.fornecedor_selected_datas.end_cidade ||
-                !this.fornecedor_selected_datas.end_estado
-            )
+            let datas = this.fornecedor_selected_datas
+
+            if(!datas.end_logradouro || !datas.end_bairro || !datas.end_cidade || !datas.end_estado)
                 return 'N/Informado'
 
-            return  this.fornecedor_selected_datas.end_logradouro + ' - ' + 
-                    this.fornecedor_selected_datas.end_numero + ', ' +
-                    this.fornecedor_selected_datas.end_bairro + ', ' +
-                    this.fornecedor_selected_datas.end_cidade + ' - ' +
-                    this.fornecedor_selected_datas.end_estado
+            return  datas.end_logradouro + ' - ' + 
+                    datas.end_numero + ', ' +
+                    datas.end_bairro + ', ' +
+                    datas.end_cidade + ' - ' +
+                    datas.end_estado
         }
     },
     mounted() {
         var self = this
 
         // Lista de fornecedores
-        get().then(r => _.forEach(r.results, v => self.fornecedores.push({ label: v.nome, value: v.id })))
+        get()
+            .then(r => _.forEach(r.results, v => self.fornecedores.push({ label: v.nome, value: v.id })))
 
         // isFetching trick
         Bus.$on('isFetching', is => self.isFetching = is)

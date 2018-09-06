@@ -1,4 +1,4 @@
-function mountPEP(spe, empreendimento, fase, bloco = null, unidade = null) {
+function mountPEP(pieces) {
     
 }
 
@@ -9,7 +9,7 @@ function reMountPEP(parsed){
         }
         if(_.isNumber(v)) {
             if(k == 'unidade_cod') {
-                if(v <= 99){
+                if(v <= 99) {
                     parsed[k] = '00'+v
                 } else if(v > 99 && v <= 999) {
                     parsed[k] = '0'+v
@@ -39,17 +39,16 @@ function parsePEP(PEP) {
         return false
 
     for (let i = splited.length - 1; i >= 0; i--) 
-        if(splited[i].length > 4 || (i !== 0 && splited[i].length < 2) || (splited.length == 6 && splited[5].length < 4)) return false
+        if(splited[i].length > 4 || (i !== 0 && splited[i].length < 2) || (splited.length == 6 && splited[5].length < 4))
+            return false
 
     let parsed = { letter: splited[0], spe: splited[1], empreendimento: splited[2], fase: splited[3] }
 
-    if(splited.length > 4){
+    if(splited.length > 4)
         parsed.bloco_cod = splited[4]
-    }
 
-    if(splited.length > 5){
+    if(splited.length > 5)
         parsed.unidade_cod = splited[5]
-    }
 
     return parsed
 }

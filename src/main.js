@@ -42,11 +42,16 @@ new Vue({
     new WOW.WOW().init()
 
     // Tratando os erros de resposta
-    Bus.$on('response-errors', function(event){
+    Bus.$on('response-errors', (event) => {
         this.$notify({ group: 'normal', clean: true })
 
         _.forEach(event.messages, (v,k) => {
-            this.$notify({group: 'normal', type: 'warn', text: Array.isArray(v) ? v.join("\n") : v, duration: 4500})
+            this.$notify({
+              group: 'normal',
+              type: 'warn',
+              text: Array.isArray(v) ? v.join("\n") : v,
+              duration: 3500
+            })
         })
     })
   },

@@ -15,23 +15,23 @@ import AdminRoutes from './admin'
 Vue.use(VueRouter)
 
 const ifNotAuthenticated = (to, from, next) => {
-  if (!store.getters.isAuthenticated) {
-    next()
-    return
-  }
-  next({ name: 'painel' })
+    if (!store.getters.isAuthenticated) {
+        next()
+        return
+    }
+    next({ name: 'painel' })
 }
 
 const ifAuthenticated = (to, from, next) => {
-  if (store.getters.isAuthenticated) {
-    next()
-    return
-  }
-  next({ name: 'login' })
+    if (store.getters.isAuthenticated) {
+        next()
+        return
+    }
+    next({ name: 'login' })
 }
 
 const Logout = (to, from, next) => {
-  store.dispatch(AUTH_LOGOUT)
+    store.dispatch(AUTH_LOGOUT)
 }
 
 const router = new VueRouter({
@@ -39,14 +39,14 @@ const router = new VueRouter({
     base: __dirname,
     routes: [
         {
-          path: '/',
-          redirect: { name: 'login' }
+            path: '/',
+            redirect: { name: 'login' }
         },
         {
-          name: 'login',
-          path: '/login',
-          component: Login,
-          beforeEnter: ifNotAuthenticated
+            name: 'login',
+            path: '/login',
+            component: Login,
+            beforeEnter: ifNotAuthenticated
         },
         {
             name: 'painel',
@@ -65,11 +65,9 @@ const router = new VueRouter({
 })
 
 router.beforeEach((to, from, next) => {
-  let oldtitle = document.title
+    document.title = document.title.substring(0, document.title.indexOf(' - ')) + ' - ' + to.name
 
-  document.title = oldtitle.substring(0, oldtitle.indexOf(' - ')) + ' - ' + to.name
-
-  next()
+    next()
 })
 
 export default router

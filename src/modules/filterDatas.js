@@ -10,7 +10,6 @@ const purify = o => JSON.parse(JSON.stringify(o)) // purify data
  * @resolve {Object}
  */
 export default function filterDatas(data, query) {
-    query = query
     const { limit = 10, offset = 0, sort = '', order = '' } = query
 
     let rows = data;

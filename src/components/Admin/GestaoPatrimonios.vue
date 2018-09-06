@@ -296,7 +296,6 @@ export default {
         }
     },
     watch: {
-
         PEP: function(pep) {
             this.$initPep(pep)
         },
@@ -308,7 +307,7 @@ export default {
                 this.bloco_blocked = false
             }
 
-            let datas = this.pepParsed
+            let datas = this.               
             datas.empreendimento = empreendimento.value
 
             this.PEP = reMountPEP(datas)
@@ -366,6 +365,8 @@ export default {
                     // Assinging values to the fields
                     this.assignValues()
 
+                    // Limpando notificações antigas e exibindo as novas
+                    this.$notify({ group: 'normal', clean: true })
                     this.$notify({
                         group: 'normal',
                         type: 'success',
@@ -533,6 +534,11 @@ export default {
 </script>
 
 <style lang="scss">
+.content-gest{
+    -webkit-transition: all .3s;
+    transition: all .3s;
+}
+
 .v-select {
     span.selected-tag {
         pointer-events: none;
