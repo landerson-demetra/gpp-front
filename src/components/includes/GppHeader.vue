@@ -57,7 +57,6 @@
 <script>
 import { mapState } from 'vuex'
 
-
 export default {
     name: 'GppHeader',
     computed: mapState({ profile: state => state.user.profile })

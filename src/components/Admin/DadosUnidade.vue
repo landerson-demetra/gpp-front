@@ -7,36 +7,36 @@
             <div class="card-body">
                 <form action="">
                     <div class="row">
-                        <div class="form-group col-md-6">
+                        <div class="form-group col-md-12">
                             <label for="PEP">PEP</label>
                             <input v-model="PEP" id="PEP" type="text" class="form-control" placeholder="R.XXXX.99.99.99.9999">
                         </div>
                     </div>
-                    <div class="row">
+<!--                     <div class="row">
                         <div class="form-group col-md-4">
                             <label for="Empreendimento">Empreendimento</label>
-                            <v-select v-model="Empreendimento" name="Empreendimento" placeholder="Empreendimento" :options="[]">
+                            <v-select v-model="Empreendimento" name="Empreendimento" placeholder="Empreendimento" :options="this.Empreendimentos">
                                 <span slot="no-options">Nenhum empreendimento encontrado.</span>
                             </v-select>
                         </div>
                         <div class="form-group col-md-4">
                             <label for="Bloco">Bloco</label>
-                            <v-select v-model="Bloco" name="Bloco" placeholder="Bloco" :options="[]">
-                                <span slot="no-options">Nenhum bloco encontrado.</span>
-                            </v-select>
+                            <select :disabled="bloco_blocked" v-model="Bloco" name="bloco" id="Bloco" class="form-control">
+                                <option value="" selected>Selecione</option> 
+                            </select>
                         </div>
-                        <div class="form-group col-md-3">
+                        <div class="form-group col-md-4">
                             <label for="Unidade">Unidade</label>
-                            <v-select v-model="Unidade" name="Unidade" placeholder="Unidade" :options="[]">
-                                <span slot="no-options">Nenhuma unidade encontrada.</span>
-                            </v-select>
+                            <select :disabled="unidade_blocked" v-model="Unidade" name="bloco" id="Unidade" class="form-control">
+                                <option value="" selected>Selecione</option> 
+                            </select>
                         </div>
-                    </div>
+                    </div> -->
                 </form>
 
                 <hr>
 
-                <div v-if="!dados_unidade" class="alert alert-secondary text-center"><i class="fas fa-exclamation-circle"></i> Nenhuma unidade selecionada</div>
+                <div v-if="!dados_unidade.length" class="alert alert-secondary text-center"><i class="fas fa-exclamation-circle"></i> Nenhuma unidade selecionada</div>
 
                 <div v-else>
                     <table class="table table-hover table-responsive-sm table-bordered table-striped border-top-0">
@@ -65,56 +65,118 @@
                         </tbody>
                     </table>
 
-                    <div class="col text-right">
-                        <button class="btn btn-success" data-toggle="modal" data-target="#modalContato"><i class="fas fa-plus"></i> Adicionar</button>
+                    <div class="row">
+                        <div class="col text-right">
+                            <button class="btn btn-success" data-toggle="modal" data-target="#modalNovoDado"><i class="fas fa-plus"></i> Adicionar</button>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
+
+        <DadosUnidadeModal action="New" name="NovoDado" title="Cadastrar Dado da Unidade"></DadosUnidadeModal>
     </div>
 </template>
 
 <script>
-import { mountPEP, reMountPEP, parsePEP } from '../../modules/pep'
-import { get } from '../../api/dados-unidade'
+import Bus from '../../bus'
+import DadosUnidadeModal from '../includes/Modals/DadosUnidade'
+import { reMountPEP, parsePEP } from '../../modules/pep'
+import { get, store } from '../../api/dados-unidade'
+import { get as getE } from '../../api/empreendimentos'
 
 export default {
     name: 'DadosUnidade',
+    components: { DadosUnidadeModal },
     data(){
         return {
-            PEP: 'R.AA01.01.01.01.012',
+            isFetching: false,
+
+            PEP: this.$route.params.pep || null,
+            pepParsed: '',
             Empreendimento: '',
             Bloco: '',
             Unidade: '',
 
-            dados_unidade: false,
+            Empreendimentos: [],
+            Blocos: [],
+            Unidades: [],
+
+            bloco_blocked: true,
+            unidade_blocked: true,
+
+            dados_unidade: [],
         }
     },
     methods: {
         fetch(){
-            let pieces = parsePEP(this.PEP)
- 
-            console.log(pieces)
+            var self = this
 
-            get(this.PEP).then(r => this.dados_unidade = r.results)
+            // let pieces = parsePEP(this.PEP)
+ 
+            get(this.PEP)
+                .then(r => {
+                    // this.Empreendimento = pieces.empreendimento
+                    // this.Bloco = pieces.bloco_cod
+                    // this.Unidade = pieces.unidade_cod
+
+                    this.dados_unidade = r.results
+
+                    console.log(r)
+                })
+        },
+        saveDado(datas){
+            datas.PEP_Unidade = this.PEP
+
+            store(datas).then(r => {
+                console.log(r)
+            }).catch(e => {
+                console.log(e)
+            })
         }
     },
     watch: {
-        PEP(){
+        PEP(pep){
+            if(!pep){
+                this.dados_unidade = []
+            }
+
+            this.pepParsed = parsePEP(pep)
+
             this.fetch()
         },
-        Empreendimento(){
-            this.fetch()
+        Empreendimento(empreendimento){
+            if(!empreendimento){
+                this.bloco_blocked = true
+                return
+            }else{
+                this.bloco_blocked = false
+            }
+
+            let datas = this.pepParsed
+            datas.empreendimento = empreendimento.value
+
+            console.log(reMountPEP(datas))
         },
         Bloco(){
-            this.fetch()
+            
         },
         Unidade(){
-            this.fetch()
+            
         }
     },
     mounted(){
-        
+        var self = this
+
+        // Save events
+        Bus.$on('NovoDado-onOk', datas => self.saveDado(datas))
+
+        // var self = this
+
+        // this.pepParsed = parsePEP(this.PEP)
+
+        // getE()
+        //     .then(r => _.forEach(r.results.data, v => self.Empreendimentos.push({ label: v.empreendimento_nome, value: v.empreendimento_cod })))
     }
 }
 </script>

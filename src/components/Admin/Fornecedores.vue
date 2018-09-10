@@ -235,7 +235,7 @@ export default {
                 })
 
                 // Notificando o usuário
-                this.$notify({group:'normal', type:'success', text:'Contato do forencedor criado com sucesso'})
+                this.$notify({group:'normal', type:'success', text:'Contato do fornecedor criado com sucesso'})
 
                 // Fechando a modal
                 $('.modal').modal('hide')

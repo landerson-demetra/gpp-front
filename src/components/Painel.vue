@@ -19,8 +19,8 @@
 import GppHeader from './includes/GppHeader'
 
 export default {
-  name: 'Painel',
-  components: { GppHeader }
+    name: 'Painel',
+    components: { GppHeader }
 }
 </script>
 
