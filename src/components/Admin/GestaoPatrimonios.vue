@@ -307,7 +307,7 @@ export default {
                 this.bloco_blocked = false
             }
 
-            //????????????????????????let datas = this.               
+            let datas = this.pepParsed
             datas.empreendimento = empreendimento.value
 
             this.PEP = reMountPEP(datas)
@@ -454,6 +454,9 @@ export default {
 
         },
         assignUnidadeValues(){
+            if(!this.unidade_datas.length)
+                return
+
             // - Não há contratos
             if(!this.unidade_datas.contratos.length)
                 this.$notify({ group: 'normal', type: 'info', text: 'Não há contratos para PEP' })

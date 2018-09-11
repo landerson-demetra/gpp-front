@@ -2,7 +2,7 @@
     <div id="DadosUnidade" class="wow fadeIn" data-wow-duration="2s">
         <div class="card shadow border-0">
             <div class="card-header border-0 bg-primary text-white">
-                <h3 class="mt-0">Dados da Unidade</h3>
+                <h3 class="mt-0">Dados da Unidade <span v-if="this.pep_exists">[ {{ this.PEP }} ]</span></h3>
             </div>
             <div class="card-body">
                 <form action="">
@@ -36,10 +36,12 @@
 
                 <hr>
 
-                <div v-if="!dados_unidade.length" class="alert alert-secondary text-center"><i class="fas fa-exclamation-circle"></i> Nenhuma unidade selecionada</div>
+                <div>
+                    <div v-if="!pep_exists" class="alert alert-secondary text-center"><i class="fas fa-exclamation-circle"></i> PEP inválida</div>
 
-                <div v-else>
-                    <table class="table table-hover table-responsive-sm table-bordered table-striped border-top-0">
+                    <div v-if="pep_exists && !dados_unidade.length" class="alert alert-secondary text-center"><i class="fas fa-exclamation-circle"></i> Nenhum dado da unidade encontrado para PEP</div>
+
+                    <table v-if="dados_unidade.length && pep_exists" class="table table-hover table-responsive-sm table-bordered table-striped border-top-0">
                         <thead>
                             <tr>
                                 <th scope="col">PEP</th>
@@ -51,7 +53,7 @@
                         </thead>
                         <tbody>
                             <tr v-for="dado in dados_unidade">
-                                <td>{{ dado.PEP_Unidade }}</td>
+                                <td><router-link :to="{ name: 'GestaoPatromonios', params: {pep: dado.PEP_Unidade } }" class="nav-link">{{ dado.PEP_Unidade }}</router-link></td>
                                 <td>{{ dado.N_Contribuinte }}</td>
                                 <td>{{ dado.usuario }}</td>
                                 <td>{{ dado.senha }}</td>
@@ -65,7 +67,7 @@
                         </tbody>
                     </table>
 
-                    <div class="row">
+                    <div class="row" v-if="this.pep_exists">
                         <div class="col text-right">
                             <button class="btn btn-success" data-toggle="modal" data-target="#modalNovoDado"><i class="fas fa-plus"></i> Adicionar</button>
                         </div>
@@ -80,14 +82,18 @@
 
 <script>
 import Bus from '../../bus'
-import DadosUnidadeModal from '../includes/Modals/DadosUnidade'
+
 import { reMountPEP, parsePEP } from '../../modules/pep'
 import { get, store } from '../../api/dados-unidade'
 import { get as getE } from '../../api/empreendimentos'
+import { exists } from '../../api/unidades'
+
+import DadosUnidadeModal from '../includes/Modals/DadosUnidade'
+import ClipLoader from 'vue-spinner/src/ClipLoader'
 
 export default {
     name: 'DadosUnidade',
-    components: { DadosUnidadeModal },
+    components: { DadosUnidadeModal, ClipLoader },
     data(){
         return {
             isFetching: false,
@@ -106,63 +112,49 @@ export default {
             unidade_blocked: true,
 
             dados_unidade: [],
+            pep_exists: false
         }
     },
     methods: {
         fetch(){
             var self = this
 
-            // let pieces = parsePEP(this.PEP)
- 
-            get(this.PEP)
-                .then(r => {
-                    // this.Empreendimento = pieces.empreendimento
-                    // this.Bloco = pieces.bloco_cod
-                    // this.Unidade = pieces.unidade_cod
-
-                    this.dados_unidade = r.results
-
-                    console.log(r)
-                })
+            exists(this.PEP).then(r => {
+                if(r.results) {
+                    self.pep_exists = true
+                    get(self.PEP).then(r => self.dados_unidade = r.results)
+                } else {
+                    self.pep_exists = false
+                }
+            })
         },
         saveDado(datas){
             datas.PEP_Unidade = this.PEP
 
             store(datas).then(r => {
-                console.log(r)
+                if(r.results) {
+                    this.dados_unidade.push(r.results)
+                }
             }).catch(e => {
                 console.log(e)
             })
+
+            // Fechando a modal
+            $('.modal').modal('hide')
+        },
+        $initPEP(){
+            if(!this.PEP || this.PEP.length < 20) {
+                this.dados_unidade = []
+                this.pep_exists = false
+                return
+            }
+
+            this.fetch()
         }
     },
     watch: {
         PEP(pep){
-            if(!pep){
-                this.dados_unidade = []
-            }
-
-            this.pepParsed = parsePEP(pep)
-
-            this.fetch()
-        },
-        Empreendimento(empreendimento){
-            if(!empreendimento){
-                this.bloco_blocked = true
-                return
-            }else{
-                this.bloco_blocked = false
-            }
-
-            let datas = this.pepParsed
-            datas.empreendimento = empreendimento.value
-
-            console.log(reMountPEP(datas))
-        },
-        Bloco(){
-            
-        },
-        Unidade(){
-            
+            this.$initPEP()
         }
     },
     mounted(){
@@ -171,12 +163,8 @@ export default {
         // Save events
         Bus.$on('NovoDado-onOk', datas => self.saveDado(datas))
 
-        // var self = this
-
-        // this.pepParsed = parsePEP(this.PEP)
-
-        // getE()
-        //     .then(r => _.forEach(r.results.data, v => self.Empreendimentos.push({ label: v.empreendimento_nome, value: v.empreendimento_cod })))
+        if(this.PEP)
+            this.$initPEP(this.PEP)
     }
 }
 </script>

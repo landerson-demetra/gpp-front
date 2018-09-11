@@ -4,17 +4,16 @@ function mountPEP(pieces) {
 
 function reMountPEP(parsed){
     _.forEach(parsed, function(v,k){
-        if(!v) {
-            delete parsed[k]
-        }
+        if(!v) delete parsed[k]
         if(_.isNumber(v)) {
             if(k == 'unidade_cod') {
-                if(v <= 99) {
+                if(v <= 9) {
+                    parsed[k] = '000'+v
+                } else if(v <= 99) {
                     parsed[k] = '00'+v
                 } else if(v > 99 && v <= 999) {
                     parsed[k] = '0'+v
                 }
-                // <= 999 ? 00999 ! 0999 -> 9999
             }else if(v <= 9) {
                 parsed[k] = '0'+v
             }

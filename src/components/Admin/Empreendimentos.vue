@@ -5,7 +5,7 @@
 
         <div class="row">
             <div class="col-12" v-if="!this.empreendimentos.datas.length">
-                <clip-loader class="my-5" :loading="true" :color="'#26256A'" :size="'70px'"></clip-loader>
+                <grid-loader class="mx-auto my-5" :loading="true" :color="'#26256A'" :size="'10px'"></grid-loader>
             </div>
             <div class="col-12" v-else>
                 <div class="row my-3 justify-content-end">
@@ -114,7 +114,7 @@
 
             <hr>
 
-            <clip-loader class="my-5" :loading="isFetching" :color="'#26256A'" :size="'70px'"></clip-loader>
+            <grid-loader class="mx-auto my-5" :loading="isFetching" :color="'#26256A'" :size="'10px'"></grid-loader>
 
             <!-- Busca -->
             <div class="row my-3 justify-content-end" v-if="!isFetching">
@@ -157,11 +157,11 @@
 <script>
 import Bus from '../../bus'
 import Paginator from '../includes/Paginator'
-import ClipLoader from 'vue-spinner/src/ClipLoader'
+import GridLoader from 'vue-spinner/src/GridLoader'
 
 export default {
     name: 'Empreendimento',
-    components: { Paginator, ClipLoader },
+    components: { Paginator, GridLoader },
     data() {
         return {
             check_all: false,

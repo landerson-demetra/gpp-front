@@ -18,7 +18,7 @@ export default [
         name: 'Vinculacao'
     },
     {
-        path: 'dados-unidade',
+        path: 'dados-unidade/:pep?',
         component: DadosUnidade,
         name: 'DadosUnidade'
     },

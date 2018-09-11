@@ -14,4 +14,4 @@ const store = (datas) => {
     })
 }
 
-export { get }
+export { get, store }
