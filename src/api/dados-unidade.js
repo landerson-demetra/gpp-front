@@ -14,4 +14,11 @@ const store = (datas) => {
     })
 }
 
+const update = (datas) => {
+    datas._method = 'PATCH' // transforming the request
+    return new Promise((resolve, reject) => {
+        http.post('/dados-unidade/' + datas.id, datas).then(r => resolve(r.data)).catch(e => reject(e))
+    })
+}
+
 export { get, store }

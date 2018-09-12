@@ -22,6 +22,7 @@ const update = (datas) => {
     })
 }
 
+
 const deletedata = (id) => {
     return new Promise((resolve, reject) => {
         http.delete('/fornecedor/' + id).then(r => resolve(r.data)).catch(e => reject(e))
