@@ -53,13 +53,13 @@
                         </thead>
                         <tbody>
                             <tr v-for="dado in dados_unidade">
-                                <td><router-link :to="{ name: 'GestaoPatromonios', params: {pep: dado.PEP_Unidade } }" class="nav-link">{{ dado.PEP_Unidade }}</router-link></td>
+                                <td>{{ dado.PEP_Unidade }}</td>
                                 <td>{{ dado.N_Contribuinte }}</td>
                                 <td>{{ dado.usuario }}</td>
                                 <td>{{ dado.senha }}</td>
                                 <td>
                                     <div class="action-buttons">
-                                        <button class="btn btn-warning"><i class="fa fa-edit"></i></button>
+                                        <button v-on:click="_setDadosUnidadeDatas(dado)" data-toggle="modal" data-target="#modalEditarDado" class="btn btn-warning"><i class="fa fa-edit"></i></button>
                                         <button class="btn btn-danger"><i class="fa fa-trash"></i></button>
                                     </div>
                                 </td>
@@ -75,8 +75,12 @@
                 </div>
             </div>
         </div>
-
+    
+        <!-- Novo dado -->
         <DadosUnidadeModal action="New" name="NovoDado" title="Cadastrar Dado da Unidade"></DadosUnidadeModal>
+
+        <!-- Editar dado -->
+        <DadosUnidadeModal :datas="dados_unidade_selected" action="Edit" name="EditarDado" title="Editar Dado da Unidade"></DadosUnidadeModal>
     </div>
 </template>
 
@@ -84,7 +88,7 @@
 import Bus from '../../bus'
 
 import { reMountPEP, parsePEP } from '../../modules/pep'
-import { get, store } from '../../api/dados-unidade'
+import { get, store, update } from '../../api/dados-unidade'
 import { get as getE } from '../../api/empreendimentos'
 import { exists } from '../../api/unidades'
 
@@ -112,6 +116,7 @@ export default {
             unidade_blocked: true,
 
             dados_unidade: [],
+            dados_unidade_selected: [],
             pep_exists: false
         }
     },
@@ -142,6 +147,24 @@ export default {
             // Fechando a modal
             $('.modal').modal('hide')
         },
+        updateDado(fields){
+            update(this.dados_unidade_selected.id, fields).then(r => {
+                // Atualizando o dado da unidade na listagem
+                let index = this.dados_unidade.map(e => e.id).indexOf(this.dados_unidade_selected.id)
+                this.dados_unidade[index] = r.results
+
+                // Forçando a atualização da DOM
+                this.$forceUpdate()
+
+                // Notificando o usuário
+                this.$notify({group:'normal', type:'success', text:'Dado da unidade atualizado com sucesso'})
+            }).catch(e => {
+                console.log(e)
+            })
+
+            // Fechando a modal
+            $('.modal').modal('hide')
+        },
         $initPEP(){
             if(!this.PEP || this.PEP.length < 20) {
                 this.dados_unidade = []
@@ -150,6 +173,9 @@ export default {
             }
 
             this.fetch()
+        },
+        _setDadosUnidadeDatas(datas){
+            this.dados_unidade_selected = datas
         }
     },
     watch: {
@@ -162,6 +188,9 @@ export default {
 
         // Save events
         Bus.$on('NovoDado-onOk', datas => self.saveDado(datas))
+
+        // Edit events
+        Bus.$on('EditarDado-onOk', datas => self.updateDado(datas))
 
         if(this.PEP)
             this.$initPEP(this.PEP)

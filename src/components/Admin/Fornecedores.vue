@@ -178,9 +178,7 @@ export default {
             })
         },
         updateFornecedor(fields){
-            fields.id = this.fornecedor_selected.value
-
-            update(fields).then(r => {
+            update(this.fornecedor_selected.value, fields).then(r => {
                 // Atualizando os dados novos
                 this.fornecedor_selected.label = r.results.nome
                 this.fornecedor_selected_datas = r.results
@@ -249,7 +247,7 @@ export default {
 
             updateC(fields).then(r => {
                 // Encontrando o índice do contato recém atualizado na lista de fornecedores
-                let index = this.fornecedor_selected_contatos.map((e) => e.id).indexOf(this.fornecedor_selected_contatos_active.id)
+                let index = this.fornecedor_selected_contatos.map(e => e.id).indexOf(this.fornecedor_selected_contatos_active.id)
                 this.fornecedor_selected_contatos[index] = r.results
 
                 // Forçando a atualização da DOM

@@ -69,7 +69,6 @@ export default {
             NContribuinte: '',
             Usuario: '',
             Senha: '',
-
         }
     },
     methods: {
@@ -81,7 +80,10 @@ export default {
                 this.reset()
         },
         fill(){
-            // 
+            this.PEP =  this.datas.PEP_Unidade
+            this.NContribuinte =  this.datas.N_Contribuinte
+            this.Usuario = this.datas.usuario
+            this.Senha = this.datas.senha
         },
         reset(){
             this.PEP  = ''
