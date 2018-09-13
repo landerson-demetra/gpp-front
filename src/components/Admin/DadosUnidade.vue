@@ -2,7 +2,7 @@
     <div id="DadosUnidade" class="wow fadeIn" data-wow-duration="2s">
         <div class="card shadow border-0">
             <div class="card-header border-0 bg-primary text-white">
-                <h3 class="mt-0">Dados da Unidade <span v-if="this.pep_exists">[ {{ this.PEP }} ]</span></h3>
+                <h3 class="mt-0">Dados da Unidade <small class="opacity-small" v-if="this.pep_exists">[ {{ this.PEP }} ]</small></h3>
             </div>
             <div class="card-body">
                 <form action="">
@@ -197,3 +197,9 @@ export default {
     }
 }
 </script>
+
+<style>
+    .opacity-small{
+        opacity: .5;
+    }
+</style>
