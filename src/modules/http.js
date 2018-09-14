@@ -22,17 +22,12 @@ http.interceptors.response.use((response) => {
     Bus.$emit('isFetching', false)
 
     return new Promise((resolve, reject) => {
-        if (err.response.status === 401 && err.config && !err.config.__isRetryRequest) {
+        if(err.response.status === 401 && err.config && !err.config.__isRetryRequest)
             store.dispatch(AUTH_LOGOUT)
-        }
-
-        if (err.response.status == 422) {
+        if(err.response.status == 422)
             Bus.$emit('response-errors', { messages: err.response.data.messages.errors, code: 422 })
-        }
-
-        if (err.response.status == 409) {
+        if(err.response.status == 409)
             Bus.$emit('response-errors', { messages: err.response.data.messages, code: 409 })
-        }
 
         throw err
     })

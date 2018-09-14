@@ -7,4 +7,11 @@ const get = (params) => {
     })
 }
 
-export { get }
+const getForList = () => {
+    return new Promise((resolve, reject) => {
+        http.get('empreendimento/forlist')
+            .then(r => resolve(r.data)).catch(e => reject(e))
+    })
+}
+
+export { get, getForList }

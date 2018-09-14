@@ -60,7 +60,7 @@
                                 <td>
                                     <div class="action-buttons">
                                         <button v-on:click="_setDadosUnidadeDatas(dado)" data-toggle="modal" data-target="#modalEditarDado" class="btn btn-warning"><i class="fa fa-edit"></i></button>
-                                        <button class="btn btn-danger"><i class="fa fa-trash"></i></button>
+                                        <button v-on:click="_setDadosUnidadeDatas(dado)" data-toggle="modal" data-target="#modalDeletarDado"  class="btn btn-danger"><i class="fa fa-trash"></i></button>
                                     </div>
                                 </td>
                             </tr>
@@ -81,6 +81,9 @@
 
         <!-- Editar dado -->
         <DadosUnidadeModal :datas="dados_unidade_selected" action="Edit" name="EditarDado" title="Editar Dado da Unidade"></DadosUnidadeModal>
+
+        <!-- Deletar dado -->
+        <DadosUnidadeModal :datas="dados_unidade_selected" action="Delete" name="DeletarDado" title="Deletar dado da unidade"></DadosUnidadeModal>
     </div>
 </template>
 
@@ -88,7 +91,7 @@
 import Bus from '../../bus'
 
 import { reMountPEP, parsePEP } from '../../modules/pep'
-import { get, store, update } from '../../api/dados-unidade'
+import { get, store, update, deletedata } from '../../api/dados-unidade'
 import { get as getE } from '../../api/empreendimentos'
 import { exists } from '../../api/unidades'
 
@@ -124,22 +127,17 @@ export default {
         fetch(){
             var self = this
 
-            exists(this.PEP).then(r => {
-                if(r.results) {
-                    self.pep_exists = true
-                    get(self.PEP).then(r => self.dados_unidade = r.results)
-                } else {
-                    self.pep_exists = false
-                }
+            exists(this.PEP).then(() => {
+                self.pep_exists = true
+                get(self.PEP).then(r => self.dados_unidade = r.results)
             })
         },
         saveDado(datas){
             datas.PEP_Unidade = this.PEP
 
             store(datas).then(r => {
-                if(r.results) {
+                if(r.results)
                     this.dados_unidade.push(r.results)
-                }
             }).catch(e => {
                 console.log(e)
             })
@@ -157,13 +155,29 @@ export default {
                 this.$forceUpdate()
 
                 // Notificando o usuário
-                this.$notify({group:'normal', type:'success', text:'Dado da unidade atualizado com sucesso'})
+                this.$notify({group:'normal', type:'success', text: 'Dado da unidade atualizado com sucesso'})
             }).catch(e => {
                 console.log(e)
             })
 
             // Fechando a modal
             $('.modal').modal('hide')
+        },
+        deleteDado(){
+            deletedata(this.dados_unidade_selected.id).then(r => {
+                // Removendo o fornecedor deletado da lista de fornecedores
+                let index = this.dados_unidade.map((e) => e.id).indexOf(this.dados_unidade_selected.id)
+                this.dados_unidade.splice(index, 1)
+
+                // Notificando o usuário
+                this.$notify({group: 'normal', type: 'success', text: 'Dado da unidade deletado com sucesso'})
+
+                // Fechando a modal
+                $('.modal').modal('hide')
+            }).catch(e => {
+                if(e.response.status < 423) return
+                this.$notify(this.$config.errors.unexpected)
+            })
         },
         $initPEP(){
             if(!this.PEP || this.PEP.length < 20) {
@@ -187,10 +201,13 @@ export default {
         var self = this
 
         // Save events
-        Bus.$on('NovoDado-onOk', datas => self.saveDado(datas))
+        Bus.$on('evNovoDado', datas => self.saveDado(datas))
 
         // Edit events
-        Bus.$on('EditarDado-onOk', datas => self.updateDado(datas))
+        Bus.$on('evEditarDado', datas => self.updateDado(datas))
+
+        // Delete events
+        Bus.$on('evDeletarDado', b => self.deleteDado())
 
         if(this.PEP)
             this.$initPEP(this.PEP)

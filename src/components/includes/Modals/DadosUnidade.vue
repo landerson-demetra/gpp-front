@@ -11,7 +11,7 @@
                     </div>
                     <div class="modal-body">
                         <div v-if="this.action == 'Delete'">
-                            <p>Você tem certeza que deseja deletar o dado da unidade?</p>
+                            <p>Você tem certeza que deseja deletar o dado da unidade referente a PEP <b>{{ this.datas.PEP_Unidade }}</b>?</p>
                         </div>
                         <div v-else>
                             <form>
@@ -73,7 +73,7 @@ export default {
     },
     methods: {
         emitOkEvent(){
-            Bus.$emit(this.name + '-onOk', (this.action !== 'Delete' ? this.getFields : true))
+            Bus.$emit('ev' + this.name, (this.action !== 'Delete' ? this.getFields : true))
         },
         closeEvent(){
             if(this.action == 'New')

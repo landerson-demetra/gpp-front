@@ -279,7 +279,6 @@ export default {
                 $('.modal').modal('hide')
             }).catch(e => {
                 if(e.response.status < 423) return
-
                 this.$notify(this.$config.errors.unexpected)
             })
         },
@@ -329,16 +328,16 @@ export default {
         Bus.$on('isFetching', is => self.isFetching = is)
 
         // Save events
-        Bus.$on('NovoFornecedor-onOk', datas => self.saveFornecedor(datas))
-        Bus.$on('NovoContato-onOk', datas => self.saveContato(datas))
+        Bus.$on('evNovoFornecedor', datas => self.saveFornecedor(datas))
+        Bus.$on('evNovoContato', datas => self.saveContato(datas))
 
         // Edit events
-        Bus.$on('EditarFornecedor-onOk', datas => self.updateFornecedor(datas))
-        Bus.$on('EditarContato-onOk', datas => self.updateContato(datas))
+        Bus.$on('evEditarFornecedor', datas => self.updateFornecedor(datas))
+        Bus.$on('evEditarContato', datas => self.updateContato(datas))
 
         // Delete events
-        Bus.$on('DeletarFornecedor-onOk', r => self.deleteFornecedor())
-        Bus.$on('DeletarContato-onOk', r => self.deleteContato())
+        Bus.$on('evDeletarFornecedor', r => self.deleteFornecedor())
+        Bus.$on('evDeletarContato', r => self.deleteContato())
     }
 }
 </script>

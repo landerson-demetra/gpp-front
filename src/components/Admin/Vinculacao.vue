@@ -4,25 +4,27 @@
             <div class="card-header border-0 bg-primary text-white">
                 <h3 class="mt-0">Vinculação PEP</h3>
             </div>
-            <div class="card-body">
+            <div class="card-body" :class="{'is-fetching': isFetching}">
                 <form>
                     <div class="row">
                         <div class="form-group col-md-6">
                             <label for="Empreendimento">Empreendimento</label>
-                            <v-select name="Empreendimento" id="Empreendimento" placeholder="Selecione..." :options="[]">
+                            <v-select v-model="fornecedor_selected" name="Empreendimento" id="Empreendimento" placeholder="Selecione..." :options="this.fornecedores">
                                 <span slot="no-options">Nenhum empreendimento encontrado.</span>
                             </v-select>
                         </div>
                         <div class="form-group col-md-6">
                             <label for="PEP">Condominio</label>
-                            <input v-model="pep" type="text" class="form-control" placeholder="R.XXXX.99.99">
+                            <input v-model="PEP" type="text" class="form-control" placeholder="R.XXXX.99.99">
                         </div>
                     </div>
                 </form>
 
                 <hr>
 
-                <div class="row mt-3 no-gutters">
+                <div v-if="!this.fornecedor_selected" class="alert alert-secondary text-center"><i class="fas fa-exclamation-circle"></i> Você precisa escolher um empreendimento/condomínio</div>
+
+                <div class="row mt-3 no-gutters" v-else>
                     <table class="table table-hover table-responsive-sm table-bordered table-striped border-top-0">
                         <thead>
                             <tr>
@@ -36,27 +38,13 @@
                             </tr>
                         </thead>
                         <tbody>
-                            <tr>
-                                <th>PEP</th>
-                                <td>ADM</td>
-                                <td>Fornecedor</td>
-                                <td>Prefeitura</td>
-                                <td>Responsável</td>
-                                <td>Individualizado</td>
-                                <td>
-                                    <div class="action-buttons">
-                                        <button class="btn btn-warning"><i class="fa fa-edit"></i></button>
-                                        <button class="btn btn-danger"><i class="fa fa-trash"></i></button>
-                                    </div>
-                                </td>
-                            </tr>
-                            <tr>
-                                <th>PEP</th>
-                                <td>ADM</td>
-                                <td>Fornecedor</td>
-                                <td>Prefeitura</td>
-                                <td>Responsável</td>
-                                <td>Individualizado</td>
+                            <tr v-for="vinculacao in vinculacoes">
+                                <th :title="fornecedor_selected.label"><a href="#">{{ vinculacao.PEP_Empreendimento }}</a></th>
+                                <td><a href="#">{{ vinculacao.administradora.nome }}</a></td>
+                                <td><a href="#">{{ vinculacao.fornecedor.nome }}</a></td>
+                                <td><a href="#">{{ vinculacao.prefeitura.nome }}</a></td>
+                                <td><a href="#">{{ vinculacao.responsavel.name }}</a></td>
+                                <td>{{ vinculacao.is_ind ? 'Sim' : 'Não' }}</td>
                                 <td>
                                     <div class="action-buttons">
                                         <button class="btn btn-warning"><i class="fa fa-edit"></i></button>
@@ -68,78 +56,65 @@
                     </table>
 
                     <div class="col text-right">
-                        <button class="btn btn btn-success" data-toggle="modal" data-target="#addVinc"><i class="fas fa-plus"></i> Adicionar</button>
+                        <button class="btn btn btn-success" data-toggle="modal" data-target="#modalNovaVinculacao"><i class="fas fa-plus"></i> Adicionar</button>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- Modal -->
-        <div class="modal fade" id="addVinc" tabindex="-1" role="dialog" aria-labelledby="addVincLabel" aria-hidden="true">
-            <div class="modal-dialog modal-lg shadow" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="addVincLabel">Administração</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <form v-on:submit.prevent>
-                            <div class="row">
-                                <div class="form-group col-md-6">
-                                    <label for="PEP">PEP</label>
-                                    <input :value="PEP" disabled="" id="PEP" type="text" class="form-control">
-                                </div>
-                                <div class="form-group col-md-4">
-                                    <label for="Individualizado">Individualizado</label>
-                                    <select class="form-control">
-                                        <option value="">Selecione</option>
-                                        <option value="1">Sim</option>
-                                        <option value="0">Não</option>
-                                    </select>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="form-group col-md-4">
-                                    <label for="ADM">ADM</label>
-                                    <v-select id="ADM" placeholder="Selecione..." :options="this.administradoras">
-                                        <span slot="no-options">Nenhuma administradora encontrada.</span>
-                                    </v-select>
-                                </div>
-                                <div class="form-group col-md-4">
-                                    <label for="Fornecedor">Fornecedor</label>
-                                    <v-select id="ADM" placeholder="Selecione..." :options="this.fornecedores">
-                                        <span slot="no-options">Nenhum fornecedor encontrado.</span>
-                                    </v-select>
-                                </div>
-                                <div class="form-group col-md-4">
-                                    <label for="Prefeitura">Prefeitura</label>
-                                    <v-select id="ADM" placeholder="Selecione..." :options="this.prefeituras">
-                                        <span slot="no-options">Nenhuma prefeitura encontrada</span>
-                                    </v-select>
-                                </div>
-                            </div>
-                        </form>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-primary"><i class="fas fa-check"></i> Salvar</button>
-                    </div>
-                </div>
-            </div>
-        </div>
+        <!-- Modal nova vinculação -->
+        <VinculacaoModal action="New" name="NovaVinculacao" title="Criar vinculação"></VinculacaoModal>
     </div>
 </template>
 
 <script>
+import Bus from '../../bus'
+import { get } from '../../api/vinculacoes'
+import { get as getE, getForList } from '../../api/empreendimentos'
+
+import VinculacaoModal from '../includes/Modals/VinculacaoModal'
+
 export default {
     name: 'Vinculacao',
+    components: { VinculacaoModal },
     data() {
         return {
-            show: true,
+            isFetching: false,
+
+            fornecedores: [],
+            fornecedor_selected: false,
+
             PEP: '',
+
+            vinculacoes: []
         }
+    },
+    watch: {
+        fornecedor_selected(selected){
+            if(!selected) return
+
+            this.vinculacoes = []
+
+            this.fetch()
+
+            this.PEP = selected.value
+        }
+    },
+    methods: {
+        fetch() {
+            get(this.fornecedor_selected.value)
+                .then(r => this.vinculacoes = r.results)
+        }
+    },
+    mounted() {
+        var self = this
+
+        // isFetching trick
+        Bus.$on('isFetching', is => self.isFetching = is)
+
+        // Obtendo a lista de fornecedores
+        getForList()
+            .then(r => _.forEach(r.results, v => self.fornecedores.push({ label: v.empreendimento_nome, value: v.PEP })))
     }
 }
 </script>

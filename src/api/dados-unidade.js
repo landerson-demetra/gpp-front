@@ -22,4 +22,11 @@ const update = (id, datas) => {
     })
 }
 
-export { get, store, update }
+const deletedata = (id) => {
+    return new Promise((resolve, reject) => {
+        http.delete('dados-unidade/' + id) 
+            .then(r => resolve(r.data)).catch(e => reject(e))
+    })
+}
+
+export { get, store, update, deletedata }

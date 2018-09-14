@@ -11,6 +11,13 @@ const get = (params = {}) => {
     })
 }
 
+const getForList = (params) => {
+    return new Promise((resolve, reject) => {
+        http.get('fornecedor/forlist', {params: params})
+            .then(r => resolve(r.data)).catch(e => reject(e))
+    })
+}
+
 const store = (datas) => {
     return new Promise((resolve, reject) => {
         http.post('fornecedor', datas)
@@ -33,4 +40,4 @@ const deletedata = (id) => {
     })
 }
 
-export { get, store, update, deletedata };
+export { get, getForList, store, update, deletedata };
