@@ -22,8 +22,8 @@
                                     </div>
                                     <div class="form-group col-md-4">
                                         <label for="Individualizado">Individualizado</label>
-                                        <select v-model="isEnd" class="form-control">
-                                            <option value="" selected="">Selecione</option>
+                                        <select v-model="isInd" class="form-control">
+                                            <option value="0" selected="">Selecione</option>
                                             <option value="1">Sim</option>
                                             <option value="0">Não</option>
                                         </select>
@@ -81,7 +81,7 @@ export default {
         return  {
             // Form vinculação
             PEP: '',
-            isEnd: '',
+            isInd: '',
             Administradora: '',
             Fornecedor: '',
             Prefeitura: '',
@@ -133,10 +133,10 @@ export default {
         getFields() {
             return {
                 'is_ind': this.isInd,
-                'adm_id': this.Administradora,
-                'forn_id': this.Fornecedor,
-                'pref_id': this.Prefeitura,
-                'resp_id': this.Responsavel,
+                'adm_id': this.Administradora.value,
+                'forn_id': this.Fornecedor.value,
+                'pref_id': this.Prefeitura.value,
+                'resp_id': this.Responsavel.value,
             }
         }
     },

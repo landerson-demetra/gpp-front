@@ -187,7 +187,7 @@ export default {
         unidades: {
             handler: function(){
                 try{
-                    $('html,body').animate({scrollTop: $('#unidades').offset().top}, 1300)
+                    $('html,body').clearQueue().animate({scrollTop: $('#unidades').offset().top}, 500)
                 }catch(e){}
             },
             deep: true

@@ -24,38 +24,42 @@
 
                 <div v-if="!this.fornecedor_selected" class="alert alert-secondary text-center"><i class="fas fa-exclamation-circle"></i> Você precisa escolher um empreendimento/condomínio</div>
 
-                <div class="row mt-3 no-gutters" v-else>
-                    <table class="table table-hover table-responsive-sm table-bordered table-striped border-top-0">
-                        <thead>
-                            <tr>
-                                <th scope="col">PEP</th>
-                                <th scope="col">ADM</th>
-                                <th scope="col">Fornecedor</th>
-                                <th scope="col">Prefeitura</th>
-                                <th scope="col">Responsável</th>
-                                <th scope="col">Individualizado</th>
-                                <th scope="col">Ações</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr v-for="vinculacao in vinculacoes">
-                                <th :title="fornecedor_selected.label"><a href="#">{{ vinculacao.PEP_Empreendimento }}</a></th>
-                                <td><a href="#">{{ vinculacao.administradora.nome }}</a></td>
-                                <td><a href="#">{{ vinculacao.fornecedor.nome }}</a></td>
-                                <td><a href="#">{{ vinculacao.prefeitura.nome }}</a></td>
-                                <td><a href="#">{{ vinculacao.responsavel.name }}</a></td>
-                                <td>{{ vinculacao.is_ind ? 'Sim' : 'Não' }}</td>
-                                <td>
-                                    <div class="action-buttons">
-                                        <button class="btn btn-warning"><i class="fa fa-edit"></i></button>
-                                        <button class="btn btn-danger"><i class="fa fa-trash"></i></button>
-                                    </div>
-                                </td>
-                            </tr>
-                        </tbody>
-                    </table>
+                <div v-if="this.fornecedor_selected && !this.vinculacoes.length" class="alert alert-secondary text-center"><i class="fas fa-exclamation-circle"></i> Não há vinculações para PEP</div>
 
-                    <div class="col text-right">
+                <div class="row mt-3 no-gutters">
+                    <div v-if="this.vinculacoes.length">
+                        <table class="table table-hover table-responsive-sm table-bordered table-striped border-top-0">
+                            <thead>
+                                <tr>
+                                    <th scope="col">PEP</th>
+                                    <th scope="col">ADM</th>
+                                    <th scope="col">Fornecedor</th>
+                                    <th scope="col">Prefeitura</th>
+                                    <th scope="col">Responsável</th>
+                                    <th scope="col">Individualizado</th>
+                                    <th scope="col">Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr v-for="vinculacao in vinculacoes">
+                                    <th :title="fornecedor_selected.label"><a href="#">{{ vinculacao.PEP_Empreendimento }}</a></th>
+                                    <td><a href="#">{{ vinculacao.administradora.nome }}</a></td>
+                                    <td><a href="#">{{ vinculacao.fornecedor.nome }}</a></td>
+                                    <td><a href="#">{{ vinculacao.prefeitura.nome }}</a></td>
+                                    <td><a href="#">{{ vinculacao.responsavel.name }}</a></td>
+                                    <td>{{ vinculacao.is_ind ? 'Sim' : 'Não' }}</td>
+                                    <td>
+                                        <div class="action-buttons">
+                                            <button class="btn btn-warning"><i class="fa fa-edit"></i></button>
+                                            <button class="btn btn-danger"><i class="fa fa-trash"></i></button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div v-if="this.fornecedor_selected" class="col text-right">
                         <button class="btn btn btn-success" data-toggle="modal" data-target="#modalNovaVinculacao"><i class="fas fa-plus"></i> Adicionar</button>
                     </div>
                 </div>
@@ -104,6 +108,9 @@ export default {
         fetch() {
             get(this.fornecedor_selected.value)
                 .then(r => this.vinculacoes = r.results)
+        },
+        saveVinculacao(datas) {
+            console.log(datas);
         }
     },
     mounted() {
@@ -111,6 +118,9 @@ export default {
 
         // isFetching trick
         Bus.$on('isFetching', is => self.isFetching = is)
+
+        // Save Events
+        Bus.$on('evNovaVinculacao', (datas) => self.saveVinculacao(datas))
 
         // Obtendo a lista de fornecedores
         getForList()
