@@ -1,7 +1,7 @@
 <template>
     <div>
         <div class="row">
-            <div class="content-gest mb-5 col-md-12" :class="{ 'col-lg-9': !gestExpanded, 'col-lg-12': gestExpanded }">
+            <div class="content-gest mb-5 col-md-12 col-lg-12">
                 <div class="card shadow border-0">
                     <div class="card-header border-0 bg-primary text-white">
                         <div class="row">
@@ -105,20 +105,10 @@
                         </ul>
                         <div class="tab-content" id="myTabContent">
                             <div class="tab-pane fade show active" id="condominios" role="tabpanel" aria-labelledby="home-tab">
-                                <div v-if="gestExpanded">
-                                    <datatable :tblClass="'table-bordered table-responsive d-md-table'" :HeaderSettings="false" :Pagination="false" v-bind="$data.condominios" />
-                                </div>
-                                <div v-else>
-                                    <datatable :tblClass="'table-bordered table-responsive'" :HeaderSettings="false" :Pagination="false" v-bind="$data.condominios" />
-                                </div>
+                                <datatable :HeaderSettings="false" :Pagination="false" v-bind="$data.condominios" />
                             </div>
                             <div class="tab-pane fade" id="iptus" role="tabpanel" aria-labelledby="iptus-tab">
-                                <div v-if="gestExpanded">
-                                    <datatable :tblClass="'table-bordered table-responsive d-md-table'" :HeaderSettings="false" :Pagination="false" v-bind="$data.iptus" />
-                                </div>
-                                <div v-else>
-                                    <datatable :tblClass="'table-bordered table-responsive'" :HeaderSettings="false" :Pagination="false" v-bind="$data.iptus" />
-                                </div>
+                                <datatable :HeaderSettings="false" :Pagination="false" v-bind="$data.iptus" />
                             </div>
                             <div class="tab-pane fade" id="agua" role="tabpanel" aria-labelledby="agua-tab">
 
@@ -187,6 +177,15 @@ export default {
     components: { GppResumo },
     data() {
         return {
+            money: {
+                decimal: ',',
+                thousands: '.',
+                prefix: 'R$ ',
+                suffix: ' #',
+                precision: 2,
+                masked: false
+            },
+
             PEP: this.$route.params.pep || null,
             pepParsed: {},
             pepIs: null,
@@ -227,7 +226,9 @@ export default {
             },
 
             condominios: {
-                tblClass: 'table-bordered table-responsive',
+                fixHeaderAndSetBodyMaxHeight: 300,
+                tblStyle: 'table-layout: fixed',
+                tblClass: 'table-bordered table-responsive d-md-table',
                 columns: [
                     { title: 'Status', field: 'status' },
                     { title: 'Periodo', field: 'periodo' },
@@ -239,26 +240,28 @@ export default {
                     { title: 'Correção', field: 'correcao'},
                     { title: 'Fonte', field: 'fonte'},
                     { title: 'Total', field: 'total'},
-                    { title: 'Data Pgto', field: 'data_pgto'},
-                ],
+                    { title: 'D.Pgto', field: 'data_pgto'},
+                ].map(col => (col.colStyle = { width: '150px' }, col)),
                 data: [],
                 total: 0,
                 query: {}
             },
 
             iptus: {
-                tblClass: 'table-bordered table-responsive',
+                fixHeaderAndSetBodyMaxHeight: 300,
+                tblStyle: 'table-layout: fixed',
+                tblClass: 'table-bordered table-responsive d-md-table',
                 columns: [
                     { title: 'Periodo', field: 'periodo' },
                     { title: 'Parcela', field: 'parcela' },
-                    { title: 'Vencimento', field: 'vencimento', sortable: true },
-                    { title: 'V.Principal', field: 'valor_principal', sortable: true },
-                    { title: 'Multa', field: 'multa', sortable: true },
-                    { title: 'Juros', field: 'juros', sortable: true },
-                    { title: 'Correção Monetária', field: 'correcao_monetaria', sortable: true },
+                    { title: 'Vencimento', field: 'vencimento' },
+                    { title: 'V.Principal', field: 'valor_principal' },
+                    { title: 'Multa', field: 'multa' },
+                    { title: 'Juros', field: 'juros' },
+                    { title: 'C.Monetária', field: 'correcao_monetaria' },
                     { title: 'Dívida ativa', field: 'divida_ativa'},
                     { title: 'Fonte', field: 'fonte'},
-                ],
+                ].map(col => (col.colStyle = { width: '150px' }, col)),
                 data: [],
                 total: 0,
                 query: {}
@@ -270,9 +273,9 @@ export default {
                     { title: 'Contrato', field: 'contrato' },
                     { title: 'Nome', field: 'nome' },
                     { title: 'CPF/CNPJ', field: 'cpfcnpj'},
-                    { title: 'Valor contrato', field: 'vlcontrato', sortable: true},
+                    { title: 'Valor contrato', field: 'vlcontrato' },
                     { title: 'Data do contrato', field: 'drcontrato'},
-                    { title: 'Status', field: 'status', sortable: true},
+                    { title: 'Status', field: 'status' },
                 ],
                 data: [],
                 total: 0,
@@ -298,6 +301,7 @@ export default {
     watch: {
         PEP: function(pep) {
             this.$initPep(pep)
+            this.$router.push({ params: {pep: pep} })
         },
         empreendimento_selected: function(empreendimento){
             if(!empreendimento){
@@ -317,6 +321,9 @@ export default {
                 this.bloco_selected = ''
                 this.unidade_selected = ''
             }
+
+            // Reseta a unidade selecionada
+            this.unidade_selected = ''
 
             let datas = this.pepParsed
             datas.bloco_cod = bloco
@@ -450,11 +457,9 @@ export default {
                 this.$resetUnidadeDatas()
 
             // Resumo de patrimônios
-
-
         },
         assignUnidadeValues(){
-            if(!this.unidade_datas.length)
+            if(_.isEmpty(this.unidade_datas))
                 return
 
             // - Não há contratos
@@ -471,7 +476,7 @@ export default {
 
             /* [ Contratos ] */
             var formated = []
-            _.forEach(this.unidade_datas.contratos, function(v,k){
+            _.forEach(this.unidade_datas.contratos, (v) => {
                 formated.push({
                     contrato: v.id,
                     nome: v.nome,
@@ -487,19 +492,19 @@ export default {
 
             /* [ Condominios ] */
             formated = []
-            _.forEach(this.unidade_datas.condominios, function(v,k){
+            _.forEach(this.unidade_datas.condominios, (v) => {
                 formated.push({
                     status: 'R',
                     periodo: v.periodo,
                     vencimento: v.vencimento,
-                    valor: v.valor,
-                    valor_pago: v.valor_pago,
-                    multa: v.multa,
-                    juros: v.juros,
-                    correcao: v.correcao,
+                    valor: this.$options.filters.currency(v.valor),
+                    valor_pago: (v.valor_pago ? this.$options.filters.currency(v.valor_pago) : 'N/Pago'),
+                    multa: v.multa + '%' ,
+                    juros: v.juros + '%',
+                    correcao: v.correcao + '%',
                     fonte: v.fonte,
-                    total: '?',
-                    data_pgto: v.data_pagamento
+                    total: '...',
+                    data_pgto: (v.data_pagamento ? v.data_pagamento : 'N/Pago')
                 })
             })
 
@@ -508,15 +513,15 @@ export default {
 
             /* [ Iptus ] */
             formated = []
-            _.forEach(this.unidade_datas.iptus, function(v,k){
+            _.forEach(this.unidade_datas.iptus, (v) => {
                 formated.push({
                     periodo: v.periodo,
                     parcela: v.parcela,
                     vencimento: v.vencimento,
-                    valor_principal: v.valor_principal,
-                    multa: v.multa,
-                    juros: v.juros,
-                    correcao_monetaria: v.correcao_monetaria,
+                    valor_principal: this.$options.filters.currency(v.valor_principal),
+                    multa: v.multa + '%',
+                    juros: v.juros + '%',
+                    correcao_monetaria: v.correcao_monetaria + '%',
                     divida_ativa: v.divida_ativa,
                     fonte: v.fonte,
                 })

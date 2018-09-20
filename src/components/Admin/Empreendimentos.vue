@@ -8,15 +8,26 @@
                 <grid-loader class="mx-auto my-5" :loading="true" :color="'#26256A'" :size="'10px'"></grid-loader>
             </div>
             <div class="col-12" v-else>
-                <div class="row my-3 justify-content-end">
+                <div class="row bg-white shadow-sm p-3 my-3 justify-content-start">
+                    <div class="input-group col-md-4">
+                        <input type="text" class="form-control" placeholder="Empreendimento...">
+                    </div>
+                    <div class="input-group col-md-3">
+                        <input type="text" class="form-control" placeholder="SPE (XXXX)...">
+                    </div>
+                    <div class="input-group col-md-3">
+                        <input type="text" class="form-control" placeholder="Condomínio (X.XXXX.XX.XX)...">
+                    </div>
                     <div class="input-group col-md-2">
                         <select v-model="empreendimentos.paginator.per_page" class="form-control">
                             <option value="5">Mostrar: 5</option>
                             <option value="15">Mostrar: 15</option>
                             <option value="25">Mostrar: 25</option>
-                            <option value="50">Mostrar: 25</option>
+                            <option value="50">Mostrar: 50</option>
                         </select>
                     </div>
+                    
+                    <!-- <button class="btn btn-primary"><i class="fas fa-search"></i></button> -->
                 </div>
                 <table :class="{'is-fetching': isFetching}" class="table table-responsive-md table-borderless table-hover">
                     <thead>
@@ -27,7 +38,7 @@
                                     <label></label>
                                 </div>
                             </th>
-                            <th>PEP</th>
+                            <th>Condomínio</th>
                             <th>SPE</th>
                             <th>Empreendimento</th>
                             <th></th>

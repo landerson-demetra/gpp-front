@@ -13,6 +13,7 @@ import vSelect from 'vue-select'
 import Datatable from 'vue2-datatable-component'
 import locale from 'vue2-datatable-component/locale/pt-br'
 import Notifications from 'vue-notification'
+import VueCurrencyFilter from 'vue-currency-filter'
 import GppErrors from './components/includes/GppErrors'
 import WOW from 'wowjs'
 
@@ -31,6 +32,7 @@ Vue.config.productionTip = false
 Vue.use(Vuex)
 Vue.use(Datatable, { locale })
 Vue.use(Notifications)
+Vue.use(VueCurrencyFilter, Vue.prototype.$config.currency)
 
 /* [ Register components ] */
 Vue.component('v-select', vSelect)
@@ -45,7 +47,7 @@ new Vue({
     Bus.$on('response-errors', (event) => {
         this.$notify({ group: 'normal', clean: true })
 
-        _.forEach(event.messages, (v,k) => {
+        _.forEach(event.messages, (v) => {
             this.$notify({
               group: 'normal',
               type: 'warn',

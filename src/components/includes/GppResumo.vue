@@ -1,5 +1,5 @@
 <template>
-    <div class="col-md-12" :class="{ 'col-lg-3': !gest, 'col-lg-12': gest }">
+    <div class="col-md-12 col-lg-12">
         <div class="card shadow border-0">
             <div class="card-header border-0 bg-primary text-white">
                 <h3 class="mt-0">Resumo</h3>

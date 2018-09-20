@@ -17,5 +17,15 @@ export default {
     // Errors
     errors: {
         unexpected: { group: 'normal', type: 'error', title: 'Ops :/', text: 'Ocorreu um erro inesperado' }
+    },
+
+    // Currency
+    currency: {
+        symbol : '', // R$
+        thousandsSeparator: '.',
+        fractionCount: 2,
+        fractionSeparator: ',',
+        symbolPosition: 'front',
+        symbolSpacing: true
     }
 }
