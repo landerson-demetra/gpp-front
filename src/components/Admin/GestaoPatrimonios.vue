@@ -7,7 +7,7 @@
                         <div class="row">
                             <h3 class="col-md-10 mt-0">Gestão de Patrimônios <span v-if="this.isFetching">[Aguarde...]</span></h3>
                             <div class="col-md-2 text-right d-none d-lg-block">
-                                <button class="btn btn-primary border border-dark" v-on:click="gestExpanded = !gestExpanded"><i class="fas" :class="{ 'fa-forward': !gestExpanded, 'fa-backward': gestExpanded }"></i></button>
+                                <button :disabled="this.pepIs !== 'unidade'" class="btn btn-primary border border-dark"><i class="fas fa-money-check-alt"></i> Resumo</button>
                             </div>
                         </div>
                     </div>
@@ -120,6 +120,7 @@
                     </div>
                     <div class="card-footer bg-primary text-white border-0 text-right">
                         <div class="btn-group" role="group" aria-label="Basic example">
+                            <button type="button" class="btn btn-primary"><i class="fas fa-file-upload"></i> Anexar</button>
                             <button type="button" class="btn btn-primary"><i class="fas fa-print"></i> Imprimir</button>
                             <div class="dropup">
                                 <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown"><i class="fas fa-file-export"></i> Exportar</button>
@@ -135,7 +136,7 @@
             </div>
 
             <!-- Resumo de patrimônios -->
-            <GppResumo :gest="gestExpanded"></GppResumo>
+            <!-- <GppResumo :gest="gestExpanded"></GppResumo> -->
         </div>
 
         <!-- Modal -->
@@ -231,6 +232,7 @@ export default {
                 tblClass: 'table-bordered table-responsive d-md-table',
                 columns: [
                     { title: 'Status', field: 'status' },
+                    { title: 'Doc.SAP', field: 'doc_sap' },
                     { title: 'Periodo', field: 'periodo' },
                     { title: 'Vencimento', field: 'vencimento'},
                     { title: 'Valor', field: 'valor'},
@@ -496,6 +498,7 @@ export default {
                 formated.push({
                     status: 'R',
                     periodo: v.periodo,
+                    doc_sap: v.doc_sap ? v.doc_sap : 'N/Informado',
                     vencimento: v.vencimento,
                     valor: this.$options.filters.currency(v.valor),
                     valor_pago: (v.valor_pago ? this.$options.filters.currency(v.valor_pago) : 'N/Pago'),

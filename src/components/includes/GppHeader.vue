@@ -22,9 +22,9 @@
                             <router-link :to="{ name: 'GestaoPatromonios' }" class="nav-link">Gestão de Patrimônios</router-link>
                         </li>
                         <li class="nav-item dropdown">
-                            <a href="#" class="nav-link dropdown-toggle" id="navbarDropdownCadastro" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Cadastro</a>
+                            <a href="#" class="nav-link dropdown-toggle" id="navbarDropdownCadastro" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Cadastros</a>
                             <div class="dropdown-menu" aria-labelledby="navbarDropdownCadastro">
-                                <router-link :to="{ name: 'Fornecedores' }" class="dropdown-item"><i class="fas fa-handshake"></i> Fornecedores</router-link>
+                                <router-link :to="{ name: 'Fornecedores' }" class="dropdown-item"><i class="fas fa-handshake"></i> Responsáveis</router-link>
                                 <router-link :to="{ name: 'Vinculacao' }" class="dropdown-item"><i class="fas fa-sync"></i> Vinculação PEP</router-link>
                                 <router-link :to="{ name: 'DadosUnidade' }" class="dropdown-item"><i class="fas fa-building"></i> Dados da Unidade</router-link>
                             </div>

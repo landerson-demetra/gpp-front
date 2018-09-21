@@ -2,7 +2,7 @@
     <div id="fornecedores" class="wow fadeIn" data-wow-duration="2s">
         <div class="card shadow border-0">
             <div class="card-header border-0 bg-primary text-white">
-                <h3 class="mt-0">Fornecedores</h3>
+                <h3 class="mt-0">Responsáveis</h3>
             </div>
             <div class="card-body">
                 <form method="POST" v-on:submit.prevent>
@@ -218,7 +218,7 @@ export default {
         /*=====  End of Fornecedor  ======*/
 
         /*==============================================
-        =            Contatos do fornecedor            =
+        =            Contatos do forneced+or            =
         ==============================================*/
         saveContato(datas){
             datas.fornecedor_id = this.fornecedor_selected.value
@@ -338,6 +338,16 @@ export default {
         // Delete events
         Bus.$on('evDeletarFornecedor', r => self.deleteFornecedor())
         Bus.$on('evDeletarContato', r => self.deleteContato())
+    },
+    beforeDestroy(){
+        Bus.$off([
+            'evNovoFornecedor',
+            'evNovoContato',
+            'evEditarFornecedor',
+            'evEditarContato',
+            'evDeletarFornecedor',
+            'evDeletarContato'
+        ])
     }
 }
 </script>

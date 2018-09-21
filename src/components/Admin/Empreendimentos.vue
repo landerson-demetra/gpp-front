@@ -9,14 +9,14 @@
             </div>
             <div class="col-12" v-else>
                 <div class="row bg-white shadow-sm p-3 my-3 justify-content-start">
+                    <div class="input-group col-md-3">
+                        <input type="text" class="form-control" placeholder="Projeto (X.XXXX.XX.XX)...">
+                    </div>
                     <div class="input-group col-md-4">
+                        <input type="text" class="form-control" placeholder="Razão Social...">
+                    </div>
+                    <div class="input-group col-md-3">
                         <input type="text" class="form-control" placeholder="Empreendimento...">
-                    </div>
-                    <div class="input-group col-md-3">
-                        <input type="text" class="form-control" placeholder="SPE (XXXX)...">
-                    </div>
-                    <div class="input-group col-md-3">
-                        <input type="text" class="form-control" placeholder="Condomínio (X.XXXX.XX.XX)...">
                     </div>
                     <div class="input-group col-md-2">
                         <select v-model="empreendimentos.paginator.per_page" class="form-control">
@@ -24,6 +24,7 @@
                             <option value="15">Mostrar: 15</option>
                             <option value="25">Mostrar: 25</option>
                             <option value="50">Mostrar: 50</option>
+                            <option value="100">Mostrar: 100</option>
                         </select>
                     </div>
                     
@@ -38,8 +39,8 @@
                                     <label></label>
                                 </div>
                             </th>
-                            <th>Condomínio</th>
-                            <th>SPE</th>
+                            <th>Projeto</th>
+                            <th>SPE - Razão Social</th>
                             <th>Empreendimento</th>
                             <th></th>
                         </tr>
@@ -145,16 +146,33 @@
             <!-- Listagem -->
             <div v-if="!unidades.notfound">
                 <div class="row" v-if="!isFetching">
-                    <div v-for="unidade in this.unidades.datasShow" class="col-xl-2 col-lg-3 col-md-4 col-sm-12 mb-3">
-                        <div  class="card shadow bg-white">
-                            <ul class="list-group list-group-flush">
-                                <li class="list-group-item"><b>Bloco:</b> {{ unidade.bloco_nome }}</li>
-                                <li class="list-group-item"><b>Unidade:</b> {{ unidade.unidade_nome }}</li>
-                                <router-link :to="{name: 'GestaoPatromonios', params: {pep: unidade.PEP}}" title="Gerenciar Patrimônios" class="btn btn-primary btn-block">Gerir</router-link>
-                            </ul>
-                        </div>
+                    <div class="col-md-12">
+                        <table class="table table-units table-bordered table-striped shadow-sm">
+                            <thead>
+                                <tr>
+                                    <th>Número</th>
+                                    <th>Bloco</th>
+                                    <th>Status</th>
+                                    <th>Ações</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr v-for="unidade in unidades.datasShow">
+                                    <th>{{ unidade.unidade_nome }}</th>
+                                    <th>{{ unidade.bloco_nome }}</th>
+                                    <th>N/Definido</th>
+                                    <th>
+                                        <router-link :to="{name: 'GestaoPatromonios', params: {pep: unidade.PEP}}" title="Gerenciar Patrimônios" class="btn btn-primary">Gerir</router-link>
+                                        <button class="btn btn-secondary"><i class="fas fa-edit"></i></button>
+                                        <button class="btn btn-danger"><i class="fas fa-trash-alt"></i></button>
+                                    </th>
+                                </tr>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
+
+                <div class="clearfix"></div>
 
                 <!-- Paginação -->
                 <div :class="{'is-fetching': isFetching}">
@@ -189,7 +207,7 @@ export default {
                 checkeds: [],
                 searchTxt: '',
                 notfound: false,
-                paginator: { per_page: 12, limit_pages: 6, current_page: 1 }
+                paginator: { per_page: 6, limit_pages: 6, current_page: 1 }
             },
             isFetching: undefined
         }
@@ -378,5 +396,9 @@ export default {
 .checked{
     background-color: #F1F1F1;
     box-shadow: 0 0 .3em #CCC;
+}
+
+.table-units{
+    text-align: center;
 }
 </style>

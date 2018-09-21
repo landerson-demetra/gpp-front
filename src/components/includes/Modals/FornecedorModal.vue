@@ -35,7 +35,7 @@
                                     </div>
                                      <div class="form-group col-lg-6">
                                         <label for="Segmento">Segmento(s) <span class="text-danger">*</span></label>
-                                        <v-select v-model="Segmentos" :placeholder="'Selecione um ou mais segmento(s)...'" multiple :options="['Prefeitura', 'Administradora', 'Fornecedor']"></v-select>
+                                        <v-select :close-on-select="false" taggable push-tags v-model="Segmentos" :placeholder="'Selecione um ou mais segmento(s)...'" multiple :options="['Prefeitura', 'Administradora', 'Fornecedor SAP', 'Fornecedor Água', 'Fornecedor Luz']"></v-select>
                                     </div>
 
                                     <div class="col-12"><h5>Endereço</h5><hr></div>
@@ -77,7 +77,7 @@
                     <div class="modal-footer">
                         <div v-if="this.action !== 'Delete'">
                             <button type="button" class="btn btn-default" v-on:click="this.closeEvent" data-dismiss="modal">Fechar</button>
-                            <button v-on:click="this.emitOkEvent" type="button" class="btn btn-primary"><i class="fas fa-check"></i> Salvar</button>
+                            <button v-on:click.prevent="emitOkEvent" type="button" class="btn btn-primary"><i class="fas fa-check"></i> Salvar</button>
                         </div>
                         <div v-else>
                             <button type="button" class="btn btn-default" data-dismiss="modal">Não</button>
