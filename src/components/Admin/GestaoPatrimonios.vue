@@ -34,22 +34,6 @@
                                         <option>Não</option>
                                     </select>
                                 </div>
-                                <!-- <div class="form-group col-md-2">
-                                    <label class="invisible">Ação</label>
-                                    <div class="input-group">
-                                        <div class="input-group-prepend">
-                                            <button class="btn btn-primary" type="button" data-toggle="modal" data-target="#exampleModal">ADM</button>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="form-group col-md-2">
-                                    <label class="invisible">Ação</label>
-                                    <div class="input-group">
-                                        <div class="input-group-prepend">
-                                            <button class="btn btn-primary" type="button">Jurídico</button>
-                                        </div>
-                                    </div>
-                                </div> -->
                             </div>
                             <div class="row">
                                <div class="form-group col-md-4">
@@ -74,7 +58,7 @@
                                 </div>
                                 <div class="form-group col-md-3">
                                     <label for="Status">Status</label>
-                                    <select :disabled="pepIs !== 'unidade'" name="status" id="Status" class="form-control">
+                                    <select :disabled="!unidade_selected" name="status" id="Status" class="form-control">
                                         <option value="">N/Definido</option>
                                         <option>Estoque</option>
                                         <option>Pré-distrato</option>
@@ -106,15 +90,25 @@
                         <div class="tab-content" id="myTabContent">
                             <div class="tab-pane fade show active" id="condominios" role="tabpanel" aria-labelledby="home-tab">
                                 <datatable :HeaderSettings="false" :Pagination="false" v-bind="$data.condominios" />
+                                <div class="row">
+                                    <div class="col mt-4 no-gutters text-right">
+                                        <button class="btn btn btn-success" data-toggle="modal" data-target="#modalNovoCondominio"><i class="fas fa-plus"></i> Adicionar</button>
+                                    </div>
+                                </div>
                             </div>
                             <div class="tab-pane fade" id="iptus" role="tabpanel" aria-labelledby="iptus-tab">
                                 <datatable :HeaderSettings="false" :Pagination="false" v-bind="$data.iptus" />
+                                <div class="row">
+                                    <div class="col mt-4 no-gutters text-right">
+                                        <button class="btn btn btn-success" data-toggle="modal" data-target="#modalNovoContato"><i class="fas fa-plus"></i> Adicionar</button>
+                                    </div>
+                                </div>
                             </div>
                             <div class="tab-pane fade" id="agua" role="tabpanel" aria-labelledby="agua-tab">
-
+                                
                             </div>
                             <div class="tab-pane fade" id="luz" role="tabpanel" aria-labelledby="luz-tab">
-
+                                
                             </div>
                         </div>
                     </div>
@@ -135,58 +129,49 @@
                 </div>
             </div>
 
+            <!-- [ Condomínios modals ] -->
+                <!-- Novo -->
+                <CUDCondominios action="New" name="NovoCondominio" title="Cadastrar Condomínio"></CUDCondominios>
+                <!-- Editar -->
+                <CUDCondominios action="Edit" name="EditarCondominio" title="Editar Condomínio" :datas="dadoActive"></CUDCondominios>
+                <!-- Deletar -->
+                <CUDCondominios action="Delete" name="DeletarCondominio" title="Deletar Condomínio" :datas="dadoActive"></CUDCondominios>
+            <!-- [ /Condominios modals ] -->
+
             <!-- Resumo de patrimônios -->
             <!-- <GppResumo :gest="gestExpanded"></GppResumo> -->
         </div>
-
-        <!-- Modal -->
-        <div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-            <div class="modal-dialog shadow" role="document">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title" id="exampleModalLabel">Administração</h5>
-                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                            <span aria-hidden="true">&times;</span>
-                        </button>
-                    </div>
-                    <div class="modal-body">
-                        <ul>
-                            <li>...</li>
-                            <li>...</li>
-                            <li>...</li>
-                            <li>...</li>
-                        </ul>
-                    </div>
-                    <div class="modal-footer">
-                        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                        <button type="button" class="btn btn-primary"><i class="fas fa-check"></i> Salvar</button>
-                    </div>
-                </div>
-            </div>
-        </div>
     </div>
+
+
 </template>
 
 <script>
-import Bus from '../../bus' 
+import Bus from '../../bus'
 import { mapState } from 'vuex'
 import { parsePEP, reMountPEP } from '../../modules/pep'
 import GppResumo from '../includes/GppResumo'
 
+// Api calls
+import {
+    store as storeCond,
+    update as editCond,
+    deletedata as delCond
+} from '../../api/condominios'
+
+// Modals
+import CUDCondominios from '../includes/Modals/Gestao/CUD_Condominios'
+
+import ActionButtons from '../includes/Buttons/ActionButtons'
+
 export default {
     name: 'GestaoPatrimonios',
-    components: { GppResumo },
+    components: {
+        GppResumo,
+        CUDCondominios
+    },
     data() {
         return {
-            money: {
-                decimal: ',',
-                thousands: '.',
-                prefix: 'R$ ',
-                suffix: ' #',
-                precision: 2,
-                masked: false
-            },
-
             PEP: this.$route.params.pep || null,
             pepParsed: {},
             pepIs: null,
@@ -206,6 +191,9 @@ export default {
             unidade_blocked: false,
 
             isFetching: undefined,
+
+            // Events helpers
+            dadoActive: [],
 
             // Resumo
             resumo: {},
@@ -231,6 +219,7 @@ export default {
                 tblStyle: 'table-layout: fixed',
                 tblClass: 'table-bordered table-responsive d-md-table',
                 columns: [
+                    { title: 'Ação', tdComp: ActionButtons },
                     { title: 'Status', field: 'status' },
                     { title: 'Doc.SAP', field: 'doc_sap' },
                     { title: 'Periodo', field: 'periodo' },
@@ -246,7 +235,10 @@ export default {
                 ].map(col => (col.colStyle = { width: '150px' }, col)),
                 data: [],
                 total: 0,
-                query: {}
+                query: {},
+                xprops: {
+                    evName: 'Condominio',
+                }
             },
 
             iptus: {
@@ -318,14 +310,17 @@ export default {
 
             this.PEP = reMountPEP(datas)
         },
-        bloco_selected: function(bloco){
+        bloco_selected: function(bloco, old){
             if(!bloco){
                 this.bloco_selected = ''
                 this.unidade_selected = ''
+                this.unidade_blocked = true
+            }else{
+                this.unidade_blocked = false
             }
 
-            // Reseta a unidade selecionada
-            this.unidade_selected = ''
+            if(old)
+                this.unidade_selected = ''
 
             let datas = this.pepParsed
             datas.bloco_cod = bloco
@@ -443,7 +438,10 @@ export default {
                 let unidades = _.filter(o.unidades, (v) => {
                     return v.bloco_cod == this.bloco_selected
                 })
-                _.mapValues(unidades, (a) => unidadesArr.push({ 'text' : a.unidade_nome, 'value' : a.unidade_cod}))
+                _.mapValues(unidades, (a) => unidadesArr.push({
+                    'text' : a.unidade_nome,
+                    'value' : a.unidade_cod
+                }))
             })
 
             this.unidades = _.uniqBy(unidadesArr, 'value')
@@ -480,12 +478,14 @@ export default {
             var formated = []
             _.forEach(this.unidade_datas.contratos, (v) => {
                 formated.push({
+                    id: v.id,
                     contrato: v.id,
                     nome: v.nome,
                     vlcontrato: v.valor_contrato,
                     cnpj_cpf: v.cnpj_cpf,
                     dtcontrato: v.data_contrato,
                     status: v.status_contrato,
+                    raw: v
                 })
             })
 
@@ -496,6 +496,7 @@ export default {
             formated = []
             _.forEach(this.unidade_datas.condominios, (v) => {
                 formated.push({
+                    id: v.id,
                     status: 'R',
                     periodo: v.periodo,
                     doc_sap: v.doc_sap ? v.doc_sap : 'N/Informado',
@@ -507,7 +508,8 @@ export default {
                     correcao: v.correcao + '%',
                     fonte: v.fonte,
                     total: '...',
-                    data_pgto: (v.data_pagamento ? v.data_pagamento : 'N/Pago')
+                    data_pgto: (v.data_pagamento ? v.data_pagamento : 'N/Pago'),
+                    raw: v
                 })
             })
 
@@ -518,6 +520,7 @@ export default {
             formated = []
             _.forEach(this.unidade_datas.iptus, (v) => {
                 formated.push({
+                    id: v.id,
                     periodo: v.periodo,
                     parcela: v.parcela,
                     vencimento: v.vencimento,
@@ -527,19 +530,116 @@ export default {
                     correcao_monetaria: v.correcao_monetaria + '%',
                     divida_ativa: v.divida_ativa,
                     fonte: v.fonte,
+                    raw: v
                 })
             })
 
             this.iptus.total = formated.length
             this.iptus.data = formated
+        },
+
+        /*============================================
+        =            Condominios - Events            =
+        ============================================*/
+        saveCond(datas){
+            datas.PEP_Unidade = this.PEP
+
+            storeCond(datas).then(r => {
+                let v = r.results
+                this.condominios.total++
+                this.condominios.data.push({
+                    status: 'R',
+                    periodo: v.periodo,
+                    doc_sap: v.doc_sap ? v.doc_sap : 'N/Informado',
+                    vencimento: v.vencimento,
+                    valor: this.$options.filters.currency(v.valor),
+                    valor_pago: (v.valor_pago ? this.$options.filters.currency(v.valor_pago) : 'N/Pago'),
+                    multa: v.multa + '%' ,
+                    juros: v.juros + '%',
+                    correcao: v.correcao + '%',
+                    fonte: v.fonte,
+                    total: '...',
+                    data_pgto: (v.data_pagamento ? v.data_pagamento : 'N/Pago'),
+                    raw: v
+                })
+
+                // Notificando o usuário
+                this.$notify({group:'normal', type:'success', text:'Condomínio criado com sucesso'})
+
+                // Fechando a modal
+                $('.modal').modal('hide')
+            }).catch(e => {
+                if(e.response.status < 423) return
+                this.$notify({group:'normal', type:'error', title:'Ops :/', text:'Ocorreu um erro inesperado'})
+            })
+        },
+        updateCond(datas){
+            editCond(datas, this.dadoActive.id).then(r => {
+                let v = r.results,
+                    index = this.condominios.data.map(e => e.id).indexOf(this.dadoActive.id)
+
+                // Atualizando o condomínio na lista
+                this.condominios.data[index].status = 'R'
+                this.condominios.data[index].periodo = v.periodo
+                this.condominios.data[index].doc_sap = v.doc_sap ? v.doc_sap : 'N/Informado'
+                this.condominios.data[index].vencimento = v.vencimento
+                this.condominios.data[index].valor = this.$options.filters.currency(v.valor)
+                this.condominios.data[index].valor_pago = (v.valor_pago ? this.$options.filters.currency(v.valor_pago) : 'N/Pago')
+                this.condominios.data[index].multa = v.multa + '%' 
+                this.condominios.data[index].juros = v.juros + '%'
+                this.condominios.data[index].correcao = v.correcao + '%'
+                this.condominios.data[index].fonte = v.fonte
+                this.condominios.data[index].total = '...'
+                this.condominios.data[index].data_pgto = (v.data_pagamento ? v.data_pagamento : 'N/Pago')
+                this.condominios.data[index].raw = v
+
+                // Notificando o usuário
+                this.$notify({group:'normal', type:'success', text:'Condomínio atualizado com sucesso'})
+
+                // Fechando a modal
+                $('.modal').modal('hide')
+            }).catch(e => {
+                console.log(e)
+            })
+        },
+        deleteCond(id){
+            delCond(this.dadoActive.id).then(r => {
+                console.log(r)
+            }).catch(e => {
+                console.log(e)
+            })
         }
+        /*=====  End of Condominios - Events  ======*/
+        
     },
-    computed: { },
     mounted(){
+        if(this.PEP) this.$initPep(this.PEP)
+
+        /*==============================
+        =            Events            =
+        ==============================*/
         Bus.$on('isFetching', is => this.isFetching = is)
 
-        if(this.PEP)
-            this.$initPep(this.PEP)
+        // Save events
+        Bus.$on('evNovoCondominio', datas => this.saveCond(datas))
+
+        // Edit events
+        Bus.$on('evActCondominioEdit', datas => this.dadoActive = datas)
+        Bus.$on('evEditarCondominio', datas => this.updateCond(datas))
+
+        // Delete events
+        Bus.$on('evActCondominioDelete', datas => this.dadoActive = datas)
+        Bus.$on('evDeletarCondominio', id => this.deleteCond(id))
+    },
+    beforeDestroy(){
+        // ..
+        Bus.$off([
+            'evNovoCondominio',
+            'evActCondominioEdit',
+            'evEditarCondominio',
+            'evActCondominioDelete',
+            'evDeletarCondominio'
+        ])
     }
 }
 </script>

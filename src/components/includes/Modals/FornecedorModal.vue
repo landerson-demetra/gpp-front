@@ -35,7 +35,7 @@
                                     </div>
                                      <div class="form-group col-lg-6">
                                         <label for="Segmento">Segmento(s) <span class="text-danger">*</span></label>
-                                        <v-select :close-on-select="false" taggable push-tags v-model="Segmentos" :placeholder="'Selecione um ou mais segmento(s)...'" multiple :options="['Prefeitura', 'Administradora', 'Fornecedor SAP', 'Fornecedor Água', 'Fornecedor Luz']"></v-select>
+                                        <v-select :close-on-select="false" taggable push-tags v-model="Segmentos" placeholder="Selecione um ou mais segmento(s)..." multiple :options="['Prefeitura', 'Administradora', 'Fornecedor SAP', 'Fornecedor Água', 'Fornecedor Luz']"></v-select>
                                     </div>
 
                                     <div class="col-12"><h5>Endereço</h5><hr></div>
@@ -123,7 +123,7 @@ export default {
         emitOkEvent(){
             Bus.$emit('ev' + this.name, (this.action !== 'Delete' ? this.getFields : true))
 
-            // ??? this.reset()
+            this.reset()
         },
         closeEvent(){
             if(this.action == 'New')
@@ -195,17 +195,17 @@ export default {
     computed: {
         getFields() {
             return {
-                'nome': this.Nome,
-                'numero_sap': this.NumeroSAP,
-                'segmentos': this.Segmentos,
-                'cnpj_cpf': this.cpf_cnpj,
-                'site': this.Site,
-                'end_cep': this.CEP,
-                'end_logradouro': this.Logradouro,
-                'end_numero': this.Numero,
-                'end_bairro': this.Bairro,
-                'end_estado': this.Estado,
-                'end_cidade': this.Cidade,
+                nome: this.Nome,
+                numero_sap: this.NumeroSAP,
+                segmentos: this.Segmentos,
+                cnpj_cpf: this.cpf_cnpj,
+                site: this.Site,
+                end_cep: this.CEP,
+                end_logradouro: this.Logradouro,
+                end_numero: this.Numero,
+                end_bairro: this.Bairro,
+                end_estado: this.Estado,
+                end_cidade: this.Cidade,
             }
         }
     }

@@ -43,6 +43,7 @@ export default {
         }
     },
     mounted(){
+        return;
         console.clear()
 
         console.log('===================================')
@@ -56,9 +57,6 @@ export default {
         var vencDate = new Date(this.venc_parc),
             nowDate = new Date(),
             timeDiff = this.monthDiff(vencDate, nowDate)
-
-
-
 
         console.log('Data parcela: ' + vencDate)
         console.log('Data atual: ' + nowDate)

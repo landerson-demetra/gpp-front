@@ -27,5 +27,15 @@ export default {
         fractionSeparator: ',',
         symbolPosition: 'front',
         symbolSpacing: true
+    },
+
+    // V-Money
+    vMoney: {
+        decimal: ',',
+        thousands: '.',
+        prefix: 'R$ ',
+        suffix: '',
+        precision: 2,
+        masked: false
     }
 }
