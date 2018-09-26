@@ -7,7 +7,7 @@
                         <div class="row">
                             <h3 class="col-md-10 mt-0">Gestão de Patrimônios <span v-if="this.isFetching">[Aguarde...]</span></h3>
                             <div class="col-md-2 text-right d-none d-lg-block">
-                                <button :disabled="this.pepIs !== 'unidade'" class="btn btn-primary border border-dark"><i class="fas fa-money-check-alt"></i> Resumo</button>
+                                <button :disabled="this.pepIs !== 'unidade'" data-toggle="modal" data-target="#modalResumo" class="btn btn-primary border border-dark"><i class="fas fa-money-check-alt"></i> Resumo</button>
                             </div>
                         </div>
                     </div>
@@ -90,17 +90,17 @@
                         <div class="tab-content" id="myTabContent">
                             <div class="tab-pane fade show active" id="condominios" role="tabpanel" aria-labelledby="home-tab">
                                 <datatable :HeaderSettings="false" :Pagination="false" v-bind="$data.condominios" />
-                                <div class="row">
+                                <div v-if="this.pepIs == 'unidade'" class="row">
                                     <div class="col mt-4 no-gutters text-right">
-                                        <button class="btn btn btn-success" data-toggle="modal" data-target="#modalNovoCondominio"><i class="fas fa-plus"></i> Adicionar</button>
+                                        <button class="btn btn-success" data-toggle="modal" data-target="#modalNovoCondominio"><i class="fas fa-plus"></i> Adicionar</button>
                                     </div>
                                 </div>
                             </div>
                             <div class="tab-pane fade" id="iptus" role="tabpanel" aria-labelledby="iptus-tab">
                                 <datatable :HeaderSettings="false" :Pagination="false" v-bind="$data.iptus" />
-                                <div class="row">
+                                <div v-if="this.pepIs == 'unidade'" class="row">
                                     <div class="col mt-4 no-gutters text-right">
-                                        <button class="btn btn btn-success" data-toggle="modal" data-target="#modalNovoContato"><i class="fas fa-plus"></i> Adicionar</button>
+                                        <button class="btn btn-success" data-toggle="modal" data-target="#modalNovoIptu"><i class="fas fa-plus"></i> Adicionar</button>
                                     </div>
                                 </div>
                             </div>
@@ -116,18 +116,15 @@
                         <div class="btn-group" role="group" aria-label="Basic example">
                             <button type="button" class="btn btn-primary"><i class="fas fa-file-upload"></i> Anexar</button>
                             <button type="button" class="btn btn-primary"><i class="fas fa-print"></i> Imprimir</button>
-                            <div class="dropup">
-                                <button type="button" class="btn btn-primary dropdown-toggle" data-toggle="dropdown"><i class="fas fa-file-export"></i> Exportar</button>
-                                <div class="dropdown-menu">
-                                    <a class="dropdown-item" href="#"><i class="fas fa-file-pdf"></i> PDF</a>
-                                    <a class="dropdown-item" href="#"><i class="fas fa-file-excel"></i> CSV</a>
-                                    <a class="dropdown-item" href="#"><i class="fas fa-file-excel"></i> XLSX</a>
-                                </div>
-                            </div>
+                            <a href="#relatorio" class="btn btn-primary" data-toggle="dropdown"><i class="fas fa-file-export"></i> Relatório</a>
                         </div>
                     </div>
                 </div>
             </div>
+
+            <!-- [ Resumo ] -->
+                <GestaoResumo :datas="unidade_datas"></GestaoResumo>
+            <!-- [ /Resumo ] -->
 
             <!-- [ Condomínios modals ] -->
                 <!-- Novo -->
@@ -138,37 +135,40 @@
                 <CUDCondominios action="Delete" name="DeletarCondominio" title="Deletar Condomínio" :datas="dadoActive"></CUDCondominios>
             <!-- [ /Condominios modals ] -->
 
-            <!-- Resumo de patrimônios -->
-            <!-- <GppResumo :gest="gestExpanded"></GppResumo> -->
+            <!-- [ IPTUs modals ] -->
+                <!-- Novo -->
+                <CUDIptus action="New" name="NovoIptu" title="Cadastrar IPTU"></CUDIptus>
+                <!-- Editar -->
+                <CUDIptus action="Edit" name="EditarIptu" title="Editar IPTU" :datas="dadoActive"></CUDIptus>
+                <!-- Deletar -->
+                <CUDCondominios action="Delete" name="DeletarIptu" title="Deletar IPTU" :datas="dadoActive"></CUDCondominios>
+            </div>
+            <!-- [ /IPTUs modals ] -->
         </div>
     </div>
-
-
 </template>
 
 <script>
 import Bus from '../../bus'
 import { mapState } from 'vuex'
 import { parsePEP, reMountPEP } from '../../modules/pep'
-import GppResumo from '../includes/GppResumo'
 
 // Api calls
-import {
-    store as storeCond,
-    update as editCond,
-    deletedata as delCond
-} from '../../api/condominios'
+import { store as storeCond, update as editCond, deletedata as delCond } from '../../api/condominios'
+import { store as storeIptu, update as editIptu, deletedata as delIptu } from '../../api/iptus'
 
-// Modals
-import CUDCondominios from '../includes/Modals/Gestao/CUD_Condominios'
-
+// Components
+import GestaoResumo from '../includes/Modals/Gestao/Resumo'
 import ActionButtons from '../includes/Buttons/ActionButtons'
+import CUDCondominios from '../includes/Modals/Gestao/CUD_Condominios'
+import CUDIptus from '../includes/Modals/Gestao/CUD_Iptus'
 
 export default {
     name: 'GestaoPatrimonios',
     components: {
-        GppResumo,
-        CUDCondominios
+        GestaoResumo,
+        CUDCondominios,
+        CUDIptus
     },
     data() {
         return {
@@ -217,21 +217,20 @@ export default {
             condominios: {
                 fixHeaderAndSetBodyMaxHeight: 300,
                 tblStyle: 'table-layout: fixed',
-                tblClass: 'table-bordered table-responsive d-md-table',
+                tblClass: 'border table-responsive d-md-table',
                 columns: [
-                    { title: 'Ação', tdComp: ActionButtons },
-                    { title: 'Status', field: 'status' },
-                    { title: 'Doc.SAP', field: 'doc_sap' },
+                    { title: 'Documento SAP', field: 'doc_sap' },
                     { title: 'Periodo', field: 'periodo' },
                     { title: 'Vencimento', field: 'vencimento'},
                     { title: 'Valor', field: 'valor'},
-                    { title: 'V.Pago', field: 'valor_pago'},
+                    { title: 'Valor Pago', field: 'valor_pago'},
                     { title: 'Multa', field: 'multa'},
                     { title: 'Juros', field: 'juros'},
                     { title: 'Correção', field: 'correcao'},
                     { title: 'Fonte', field: 'fonte'},
                     { title: 'Total', field: 'total'},
-                    { title: 'D.Pgto', field: 'data_pgto'},
+                    { title: 'Data Pgto', field: 'data_pgto'},
+                    { title: 'Ação', fixed: 'right', tdComp: ActionButtons },
                 ].map(col => (col.colStyle = { width: '150px' }, col)),
                 data: [],
                 total: 0,
@@ -244,25 +243,31 @@ export default {
             iptus: {
                 fixHeaderAndSetBodyMaxHeight: 300,
                 tblStyle: 'table-layout: fixed',
-                tblClass: 'table-bordered table-responsive d-md-table',
+                tblClass: 'border table-responsive d-md-table',
                 columns: [
+                    { title: 'Status', field: 'status' },
                     { title: 'Periodo', field: 'periodo' },
                     { title: 'Parcela', field: 'parcela' },
                     { title: 'Vencimento', field: 'vencimento' },
-                    { title: 'V.Principal', field: 'valor_principal' },
+                    { title: 'Valor Principal', field: 'valor_principal' },
                     { title: 'Multa', field: 'multa' },
                     { title: 'Juros', field: 'juros' },
-                    { title: 'C.Monetária', field: 'correcao_monetaria' },
+                    { title: 'Correção', field: 'correcao_monetaria' },
+                    { title: 'Total', field: 'total' },
                     { title: 'Dívida ativa', field: 'divida_ativa'},
                     { title: 'Fonte', field: 'fonte'},
+                    { title: 'Ação', fixed: 'right', tdComp: ActionButtons },
                 ].map(col => (col.colStyle = { width: '150px' }, col)),
                 data: [],
                 total: 0,
-                query: {}
+                query: {},
+                xprops: {
+                    evName: 'Iptu'
+                }
             },
 
             aguas: {
-                tblClass: 'table-bordered table-responsive-sm',
+                tblClass: 'border table-responsive-sm',
                 columns: [
                     { title: 'Contrato', field: 'contrato' },
                     { title: 'Nome', field: 'nome' },
@@ -277,7 +282,7 @@ export default {
             },
 
             luzes: {
-                tblClass: 'table-bordered table-responsive-sm',
+                tblClass: 'border table-responsive-sm',
                 columns: [
                     { title: 'Contrato', field: 'contrato' },
                     { title: 'Nome', field: 'nome' },
@@ -497,12 +502,11 @@ export default {
             _.forEach(this.unidade_datas.condominios, (v) => {
                 formated.push({
                     id: v.id,
-                    status: 'R',
                     periodo: v.periodo,
                     doc_sap: v.doc_sap ? v.doc_sap : 'N/Informado',
                     vencimento: v.vencimento,
                     valor: this.$options.filters.currency(v.valor),
-                    valor_pago: (v.valor_pago ? this.$options.filters.currency(v.valor_pago) : 'N/Pago'),
+                    valor_pago: this.$options.filters.currency(v.valor_pago),
                     multa: v.multa + '%' ,
                     juros: v.juros + '%',
                     correcao: v.correcao + '%',
@@ -521,6 +525,7 @@ export default {
             _.forEach(this.unidade_datas.iptus, (v) => {
                 formated.push({
                     id: v.id,
+                    status: v.status,
                     periodo: v.periodo,
                     parcela: v.parcela,
                     vencimento: v.vencimento,
@@ -528,6 +533,7 @@ export default {
                     multa: v.multa + '%',
                     juros: v.juros + '%',
                     correcao_monetaria: v.correcao_monetaria + '%',
+                    total: '...',
                     divida_ativa: v.divida_ativa,
                     fonte: v.fonte,
                     raw: v
@@ -548,12 +554,11 @@ export default {
                 let v = r.results
                 this.condominios.total++
                 this.condominios.data.push({
-                    status: 'R',
                     periodo: v.periodo,
                     doc_sap: v.doc_sap ? v.doc_sap : 'N/Informado',
                     vencimento: v.vencimento,
                     valor: this.$options.filters.currency(v.valor),
-                    valor_pago: (v.valor_pago ? this.$options.filters.currency(v.valor_pago) : 'N/Pago'),
+                    valor_pago: this.$options.filters.currency(v.valor_pago),
                     multa: v.multa + '%' ,
                     juros: v.juros + '%',
                     correcao: v.correcao + '%',
@@ -579,12 +584,11 @@ export default {
                     index = this.condominios.data.map(e => e.id).indexOf(this.dadoActive.id)
 
                 // Atualizando o condomínio na lista
-                this.condominios.data[index].status = 'R'
                 this.condominios.data[index].periodo = v.periodo
                 this.condominios.data[index].doc_sap = v.doc_sap ? v.doc_sap : 'N/Informado'
                 this.condominios.data[index].vencimento = v.vencimento
                 this.condominios.data[index].valor = this.$options.filters.currency(v.valor)
-                this.condominios.data[index].valor_pago = (v.valor_pago ? this.$options.filters.currency(v.valor_pago) : 'N/Pago')
+                this.condominios.data[index].valor_pago = this.$options.filters.currency(v.valor_pago)
                 this.condominios.data[index].multa = v.multa + '%' 
                 this.condominios.data[index].juros = v.juros + '%'
                 this.condominios.data[index].correcao = v.correcao + '%'
@@ -602,14 +606,87 @@ export default {
                 console.log(e)
             })
         },
-        deleteCond(id){
+        deleteCond(){
             delCond(this.dadoActive.id).then(r => {
-                console.log(r)
+                // Removendo o condomínio da lista
+                let index = this.condominios.data.map(e => e.id).indexOf(this.dadoActive.id)
+                this.condominios.data.splice(index, 1)
+
+                // Notificando o usuário
+                this.$notify({group:'normal', type:'success', text:'Condomínio deletado com sucesso'})
+
+                // Fechando a modal
+                $('.modal').modal('hide')
             }).catch(e => {
                 console.log(e)
             })
-        }
+        },
         /*=====  End of Condominios - Events  ======*/
+
+        /*======================================
+        =            IPTUS - Events            =
+        ======================================*/
+        saveIptu(datas) {
+            datas.PEP_Unidade = this.PEP
+
+            storeIptu(datas).then(r => {
+                let v = r.results
+                v.raw = v
+                this.iptus.data.push(r.results)
+
+                // Notificando o usuário
+                this.$notify({group:'normal', type:'success', text:'IPTU cadastrado com sucesso'})
+
+                // Fechando a modal
+                $('.modal').modal('hide')
+            }).catch(e => {
+                console.log(e)
+            })
+        },
+        updateIptu(datas) {
+            editIptu(datas, this.dadoActive.id).then(r => {
+                let v = r.results,
+                    index = this.iptus.data.map(e => e.id).indexOf(this.dadoActive.id)
+
+                // Atualizando o Iptu na lista
+                this.iptus.data[index].status = v.status
+                this.iptus.data[index].periodo = v.periodo
+                this.iptus.data[index].parcela = v.parcela
+                this.iptus.data[index].vencimento = v.vencimento
+                this.iptus.data[index].valor_principal = this.$options.filters.currency(v.valor_principal)
+                this.iptus.data[index].multa = v.multa + '%'
+                this.iptus.data[index].juros = v.juros + '%'
+                this.iptus.data[index].correcao_monetaria = v.correcao_monetaria + '%'
+                this.iptus.data[index].divida_ativa = v.divida_ativa
+                this.iptus.data[index].fonte = v.fonte
+                this.iptus.data[index].raw = v
+
+                // Notificando o usuário
+                this.$notify({group:'normal', type:'success', text:'IPTU atualizado com sucesso'})
+
+                // Fechando a modal
+                $('.modal').modal('hide')
+            }).catch(e => {
+                console.log(e)
+            })
+        },
+        deleteIptu() {
+            delIptu(this.dadoActive.id).then(r => {
+                // Removendo o iptu da lista
+                let index = this.iptus.data.map(e => e.id).indexOf(this.dadoActive.id)
+                this.iptus.data.splice(index, 1)
+
+                // Notificando o usuário
+                this.$notify({group:'normal', type:'success', text:'Iptu deletado com sucesso'})
+
+                // Fechando a modal
+                $('.modal').modal('hide')
+            }).catch(e => {
+                console.log(e)
+            })
+        },
+        /*=====  End of IPTUS - Events  ======*/
+        
         
     },
     mounted(){
@@ -622,24 +699,32 @@ export default {
 
         // Save events
         Bus.$on('evNovoCondominio', datas => this.saveCond(datas))
+        Bus.$on('evNovoIptu', datas => this.saveIptu(datas))
 
         // Edit events
         Bus.$on('evActCondominioEdit', datas => this.dadoActive = datas)
         Bus.$on('evEditarCondominio', datas => this.updateCond(datas))
 
+        Bus.$on('evActIptuEdit', datas => this.dadoActive = datas)
+        Bus.$on('evEditarIptu', datas => this.updateIptu(datas))
+
         // Delete events
         Bus.$on('evActCondominioDelete', datas => this.dadoActive = datas)
-        Bus.$on('evDeletarCondominio', id => this.deleteCond(id))
+        Bus.$on('evDeletarCondominio', this.deleteCond)
+
+        Bus.$on('evActIptuDelete', datas => this.dadoActive = datas)
+        Bus.$on('evDeletarIptu', this.deleteIptu)
     },
     beforeDestroy(){
         // ..
-        Bus.$off([
-            'evNovoCondominio',
-            'evActCondominioEdit',
-            'evEditarCondominio',
-            'evActCondominioDelete',
-            'evDeletarCondominio'
-        ])
+        Bus.$off()
+        // Bus.$off([
+        //     'evNovoCondominio',
+        //     'evActCondominioEdit',
+        //     'evEditarCondominio',
+        //     'evActCondominioDelete',
+        //     'evDeletarCondominio'
+        // ])
     }
 }
 </script>

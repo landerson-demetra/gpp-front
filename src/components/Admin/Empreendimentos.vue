@@ -1,36 +1,35 @@
 <template>
     <div id="empreendimento" class="wow fadeIn" data-wow-duration="2s">
         <h3 class="mt-3">Empreendimentos<span class="selecteds text-muted" v-if="this.empreendimentos.checkeds.length"> ({{ this.empreendimentos.checkeds.length }} Selecionados)</span></h3>
+
         <hr>
 
-        <div class="row">
-            <div class="col-12" v-if="!this.empreendimentos.datas.length">
-                <grid-loader class="mx-auto my-5" :loading="true" :color="'#26256A'" :size="'10px'"></grid-loader>
-            </div>
-            <div class="col-12" v-else>
+        <div class="row" :class="{'is-fetching': isFetching}" >
+            <div class="col-12">
                 <div class="row bg-white shadow-sm p-3 my-3 justify-content-start">
                     <div class="input-group col-md-3">
-                        <input type="text" class="form-control" placeholder="Projeto (X.XXXX.XX.XX)...">
-                    </div>
-                    <div class="input-group col-md-4">
-                        <input type="text" class="form-control" placeholder="Razão Social...">
+                        <input v-model="S_Projeto" type="text" class="form-control" placeholder="Projeto (X.XXXX.XX.XX)...">
                     </div>
                     <div class="input-group col-md-3">
-                        <input type="text" class="form-control" placeholder="Empreendimento...">
+                        <input disabled="" v-model="S_Razao" type="text" class="form-control" placeholder="Razão Social...">
+                    </div>
+                    <div class="input-group col-md-3">
+                        <input v-model="S_Empre" type="text" class="form-control" placeholder="Empreendimento...">
                     </div>
                     <div class="input-group col-md-2">
                         <select v-model="empreendimentos.paginator.per_page" class="form-control">
-                            <option value="5">Mostrar: 5</option>
-                            <option value="15">Mostrar: 15</option>
-                            <option value="25">Mostrar: 25</option>
-                            <option value="50">Mostrar: 50</option>
-                            <option value="100">Mostrar: 100</option>
+                            <option v-for="max in [5,15,25,50,100]" :value="max">Mostrar: {{ max }}</option> 
                         </select>
                     </div>
-                    
-                    <!-- <button class="btn btn-primary"><i class="fas fa-search"></i></button> -->
+
+                    <div class="col-md-1">
+                        <button class="btn btn-primary" v-on:click="fetchEmpreds(1)"><i class="fas fa-search"></i></button>
+                    </div>
                 </div>
-                <table :class="{'is-fetching': isFetching}" class="table table-responsive-md table-borderless table-hover">
+
+                <div v-if="!this.empreendimentos.datas.length" class="alert alert-secondary" role="alert">Nenhum Projeto/Empreendimento encontrado</div>
+
+                <table v-else :class="{'is-fetching': isFetching}" class="table table-responsive-md table-borderless table-hover">
                     <thead>
                         <tr>
                             <th>
@@ -67,7 +66,7 @@
                         </tr>
                     </tbody>
                 </table>
-                
+
                 <!-- Paginação -->
                 <div :class="{'is-fetching': isFetching}">
                     <Paginator :paginator="this.empreendimentos.paginator" :limit="this.empreendimentos.paginator.limit_pages" v-on:changePage="$onEmpredsPageChange"></Paginator>
@@ -188,6 +187,9 @@ import Bus from '../../bus'
 import Paginator from '../includes/Paginator'
 import GridLoader from 'vue-spinner/src/GridLoader'
 
+// Api calls
+import { search } from '../../api/empreendimentos'
+
 export default {
     name: 'Empreendimento',
     components: { Paginator, GridLoader },
@@ -195,6 +197,9 @@ export default {
         return {
             check_all: false,
             activeEmpre: '',
+            S_Projeto: '',
+            S_Razao: '',
+            S_Empre: '',
             empreendimentos: {
                 datas: [],
                 checkeds: [],
@@ -303,9 +308,16 @@ export default {
 
         /*----------  Fetch datas  ----------*/
         fetchEmpreds: function(page = 1) {
-            this.$http.get('/empreendimento', { params: { page: page, per_page: this.empreendimentos.paginator.per_page } }).then((response) => {
+            this.$http.get('/empreendimento', {
+                params: { 
+                    projeto: this.S_Projeto,
+                    empreendimento: this.S_Empre,
+                    page: page,
+                    per_page: this.empreendimentos.paginator.per_page
+                }
+            }).then((response) => {
                 let resp = response.data.results
-                this.empreendimentos.datas = resp.data
+                this.empreendimentos.datas = resp.data || []
 
                 this._setPaginateEmpreds(resp)
             })
@@ -318,7 +330,7 @@ export default {
         },
 
         /*----------  Events  ----------*/
-        $onEmpredsPageChange: function(e){
+        $onEmpredsPageChange(e){
             let tr = $('.table').find('tr'),
                 input = tr.find('input')
 
@@ -333,10 +345,22 @@ export default {
             this.fetchEmpreds(e)
         },
 
-        $onUnidsPageChange: function(e){
+        $onUnidsPageChange (e){
             this.unidades.paginator.current_page = e
             this._setPaginateUnids()
         },
+
+        // $searchEmpreds(){
+        //     let v = {
+        //         'projeto': this.S_Projeto,
+        //         'razao': this.S_Razao,
+        //         'empreendimento': this.S_Empre
+        //     }
+
+        //     search(v).then(r => {
+        //         console.log(r)
+        //     })
+        // },
 
         /*----------  Pagination  ----------*/
         _setPaginateEmpreds: function(resp){

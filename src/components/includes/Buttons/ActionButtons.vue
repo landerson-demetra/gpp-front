@@ -1,6 +1,6 @@
 <template>
     <div>
-        <div class="action-buttons">
+        <div class="action-buttons text-center">
             <button v-on:click="EditEvent" data-toggle="modal" :data-target="'#modalEditar' + this.xprops.evName" class="btn btn-warning"><i class="fa fa-edit"></i></button>
             <button v-on:click="DeleteEvent" data-toggle="modal" :data-target="'#modalDeletar' + this.xprops.evName"  class="btn btn-danger"><i class="fa fa-trash"></i></button>
         </div>

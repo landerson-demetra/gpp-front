@@ -15,6 +15,7 @@ import locale from 'vue2-datatable-component/locale/pt-br'
 import Notifications from 'vue-notification'
 import VueCurrencyFilter from 'vue-currency-filter'
 import VueMoney from 'v-money'
+import VueTheMask from 'vue-the-mask'
 import GppErrors from './components/includes/GppErrors'
 import WOW from 'wowjs'
 
@@ -35,6 +36,7 @@ Vue.use(Datatable, { locale })
 Vue.use(Notifications)
 Vue.use(VueCurrencyFilter, Vue.prototype.$config.currency)
 Vue.use(VueMoney, Vue.prototype.$config.vMoney)
+Vue.use(VueTheMask)
 
 /* [ Register components ] */
 Vue.component('v-select', vSelect)

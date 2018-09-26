@@ -340,14 +340,15 @@ export default {
         Bus.$on('evDeletarContato', r => self.deleteContato())
     },
     beforeDestroy(){
-        Bus.$off([
-            'evNovoFornecedor',
-            'evNovoContato',
-            'evEditarFornecedor',
-            'evEditarContato',
-            'evDeletarFornecedor',
-            'evDeletarContato'
-        ])
+        Bus.$off()
+        // Bus.$off([
+        //     'evNovoFornecedor',
+        //     'evNovoContato',
+        //     'evEditarFornecedor',
+        //     'evEditarContato',
+        //     'evDeletarFornecedor',
+        //     'evDeletarContato'
+        // ])
     }
 }
 </script>

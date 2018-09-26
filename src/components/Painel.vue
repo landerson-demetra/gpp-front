@@ -31,7 +31,6 @@ export default {
         }
     },
     methods: {
-
         monthDiff(d1, d2){
             let months
 
