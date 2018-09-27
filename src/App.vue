@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <notifications position="bottom right" group="normal" />
+    <notifications class="mt-2" position="top right" group="normal" />
     <router-view class="view"></router-view>
   </div>
 </template>

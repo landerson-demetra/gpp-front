@@ -37,9 +37,21 @@
                                         </v-select>
                                     </div>
                                     <div class="form-group col-md-4">
-                                        <label for="Fornecedor">Fornecedor</label>
-                                        <v-select v-model="Fornecedor" id="ADM" placeholder="Selecione..." :options="fornecedores">
-                                            <span slot="no-options">Nenhum fornecedor encontrado.</span>
+                                        <label for="Fornecedor">Fornecedor SAP</label>
+                                        <v-select v-model="FornecedorSap" id="ADM" placeholder="Selecione..." :options="fornecedores_sap">
+                                            <span slot="no-options">Nenhum fornecedor SAP encontrado.</span>
+                                        </v-select>
+                                    </div>
+                                    <div class="form-group col-md-4">
+                                        <label for="Fornecedor">Fornecedor Água</label>
+                                        <v-select v-model="FornecedorAgua" id="ADM" placeholder="Selecione..." :options="fornecedores_agua">
+                                            <span slot="no-options">Nenhum fornecedor para água encontrado.</span>
+                                        </v-select>
+                                    </div>
+                                    <div class="form-group col-md-4">
+                                        <label for="Fornecedor">Fornecedor Luz</label>
+                                        <v-select v-model="FornecedorLuz" id="ADM" placeholder="Selecione..." :options="fornecedores_luz">
+                                            <span slot="no-options">Nenhum fornecedor para luz encontrado.</span>
                                         </v-select>
                                     </div>
                                     <div class="form-group col-md-4">
@@ -81,14 +93,18 @@ export default {
         return  {
             // Form vinculação
             PEP: '',
-            isInd: '',
+            isInd: 0,
             Administradora: '',
-            Fornecedor: '',
+            FornecedorSap: '',
+            FornecedorAgua: '',
+            FornecedorLuz: '',
             Prefeitura: '',
             Responsavel: '',
 
             administradoras: [],
-            fornecedores: [],
+            fornecedores_sap: [],
+            fornecedores_agua: [],
+            fornecedores_luz: [],
             prefeituras: [],
             responsaveis: [],
         }
@@ -105,14 +121,18 @@ export default {
             this.PEP = this.datas.PEP_Empreendimento
             this.isInd = this.datas.is_ind
             this.Administradora = ''
-            this.Fornecedor = ''
+            this.FornecedorSap = ''
+            this.FornecedorAgua = ''
+            this.FornecedorLuz = ''
             this.Prefeitura = ''
             this.Responsavel = ''
         },
         reset(){
             this.isInd = ''
             this.Administradora = ''
-            this.Fornecedor = ''
+            this.FornecedorSap = ''
+            this.FornecedorAgua = ''
+            this.FornecedorLuz = ''
             this.Prefeitura = ''
             this.Responsavel = ''
         }
@@ -134,7 +154,9 @@ export default {
             return {
                 'is_ind': this.isInd,
                 'adm_id': this.Administradora.value,
-                'forn_id': this.Fornecedor.value,
+                'forn_sap_id': this.FornecedorSap.value,
+                'forn_agua_id': this.FornecedorAgua.value,
+                'forn_luz_id': this.FornecedorLuz.value,
                 'pref_id': this.Prefeitura.value,
                 'resp_id': this.Responsavel.value,
             }
@@ -149,8 +171,12 @@ export default {
 
                 if(v.segmentos.includes('Administradora'))
                     self.administradoras.push(pushObj)
-                if(v.segmentos.includes('Fornecedor'))
-                    self.fornecedores.push(pushObj)
+                if(v.segmentos.includes('Fornecedor SAP'))
+                    self.fornecedores_sap.push(pushObj)
+                if(v.segmentos.includes('Fornecedor Água'))
+                    self.fornecedores_agua.push(pushObj)
+                if(v.segmentos.includes('Fornecedor Luz'))
+                    self.fornecedores_luz.push(pushObj)
                 if(v.segmentos.includes('Prefeitura'))
                     self.prefeituras.push(pushObj)
             })

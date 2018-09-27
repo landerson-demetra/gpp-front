@@ -93,13 +93,8 @@
 export default {
     name: 'GestaoResumo',
     props: ['datas'],
-    watch: {
-        datas() {
-            console.log(this.datas)
-        }
-    },
     mounted() {
-        console.log(this.datas)
+        
     }
 }
 </script>

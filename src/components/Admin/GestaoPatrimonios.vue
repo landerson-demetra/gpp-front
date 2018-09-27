@@ -5,9 +5,11 @@
                 <div class="card shadow border-0">
                     <div class="card-header border-0 bg-primary text-white">
                         <div class="row">
-                            <h3 class="col-md-10 mt-0">Gestão de Patrimônios <span v-if="this.isFetching">[Aguarde...]</span></h3>
-                            <div class="col-md-2 text-right d-none d-lg-block">
-                                <button :disabled="this.pepIs !== 'unidade'" data-toggle="modal" data-target="#modalResumo" class="btn btn-primary border border-dark"><i class="fas fa-money-check-alt"></i> Resumo</button>
+                            <h3 class="col-md-7 mt-0">Gestão de Patrimônios <span v-if="this.isFetching">[Aguarde...]</span></h3>
+                            <div class="col-md-5 text-right d-none d-lg-block bg-black">
+                                <button :disabled="!pepIs" class="btn btn-primary border-0 border-dark" data-toggle="modal" data-target="#modalResponsaveis"><i class="fas fa-users"></i> Responsáveis</button>
+                                <button :disabled="!pepIs" class="btn btn-primary border-0 border-dark">Ações Jurídicas</button>
+                                <button :disabled="this.pepIs !== 'unidade'" data-toggle="modal" data-target="#modalResumo" class="btn btn-primary border-0 border-dark"><i class="fas fa-money-check-alt"></i> Resumo</button>
                             </div>
                         </div>
                     </div>
@@ -24,14 +26,14 @@
                                 </div>
                                 <div class="form-group col-md-2">
                                     <label for="Vendido">Vendido</label>
-                                    <input id="Vendido" type="text" class="form-control" placeholder="Não" disabled>
+                                    <input v-model="vendido" id="Vendido" type="text" class="form-control" placeholder="N/Definido" disabled>
                                 </div>
                                 <div class="form-group col-md-3">
                                     <label for="Invadido">Invadido</label>
-                                    <select :disabled="pepParsed.is !== 'unidade'" name="invadido" id="Invadido" class="form-control">
-                                        <option value="">N/Definido</option>
-                                        <option>Sim</option>
-                                        <option>Não</option>
+                                    <select v-model="invadido" v-on:change="changeStatus" :disabled="pepIs !== 'unidade'" id="Invadido" class="form-control">
+                                        <option :value="null">N/Definido</option>
+                                        <option value="S">Sim</option>
+                                        <option value="N">Não</option>
                                     </select>
                                 </div>
                             </div>
@@ -58,10 +60,10 @@
                                 </div>
                                 <div class="form-group col-md-3">
                                     <label for="Status">Status</label>
-                                    <select :disabled="!unidade_selected" name="status" id="Status" class="form-control">
-                                        <option value="">N/Definido</option>
-                                        <option>Estoque</option>
-                                        <option>Pré-distrato</option>
+                                    <select v-model="status" v-on:change="changeStatus" :disabled="!unidade_selected" name="status" id="Status" class="form-control">
+                                        <option :value="null">N/Definido</option>
+                                        <option value="E">Estoque</option>
+                                        <option value="P">Pré-distrato</option>
                                     </select>
                                 </div>
                             </div>
@@ -122,6 +124,10 @@
                 </div>
             </div>
 
+            <!-- [ Responsaveis modal ] -->
+                <Responsaveis :PEP="PEP"></Responsaveis>
+            <!-- [ /Responsaveis modal ] -->
+
             <!-- [ Resumo ] -->
                 <GestaoResumo :datas="unidade_datas"></GestaoResumo>
             <!-- [ /Resumo ] -->
@@ -154,11 +160,14 @@ import { mapState } from 'vuex'
 import { parsePEP, reMountPEP } from '../../modules/pep'
 
 // Api calls
+import { fetchUnidades, fetchGestao } from '../../api/gestao'
+import { store as storeStatus, update as updateStatus } from '../../api/status'
 import { store as storeCond, update as editCond, deletedata as delCond } from '../../api/condominios'
 import { store as storeIptu, update as editIptu, deletedata as delIptu } from '../../api/iptus'
 
 // Components
 import GestaoResumo from '../includes/Modals/Gestao/Resumo'
+import Responsaveis from '../includes/Modals/Gestao/Responsaveis'
 import ActionButtons from '../includes/Buttons/ActionButtons'
 import CUDCondominios from '../includes/Modals/Gestao/CUD_Condominios'
 import CUDIptus from '../includes/Modals/Gestao/CUD_Iptus'
@@ -167,6 +176,7 @@ export default {
     name: 'GestaoPatrimonios',
     components: {
         GestaoResumo,
+        Responsaveis,
         CUDCondominios,
         CUDIptus
     },
@@ -177,6 +187,10 @@ export default {
             pepIs: null,
             gestExpanded: false,
             datas: {},
+
+            vendido: null,
+            invadido: null,
+            status: null,
 
             empreendimentos: [],
             empreendimento_selected: '',
@@ -298,11 +312,11 @@ export default {
         }
     },
     watch: {
-        PEP: function(pep) {
+        PEP(pep) {
             this.$initPep(pep)
             this.$router.push({ params: {pep: pep} })
         },
-        empreendimento_selected: function(empreendimento){
+        empreendimento_selected(empreendimento) {
             if(!empreendimento){
                 this.bloco_blocked = true
                 return
@@ -315,7 +329,7 @@ export default {
 
             this.PEP = reMountPEP(datas)
         },
-        bloco_selected: function(bloco, old){
+        bloco_selected(bloco, old) {
             if(!bloco){
                 this.bloco_selected = ''
                 this.unidade_selected = ''
@@ -332,7 +346,7 @@ export default {
 
             this.PEP = reMountPEP(datas)
         },
-        unidade_selected: function(unidade){
+        unidade_selected(unidade) {
             let datas = this.pepParsed
             datas.unidade_cod = unidade
 
@@ -357,7 +371,27 @@ export default {
             // Fetching the datas
             this.fetchDatas()
         },
-        $resetUnidadeDatas(){
+        changeStatus() {
+            if(this.unidade_datas.status) {
+                updateStatus({ invadido: this.invadido, status: this.status }, this.unidade_datas.status.id)
+            } else {
+                storeStatus({
+                    PEP_Unidade: this.PEP,
+                    invadido: this.invadido,
+                    status: this.status
+                }).then(r => {
+                    this.unidade_datas.status = r.results
+                })
+            }
+
+            this.$notify({ group: 'normal', clean: true })
+            this.$notify({ group: 'normal', type: 'success', text: 'Status atualizado com sucesso' })
+        },
+        $resetUnidadeDatas() {
+            this.invadido = ''
+            this.vendido = ''
+            this.status = ''
+
             this.contratos.data = []
             this.contratos.total = 0
 
@@ -366,11 +400,11 @@ export default {
 
             this.unidade_datas = []
         },
-        fetchDatas(){
-            this.$http.post('/gestao', { PEP: this.PEP }).then((response) => {
-                this.datas = response.data
+        fetchDatas() {
+            fetchGestao({ PEP: this.PEP }).then((data) => {
+                this.datas = data
 
-               if(this.datas.length){
+                if(this.datas.length){
                     // Assinging values to the fields
                     this.assignValues()
 
@@ -382,26 +416,25 @@ export default {
                         text: 'Dados listados com sucesso',
                         duration: 5000
                      })
-               } else {
+                } else {
                     this.$notify({
                         group: 'normal',
                         type: 'warn',
                         text: 'Nenhum dado encontrado para PEP <b>' + this.PEP + '</b>'
                     })
-               }
-            }).catch((e) =>{
+                }
+            }).catch((e) => {
                 console.log('err:', e)
             })
         },
-        fetchUnidadeDatas(){
-            this.$http.post('/unidade-datas', { PEP: this.PEP }).then((response) => {
-                this.unidade_datas = response.data
-
+        fetchUnidadeDatas() {
+            fetchUnidades({ PEP: this.PEP }).then((data) => {
+                this.unidade_datas = data
                 // Assigning values to the fields
                 this.assignUnidadeValues()
             })
         },
-        assignValues(){
+        assignValues() {
             var self = this
 
             // Assign empreendimentos
@@ -468,8 +501,8 @@ export default {
                 return
 
             // - Não há contratos
-            if(!this.unidade_datas.contratos.length)
-                this.$notify({ group: 'normal', type: 'info', text: 'Não há contratos para PEP' })
+            // if(!this.unidade_datas.contratos.length)
+            //     this.$notify({ group: 'normal', type: 'info', text: 'Não há contratos para PEP' })
 
             // - Não há condominios
             if(!this.unidade_datas.condominios.length)
@@ -478,6 +511,16 @@ export default {
             // - Não há IPTUS
             if(!this.unidade_datas.iptus.length)
                 this.$notify({ group: 'normal', type: 'info', text: 'Não há IPTUs para PEP' })
+
+            /* [ Status ] */
+            if(this.unidade_datas.status) {
+                this.invadido = this.unidade_datas.status.invadido
+                this.vendido = this.unidade_datas.status.vendido
+                this.status = this.unidade_datas.status.status
+            } else {
+                this.invadido = null
+                this.status = null
+            }
 
             /* [ Contratos ] */
             var formated = []
@@ -686,8 +729,6 @@ export default {
             })
         },
         /*=====  End of IPTUS - Events  ======*/
-        
-        
     },
     mounted(){
         if(this.PEP) this.$initPep(this.PEP)

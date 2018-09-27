@@ -1,17 +1,17 @@
 import http from '../modules/http'
 
-const get = (PEP) => {
+const fetchGestao = (datas) => {
     return new Promise((resolve, reject) => {
-        http.get('vinculacao/pep/' + PEP)
+        http.post('gestao', datas)
             .then(r => resolve(r.data)).catch(e => reject(e))
     })
 }
 
-const store = (datas) => {
+const fetchUnidades = (datas) => {
     return new Promise((resolve, reject) => {
-        http.post('vinculacao', datas)
+        http.post('unidade-datas', datas)
             .then(r => resolve(r.data)).catch(e => reject(e))
     })
 }
 
-export { get, store }
+export { fetchGestao, fetchUnidades }

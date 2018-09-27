@@ -14,7 +14,7 @@
                             </v-select>
                         </div>
                         <div class="form-group col-md-6">
-                            <label for="PEP">Condominio</label>
+                            <label for="PEP">Projeto</label>
                             <input v-model="PEP" type="text" class="form-control" placeholder="R.XXXX.99.99">
                         </div>
                     </div>
@@ -24,43 +24,41 @@
 
                 <div v-if="!this.fornecedor_selected" class="alert alert-secondary text-center"><i class="fas fa-exclamation-circle"></i> Você precisa escolher um empreendimento/condomínio</div>
 
-                <div v-if="this.fornecedor_selected && !this.vinculacoes.length" class="alert alert-secondary text-center"><i class="fas fa-exclamation-circle"></i> Não há vinculações para PEP</div>
+                <div v-if="this.fornecedor_selected && !this.vinculacao" class="alert alert-secondary text-center"><i class="fas fa-exclamation-circle"></i> Não há vinculações para PEP</div>
 
                 <div class="row mt-3 no-gutters">
-                    <div v-if="this.vinculacoes.length">
-                        <table class="table table-hover table-responsive-sm table-bordered table-striped border-top-0">
-                            <thead>
-                                <tr>
-                                    <th scope="col">PEP</th>
-                                    <th scope="col">ADM</th>
-                                    <th scope="col">Fornecedor</th>
-                                    <th scope="col">Prefeitura</th>
-                                    <th scope="col">Responsável</th>
-                                    <th scope="col">Individualizado</th>
-                                    <th scope="col">Ações</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr v-for="vinculacao in vinculacoes">
-                                    <th :title="fornecedor_selected.label"><a href="#">{{ vinculacao.PEP_Empreendimento }}</a></th>
-                                    <td><a href="#">{{ vinculacao.administradora.nome }}</a></td>
-                                    <td><a href="#">{{ vinculacao.fornecedor.nome }}</a></td>
-                                    <td><a href="#">{{ vinculacao.prefeitura.nome }}</a></td>
-                                    <td><a href="#">{{ vinculacao.responsavel.name }}</a></td>
-                                    <td>{{ vinculacao.is_ind ? 'Sim' : 'Não' }}</td>
-                                    <td>
-                                        <div class="action-buttons">
-                                            <button class="btn btn-warning"><i class="fa fa-edit"></i></button>
-                                            <button class="btn btn-danger"><i class="fa fa-trash"></i></button>
-                                        </div>
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
+                    <table v-if="this.vinculacao" class="table table-hover table-responsive-sm table-bordered table-striped border-top-0">
+                        <thead>
+                            <tr>
+                                <th scope="col">Projeto</th>
+                                <th scope="col">ADM</th>
+                                <th scope="col">Fornecedor</th>
+                                <th scope="col">Prefeitura</th>
+                                <th scope="col">Responsável</th>
+                                <th scope="col">Individualizado</th>
+                                <th scope="col">Ações</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <th :title="fornecedor_selected.label"><a href="#">{{ vinculacao.PEP_Empreendimento }}</a></th>
+                                <td><a href="#">{{ vinculacao.administradora.nome }}</a></td>
+                                <td><a href="#">{{ vinculacao.fornecedorsap.nome }}</a></td>
+                                <td><a href="#">{{ vinculacao.prefeitura.nome }}</a></td>
+                                <td><a href="#">{{ vinculacao.responsavel.name }}</a></td>
+                                <td>{{ vinculacao.is_ind ? 'Sim' : 'Não' }}</td>
+                                <td>
+                                    <div class="action-buttons text-center">
+                                        <button class="btn btn-warning"><i class="fa fa-edit"></i></button>
+                                        <button class="btn btn-danger"><i class="fa fa-trash"></i></button>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
 
                     <div v-if="this.fornecedor_selected" class="col text-right">
-                        <button class="btn btn btn-success" data-toggle="modal" data-target="#modalNovaVinculacao"><i class="fas fa-plus"></i> Adicionar</button>
+                        <button :disabled="this.vinculacao" class="btn btn btn-success" data-toggle="modal" data-target="#modalNovaVinculacao"><i class="fas fa-plus"></i> Adicionar</button>
                     </div>
                 </div>
             </div>
@@ -73,7 +71,7 @@
 
 <script>
 import Bus from '../../bus'
-import { get } from '../../api/vinculacoes'
+import { get, store } from '../../api/vinculacoes'
 import { get as getE, getForList } from '../../api/empreendimentos'
 
 import VinculacaoModal from '../includes/Modals/VinculacaoModal'
@@ -90,14 +88,14 @@ export default {
 
             PEP: '',
 
-            vinculacoes: []
+            vinculacao: null
         }
     },
     watch: {
         fornecedor_selected(selected){
             if(!selected) return
 
-            this.vinculacoes = []
+            this.vinculacao = null
 
             this.fetch()
 
@@ -107,10 +105,15 @@ export default {
     methods: {
         fetch() {
             get(this.fornecedor_selected.value)
-                .then(r => this.vinculacoes = r.results)
+                .then(r => this.vinculacao = r.results)
         },
         saveVinculacao(datas) {
-            console.log(datas);
+            datas.PEP_Empreendimento = this.PEP
+
+            store(datas).then(r => {
+                console.log(r)
+                // Adicionar na lista
+            })
         }
     },
     mounted() {

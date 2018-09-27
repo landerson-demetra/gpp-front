@@ -29,48 +29,50 @@
 
                 <div v-if="!this.empreendimentos.datas.length" class="alert alert-secondary" role="alert">Nenhum Projeto/Empreendimento encontrado</div>
 
-                <table v-else :class="{'is-fetching': isFetching}" class="table table-responsive-md table-borderless table-hover">
-                    <thead>
-                        <tr>
-                            <th>
-                                <div class="checkbox checkbox-success">
-                                    <input v-model="check_all" type="checkbox" id="checkbox2" class="styled">
-                                    <label></label>
-                                </div>
-                            </th>
-                            <th>Projeto</th>
-                            <th>SPE - Razão Social</th>
-                            <th>Empreendimento</th>
-                            <th></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <!-- Listagem -->
-                        <tr :id="data.id" v-on:click="checkUncheckTr(data.id)" v-for="data in empreendimentos.datas">
-                            <th>
-                                <div class="checkbox checkbox-success" style="pointer-events: none">
-                                    <input type="checkbox" :value="data.id" class="styled">
-                                    <label></label>
-                                </div>
-                            </th>
-                            <th>{{ data.PEP }}</th>
-                            <th>[{{ data.spe }}] {{ data.spe_cnpj }}</th>
-                            <th>[{{ data.empreendimento_cod }}] {{ data.empreendimento_nome }}</th>
-                            <th>
-                                <div class="action-buttons text-right">
-                                    <button class="btn btn-primary" v-on:click="viewUnidades(data.PEP)"><i class="fas fa-building"></i></button>
-                                    <button class="btn btn-secondary"><i class="fas fa-edit"></i></button>
-                                    <button class="btn btn-danger"><i class="fas fa-trash-alt"></i></button>
-                                </div>
-                            </th>
-                        </tr>
-                    </tbody>
-                </table>
+               <div class="row" v-else>
+                    <table :class="{'is-fetching': isFetching}" class="table table-bordered table-responsive-md  table-hover">
+                        <thead>
+                            <tr>
+                                <th class="text-center">
+                                    <div class="checkbox checkbox-success">
+                                        <input v-model="check_all" type="checkbox" id="checkbox2" class="styled">
+                                        <label></label>
+                                    </div>
+                                </th>
+                                <th>Projeto</th>
+                                <th>SPE - Razão Social</th>
+                                <th>Empreendimento</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Listagem -->
+                            <tr :id="data.id" v-on:click="checkUncheckTr(data.id)" v-for="data in empreendimentos.datas">
+                                <th class="text-center">
+                                    <div class="checkbox checkbox-success" style="pointer-events: none">
+                                        <input type="checkbox" :value="data.id" class="styled">
+                                        <label></label>
+                                    </div>
+                                </th>
+                                <th>{{ data.PEP }}</th>
+                                <th>[{{ data.spe }}] ...</th>
+                                <th>[{{ data.empreendimento_cod }}] {{ data.empreendimento_nome }}</th>
+                                <th>
+                                    <div class="action-buttons text-center">
+                                        <button class="btn btn-primary" v-on:click="viewUnidades(data.PEP)"><i class="fas fa-building"></i></button>
+                                        <!-- <button data-toggle="modal" data-target="#modalEditarEmpreendimento" v-on:click="$setDadoActive(data)" class="btn btn-secondary"><i class="fas fa-edit"></i></button>
+                                        <button class="btn btn-danger"><i class="fas fa-trash-alt"></i></button> -->
+                                    </div>
+                                </th>
+                            </tr>
+                        </tbody>
+                    </table>
 
-                <!-- Paginação -->
-                <div :class="{'is-fetching': isFetching}">
-                    <Paginator :paginator="this.empreendimentos.paginator" :limit="this.empreendimentos.paginator.limit_pages" v-on:changePage="$onEmpredsPageChange"></Paginator>
-                </div>
+                    <!-- Paginação -->
+                    <div class="w-100" :class="{'is-fetching': isFetching}">
+                        <Paginator :paginator="this.empreendimentos.paginator" :limit="this.empreendimentos.paginator.limit_pages" v-on:changePage="$onEmpredsPageChange"></Paginator>
+                    </div>
+               </div>
             </div>
         </div>
         
@@ -85,17 +87,27 @@
                     <form action="" method="POST" v-on:submit.prevent="">
                         <div class="row">
                             <div class="form-group col-md-3">
-                                <v-select name="Administrador" placeholder="Administrador" :options="[]">
+                                <v-select placeholder="Administrador" :options="[]">
                                     <span slot="no-options">Nenhum administrador encontrado.</span>
                                 </v-select>
                             </div>
                             <div class="form-group col-md-3">
-                                <v-select name="Fornecedor" placeholder="Fornecedor" :options="[]">
+                                <v-select placeholder="Fornecedor SAP" :options="[]">
                                     <span slot="no-options">Nenhum fornecedor encontrado.</span>
                                 </v-select>
                             </div>
                             <div class="form-group col-md-3">
-                                <v-select name="Prefeitura" placeholder="Prefeitura" :options="[]">
+                                <v-select placeholder="Fornecedor Água" :options="[]">
+                                    <span slot="no-options">Nenhum fornecedor encontrado.</span>
+                                </v-select>
+                            </div>
+                            <div class="form-group col-md-3">
+                                <v-select placeholder="Fornecedor Luz" :options="[]">
+                                    <span slot="no-options">Nenhum forneceder encontrado.</span>
+                                </v-select>
+                            </div>
+                            <div class="form-group col-md-3">
+                                <v-select placeholder="Prefeitura" :options="[]">
                                     <span slot="no-options">Nenhuma prefeitura encontrada.</span>
                                 </v-select>
                             </div>
@@ -106,7 +118,7 @@
                                     <option value="1">Sim</option> 
                                 </select>
                             </div>
-                            <div class="form-group col-12">
+                            <div class="form-group col-6">
                                 <v-select name="Reponsavel" placeholder="Reponsável" :options="[]">
                                     <span slot="no-options">Nenhum responsavel encontrado.</span>
                                 </v-select>
@@ -162,8 +174,8 @@
                                     <th>N/Definido</th>
                                     <th>
                                         <router-link :to="{name: 'GestaoPatromonios', params: {pep: unidade.PEP}}" title="Gerenciar Patrimônios" class="btn btn-primary">Gerir</router-link>
-                                        <button class="btn btn-secondary"><i class="fas fa-edit"></i></button>
-                                        <button class="btn btn-danger"><i class="fas fa-trash-alt"></i></button>
+                                        <!-- <button class="btn btn-secondary"><i class="fas fa-edit"></i></button>
+                                        <button class="btn btn-danger"><i class="fas fa-trash-alt"></i></button> -->
                                     </th>
                                 </tr>
                             </tbody>
@@ -179,6 +191,12 @@
                 </div>
             </div>
         </div>
+
+        <!-- Editar empreendimento -->
+        <EmpreendimentoModal action="Edit" name="EditarEmpreendimento" :title="'Editar ' + dadoActive.empreendimento_nome" :datas="dadoActive"></EmpreendimentoModal>
+
+        <!-- Deletar empreendimento -->
+        <EmpreendimentoModal action="Delete" name="DeletarEmpreendimento" :title="'Editar ' + dadoActive.empreendimento_nome" :datas="dadoActive"></EmpreendimentoModal>
     </div>
 </template>
 
@@ -187,12 +205,20 @@ import Bus from '../../bus'
 import Paginator from '../includes/Paginator'
 import GridLoader from 'vue-spinner/src/GridLoader'
 
+// Modals
+import EmpreendimentoModal from '../includes/Modals/EmpreendimentoModal'
+
 // Api calls
-import { search } from '../../api/empreendimentos'
+import { get, search } from '../../api/empreendimentos'
+import { list as listUnidades } from '../../api/unidades'
 
 export default {
     name: 'Empreendimento',
-    components: { Paginator, GridLoader },
+    components: {
+        Paginator,
+        GridLoader,
+        EmpreendimentoModal
+    },
     data() {
         return {
             check_all: false,
@@ -214,6 +240,7 @@ export default {
                 notfound: false,
                 paginator: { per_page: 6, limit_pages: 6, current_page: 1 }
             },
+            dadoActive: [],
             isFetching: undefined
         }
     },
@@ -275,7 +302,7 @@ export default {
     },
     methods: {
         /*----------  Check/uncheck empreendimento  ----------*/
-        checkUncheckTr: function(id){
+        checkUncheckTr(id) {
             if(event.target.nodeName == 'BUTTON' || event.target.nodeName == 'I')
                 return
 
@@ -294,8 +321,19 @@ export default {
             }
         },
 
+        /*----------  Empreendimentos - Actions  ----------*/
+        $setDadoActive(datas) {
+            this.dadoActive = datas
+        },
+        updateEmpred(datas) {
+            console.log(datas)
+        },
+        deleteEmpred() {
+            console.log('Delete event')
+        },
+
         /*----------  Mostrar unidades  ----------*/
-        viewUnidades: function(PEP) {
+        viewUnidades(PEP) {
             this.$resetUnids()
 
             let found = _.filter(this.empreendimentos.datas, (o) => {
@@ -307,30 +345,28 @@ export default {
         },
 
         /*----------  Fetch datas  ----------*/
-        fetchEmpreds: function(page = 1) {
-            this.$http.get('/empreendimento', {
-                params: { 
-                    projeto: this.S_Projeto,
-                    empreendimento: this.S_Empre,
-                    page: page,
-                    per_page: this.empreendimentos.paginator.per_page
-                }
-            }).then((response) => {
-                let resp = response.data.results
+        fetchEmpreds(page = 1) {
+            get({ 
+                projeto: this.S_Projeto,
+                empreendimento: this.S_Empre,
+                page: page,
+                per_page: this.empreendimentos.paginator.per_page
+            }).then((data) => {
+                let resp = data.results
                 this.empreendimentos.datas = resp.data || []
 
                 this._setPaginateEmpreds(resp)
             })
         },
-        fetchUnids: function(PEP) {
-            this.$http.get('/unidades', { params: { PEP: PEP } }).then((response) => {
-                this.unidades.datas = response.data
+        fetchUnids(PEP) {
+            listUnidades({ PEP: PEP }).then((data) => {
+                this.unidades.datas = data
                 this._setPaginateUnids()
             })
         },
 
         /*----------  Events  ----------*/
-        $onEmpredsPageChange(e){
+        $onEmpredsPageChange(e) {
             let tr = $('.table').find('tr'),
                 input = tr.find('input')
 
@@ -344,26 +380,14 @@ export default {
             this.empreendimentos.paginator.current_page = e
             this.fetchEmpreds(e)
         },
-
-        $onUnidsPageChange (e){
+        $onUnidsPageChange(e) {
             this.unidades.paginator.current_page = e
             this._setPaginateUnids()
         },
 
-        // $searchEmpreds(){
-        //     let v = {
-        //         'projeto': this.S_Projeto,
-        //         'razao': this.S_Razao,
-        //         'empreendimento': this.S_Empre
-        //     }
-
-        //     search(v).then(r => {
-        //         console.log(r)
-        //     })
-        // },
 
         /*----------  Pagination  ----------*/
-        _setPaginateEmpreds: function(resp){
+        _setPaginateEmpreds(resp) {
             this.empreendimentos.paginator = {
                 per_page: this.empreendimentos.paginator.per_page,
                 limit_pages: this.empreendimentos.paginator.limit_pages,
@@ -372,7 +396,7 @@ export default {
                 current_page: this.empreendimentos.paginator.current_page
             }
         },
-        _setPaginateUnids: function(){
+        _setPaginateUnids() {
             let datas = (this.unidades.datasSearch.length ? this.unidades.datasSearch : this.unidades.datas)
             let total = datas.length
 
@@ -389,7 +413,7 @@ export default {
         },
 
         /*----------  Resets  ----------*/
-        $resetUnids: function(){
+        $resetUnids() {
             this.unidades.searchTxt = ''
             this.unidades.datas = []
             this.unidades.datasShow = []
@@ -401,6 +425,15 @@ export default {
     mounted() {
         this.fetchEmpreds()
         Bus.$on('isFetching', is => this.isFetching = is)
+
+        // Edit events
+        Bus.$on('evEditarEmpreendimento', (datas) => this.updateEmpred(datas))
+
+        // Delete events
+        Bus.$on('evDeletarEmpreendimento', this.deleteEmpred)
+    },
+    beforeDestroy() {
+        Bus.$off()
     }
 }
 </script>

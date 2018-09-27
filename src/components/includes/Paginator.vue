@@ -1,5 +1,5 @@
 <template>
-    <ul class="pagination justify-content-end disabled" v-if="paginator.total > paginator.per_page">
+    <ul class="pagination justify-content-end" v-if="paginator.total > paginator.per_page">
         <li v-if="paginator.current_page != 1" class="page-item" title="Anterior">
             <a href="#" class="page-link" aria-label="Anterior" v-on:click.prevent="selectPage(paginator.current_page - 1)"><span aria-hidden="true">&laquo;</span></a>
         </li>
