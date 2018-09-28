@@ -219,9 +219,10 @@ export default {
                     { title: 'Contrato', field: 'contrato' },
                     { title: 'Nome', field: 'nome' },
                     { title: 'CPF/CNPJ', field: 'cnpj_cpf'},
-                    { title: 'V.Contrato', field: 'vlcontrato'},
-                    { title: 'D.Contrato', field: 'dtcontrato'},
-                    { title: 'Status', field: 'status'},
+                    { title: 'Valor Contrato', field: 'vlr_contrato'},
+                    { title: 'Data Contrato', field: 'dt_contrato'},
+                    { title: 'Status', field: 'status_contrato'},
+                    { title: 'Modelo', field: 'modelo_contrato'}
                 ],
                 data: [],
                 total: 0,
@@ -517,14 +518,13 @@ export default {
             var formated = []
             _.forEach(this.unidade_datas.contratos, (v) => {
                 formated.push({
-                    id: v.id,
-                    contrato: v.id,
+                    contrato: v.id_contrato,
                     nome: v.nome,
-                    vlcontrato: v.valor_contrato,
+                    vlr_contrato: this.$options.filters.currency(v.vlr_contrato),
                     cnpj_cpf: v.cnpj_cpf,
-                    dtcontrato: v.data_contrato,
-                    status: v.status_contrato,
-                    raw: v
+                    dt_contrato: v.dt_contrato,
+                    status_contrato: v.status_contrato,
+                    modelo_contrato: v.modelo_contrato
                 })
             })
 
