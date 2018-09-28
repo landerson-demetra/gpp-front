@@ -8,13 +8,13 @@
             <div class="col-12">
                 <div class="row bg-white shadow-sm p-3 my-3 justify-content-start">
                     <div class="input-group col-md-3">
-                        <input v-model="S_Projeto" type="text" class="form-control" placeholder="Projeto (X.XXXX.XX.XX)...">
+                        <input v-on:keyup.enter="fetchEmpreds(1)" v-model="S_Projeto" type="text" class="form-control" placeholder="Projeto (X.XXXX.XX.XX)...">
                     </div>
                     <div class="input-group col-md-3">
-                        <input disabled="" v-model="S_Razao" type="text" class="form-control" placeholder="Razão Social...">
+                        <input v-on:keyup.enter="fetchEmpreds(1)" disabled="" v-model="S_Razao" type="text" class="form-control" placeholder="Razão Social...">
                     </div>
                     <div class="input-group col-md-3">
-                        <input v-model="S_Empre" type="text" class="form-control" placeholder="Empreendimento...">
+                        <input v-on:keyup.enter="fetchEmpreds(1)" v-model="S_Empre" type="text" class="form-control" placeholder="Empreendimento...">
                     </div>
                     <div class="input-group col-md-2">
                         <select v-model="empreendimentos.paginator.per_page" class="form-control">
@@ -171,7 +171,7 @@
                                 <tr v-for="unidade in unidades.datasShow">
                                     <th>{{ unidade.unidade_nome }}</th>
                                     <th>{{ unidade.bloco_nome }}</th>
-                                    <th>N/Definido</th>
+                                    <th>...</th>
                                     <th>
                                         <router-link :to="{name: 'GestaoPatromonios', params: {pep: unidade.PEP}}" title="Gerenciar Patrimônios" class="btn btn-primary">Gerir</router-link>
                                         <!-- <button class="btn btn-secondary"><i class="fas fa-edit"></i></button>

@@ -36,7 +36,7 @@
                         </ul>
                         <div class="tab-content" id="pills-tabContent">
                             <div class="tab-pane fade show active" id="pills-administradoras" role="tabpanel" aria-labelledby="pills-administradoras-tab">
-                                <div v-if="!this.datas.administradora" class="alert alert-success">Nada encontrado</div>
+                                <div v-if="!this.datas.administradora" class="alert alert-warning">Nada encontrado</div>
                                 <table v-else class="table table-bordered">
                                     <thead>
                                         <tr>
@@ -55,7 +55,7 @@
                                 </table>
                             </div>
                             <div class="tab-pane fade" id="pills-fornecedor-sap" role="tabpanel" aria-labelledby="pills-fornecedor-sap-tab">
-                                <div v-if="!this.datas.fornecedorsap" class="alert alert-success">Nada encontrado</div>
+                                <div v-if="!this.datas.fornecedorsap" class="alert alert-warning">Nada encontrado</div>
                                 <table v-else class="table table-bordered">
                                     <thead>
                                         <tr>
@@ -74,7 +74,7 @@
                                 </table>
                             </div>
                             <div class="tab-pane fade" id="pills-fornecedor-agua" role="tabpanel" aria-labelledby="pills-fornecedor-agua-tab">
-                                <div v-if="!this.datas.fornecedoragua" class="alert alert-success">Nada encontrado</div>
+                                <div v-if="!this.datas.fornecedoragua" class="alert alert-warning">Nada encontrado</div>
                                 <table v-else class="table table-bordered">
                                     <thead>
                                         <tr>
@@ -93,7 +93,7 @@
                                 </table>
                             </div>
                             <div class="tab-pane fade" id="pills-fornecedor-luz" role="tabpanel" aria-labelledby="pills-fornecedor-luz-tab">
-                                <div v-if="!this.datas.fornecedorluz" class="alert alert-success">Nada encontrado</div>
+                                <div v-if="!this.datas.fornecedorluz" class="alert alert-warning">Nada encontrado</div>
                                 <table v-else class="table table-bordered">
                                     <thead>
                                         <tr>
@@ -112,8 +112,8 @@
                                 </table>
                             </div>
                             <div class="tab-pane fade" id="pills-fornecedor-prefeitura" role="tabpanel" aria-labelledby="pills-prefeitur-tab">
-                                <div v-if="!this.datas.fornecedorluz" class="alert alert-success">Nada encontrado</div>
-                                <table class="table table-bordered">
+                                <div v-if="!this.datas.fornecedorluz" class="alert alert-warning">Nada encontrado</div>
+                                <table v-else class="table table-bordered">
                                     <thead>
                                         <tr>
                                             <th scope="col">Número SAP</th>
@@ -131,8 +131,8 @@
                                 </table>
                             </div>
                             <div class="tab-pane fade" id="pills-responsavel" role="tabpanel" aria-labelledby="pills-responsavel-tab">
-                                <div v-if="!this.datas.responsavel" class="alert alert-success">Nada encontrado</div>
-                                <table class="table table-bordered">
+                                <div v-if="!this.datas.responsavel" class="alert alert-warning">Nada encontrado</div>
+                                <table v-else class="table table-bordered">
                                     <thead>
                                         <tr>
                                             <th scope="col">Nome</th>
@@ -186,7 +186,8 @@ export default {
         }
     },
     mounted() {
-        this.parseAndFetch()
+        if(this.PEP)
+            this.parseAndFetch()
     }
 }
 </script>

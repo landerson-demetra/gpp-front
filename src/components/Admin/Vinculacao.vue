@@ -2,7 +2,7 @@
     <div id="vinculacao" class="wow fadeIn" data-wow-duration="2s">
         <div class="card shadow border-0">
             <div class="card-header border-0 bg-primary text-white">
-                <h3 class="mt-0">Vinculação PEP</h3>
+                <h3 class="mt-0">Vinculação</h3>
             </div>
             <div class="card-body" :class="{'is-fetching': isFetching}">
                 <form>
@@ -33,6 +33,8 @@
                                 <th scope="col">Projeto</th>
                                 <th scope="col">ADM</th>
                                 <th scope="col">Fornecedor</th>
+                                <th scope="col">Fornecedor Água</th>
+                                <th scope="col">Fornecedor Luz</th>
                                 <th scope="col">Prefeitura</th>
                                 <th scope="col">Responsável</th>
                                 <th scope="col">Individualizado</th>
@@ -41,16 +43,18 @@
                         </thead>
                         <tbody>
                             <tr>
-                                <th :title="fornecedor_selected.label"><a href="#">{{ vinculacao.PEP_Empreendimento }}</a></th>
-                                <td><a href="#">{{ vinculacao.administradora.nome }}</a></td>
-                                <td><a href="#">{{ vinculacao.fornecedorsap.nome }}</a></td>
-                                <td><a href="#">{{ vinculacao.prefeitura.nome }}</a></td>
-                                <td><a href="#">{{ vinculacao.responsavel.name }}</a></td>
+                                <th :title="fornecedor_selected.label"><router-link :to="{ name: 'GestaoPatromonios', params: { pep: vinculacao.PEP_Empreendimento }}" class="nav-link">{{ vinculacao.PEP_Empreendimento }}</router-link></th>
+                                <td><a href="#">{{ vinculacao.administradora ? vinculacao.administradora.nome : 'N/informado' }}</a></td>
+                                <td><a href="#">{{ vinculacao.fornecedorsap ? vinculacao.fornecedorsap.nome : 'N/informado' }}</a></td>
+                                <td><a href="#">{{ vinculacao.fornecedoragua ? vinculacao.fornecedoragua.nome : 'N/informado' }}</a></td>
+                                <td><a href="#">{{ vinculacao.fornecedorluz ? vinculacao.fornecedorluz.nome : 'N/informado' }}</a></td>
+                                <td><a href="#">{{ vinculacao.prefeitura ? vinculacao.prefeitura.nome : 'N/informado' }}</a></td>
+                                <td><a href="#">{{ vinculacao.responsavel ? vinculacao.responsavel.name : 'N/informado' }}</a></td>
                                 <td>{{ vinculacao.is_ind ? 'Sim' : 'Não' }}</td>
                                 <td>
                                     <div class="action-buttons text-center">
-                                        <button class="btn btn-warning"><i class="fa fa-edit"></i></button>
-                                        <button class="btn btn-danger"><i class="fa fa-trash"></i></button>
+                                        <button data-toggle="modal" data-target="#modalEditarVinculacao" class="btn btn-warning"><i class="fa fa-edit"></i></button>
+                                        <button data-toggle="modal" data-target="#modalDeletarVinculacao" class="btn btn-danger"><i class="fa fa-trash"></i></button>
                                     </div>
                                 </td>
                             </tr>
@@ -66,12 +70,18 @@
 
         <!-- Modal nova vinculação -->
         <VinculacaoModal action="New" name="NovaVinculacao" title="Criar vinculação"></VinculacaoModal>
+
+        <!-- Modal editar vinculação -->
+        <VinculacaoModal :datas="vinculacao" action="Edit" name="EditarVinculacao" title="Editar vinculação"></VinculacaoModal>
+
+        <!-- Modal deletar vinculação -->
+        <VinculacaoModal :datas="vinculacao" action="Delete" name="DeletarVinculacao" title="Deletar Vinculação"></VinculacaoModal>
     </div>
 </template>
 
 <script>
 import Bus from '../../bus'
-import { get, store } from '../../api/vinculacoes'
+import { get, store, update, deletedata } from '../../api/vinculacoes'
 import { get as getE, getForList } from '../../api/empreendimentos'
 
 import VinculacaoModal from '../includes/Modals/VinculacaoModal'
@@ -111,23 +121,59 @@ export default {
             datas.PEP_Empreendimento = this.PEP
 
             store(datas).then(r => {
-                console.log(r)
-                // Adicionar na lista
+                // Buscando novamente os registro, melhor do que inserir manualmente 
+                this.fetch()
+
+                // Notificando o usuário
+                this.$notify({ group: 'normal', type: 'success', text: 'Vinculação para o projeto <b>' + this.PEP + '</b> criada com sucesso' })
+
+                // Fechando a modal
+                $('.modal').modal('hide')
+            })
+        },
+        updateVinculacao(datas) {
+            update(datas, this.vinculacao.id).then(r => {
+                // Buscando novamente os registro, melhor do que atualizar manualmente
+                this.fetch()
+
+                // Notificando o usuário
+                this.$notify({ group: 'normal', type: 'success', text: 'Vinculação para o projeto <b>' + this.PEP + '</b> atualizada com sucesso' })
+
+                // Fechando a modal
+                $('.modal').modal('hide')
+            })
+        },
+        deleteVinculacao() {
+            deletedata(this.vinculacao.id).then(r => {
+                this.vinculacao = null
+
+                // Notificando o usuário
+                this.$notify({ group: 'normal', type: 'success', text: 'Vinculação para o projeto <b>' + this.PEP + '</b> deletada com sucesso' })
+
+                // Fechando a modal
+                $('.modal').modal('hide')
             })
         }
     },
     mounted() {
-        var self = this
-
         // isFetching trick
-        Bus.$on('isFetching', is => self.isFetching = is)
+        Bus.$on('isFetching', is => this.isFetching = is)
 
         // Save Events
-        Bus.$on('evNovaVinculacao', (datas) => self.saveVinculacao(datas))
+        Bus.$on('evNovaVinculacao', (datas) => this.saveVinculacao(datas))
+
+        // Edit events
+        Bus.$on('evEditarVinculacao', (datas) => this.updateVinculacao(datas))
+
+        // Delete events
+        Bus.$on('evDeletarVinculacao', this.deleteVinculacao)
 
         // Obtendo a lista de fornecedores
         getForList()
-            .then(r => _.forEach(r.results, v => self.fornecedores.push({ label: v.empreendimento_nome, value: v.PEP })))
+            .then(r => _.forEach(r.results, v => this.fornecedores.push({ label: v.empreendimento_nome, value: v.PEP })))
+    },
+    beforeDestroy() {
+        Bus.$off()
     }
 }
 </script>

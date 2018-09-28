@@ -14,4 +14,19 @@ const store = (datas) => {
     })
 }
 
-export { get, store }
+const update = (datas, id) => {
+    datas._method = 'PATCH'
+    return new Promise((resolve, reject) => {
+        http.post('vinculacao/' + id, datas)
+            .then(r => resolve(r.data)).catch(e => reject(e))
+    })
+}
+
+const deletedata = (id) => {
+    return new Promise((resolve, reject) => {
+        http.delete('vinculacao/' + id)
+            .then(r => resolve(r.data)).catch(e => reject(e))
+    })
+}
+
+export { get, store, update, deletedata }

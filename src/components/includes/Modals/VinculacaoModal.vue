@@ -10,8 +10,8 @@
                         </button>
                     </div>
                     <div class="modal-body">
-                        <div v-if="this.action == 'Delete'">
-                            <p>Você tem certeza que deseja deletar a vinculação para PEP <b>{{ this.datas.PEP_Empreendimento }}</b>?</p>
+                        <div v-if="this.datas && this.action == 'Delete'">
+                            <p>Você tem certeza que deseja deletar a vinculação para o projeto <b>{{ this.datas.PEP_Empreendimento }}</b>?</p>
                         </div>
                         <div v-else>
                             <form v-on:submit.prevent>
@@ -118,14 +118,27 @@ export default {
                 this.reset()
         },
         fill(){
+            if(!this.datas) return
+
             this.PEP = this.datas.PEP_Empreendimento
             this.isInd = this.datas.is_ind
-            this.Administradora = ''
-            this.FornecedorSap = ''
-            this.FornecedorAgua = ''
-            this.FornecedorLuz = ''
-            this.Prefeitura = ''
-            this.Responsavel = ''
+
+            if(this.datas.administradora)
+                this.Administradora = {label: this.datas.administradora.nome, value: this.datas.administradora.id}
+
+            if(this.datas.fornecedorsap)
+                this.FornecedorSap = {label: this.datas.fornecedorsap.nome, value: this.datas.fornecedorsap.id}
+
+            if(this.datas.fornecedoragua)
+                this.FornecedorAgua = {label: this.datas.fornecedoragua.nome, value: this.datas.fornecedoragua.id}
+
+            if(this.datas.fornecedorluz)
+                this.FornecedorLuz = {label: this.datas.fornecedorluz.nome, value: this.datas.fornecedorluz.id}
+
+            if(this.datas.prefeitura)
+                this.Prefeitura = {label: this.datas.prefeitura.nome, value: this.datas.prefeitura.id}
+
+            //this.Responsavel = this.datas.resp_id
         },
         reset(){
             this.isInd = ''
@@ -134,7 +147,7 @@ export default {
             this.FornecedorAgua = ''
             this.FornecedorLuz = ''
             this.Prefeitura = ''
-            this.Responsavel = ''
+            //this.Responsavel = ''
         }
     },
     watch: {
@@ -153,12 +166,12 @@ export default {
         getFields() {
             return {
                 'is_ind': this.isInd,
-                'adm_id': this.Administradora.value,
-                'forn_sap_id': this.FornecedorSap.value,
-                'forn_agua_id': this.FornecedorAgua.value,
-                'forn_luz_id': this.FornecedorLuz.value,
-                'pref_id': this.Prefeitura.value,
-                'resp_id': this.Responsavel.value,
+                'adm_id': (this.Administradora ? this.Administradora.value : null),
+                'forn_sap_id': (this.FornecedorSap ? this.FornecedorSap.value : null),
+                'forn_agua_id': (this.FornecedorAgua ? this.FornecedorAgua.value : null),
+                'forn_luz_id': (this.FornecedorLuz ? this.FornecedorLuz.value : null),
+                'pref_id': (this.Prefeitura ? this.Prefeitura.value : null),
+                //'resp_id': this.Responsavel.value,
             }
         }
     },

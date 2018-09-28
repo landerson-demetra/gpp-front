@@ -13,7 +13,7 @@ export default [
         name: 'Responsaveis'
     },
     {
-        path: 'vinculacao-pep',
+        path: 'vinculacao',
         component: Vinculacao,
         name: 'Vinculacao'
     },

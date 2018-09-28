@@ -118,7 +118,7 @@
                         <div class="btn-group" role="group" aria-label="Basic example">
                             <button type="button" class="btn btn-primary"><i class="fas fa-file-upload"></i> Anexar</button>
                             <button type="button" class="btn btn-primary"><i class="fas fa-print"></i> Imprimir</button>
-                            <a href="#relatorio" class="btn btn-primary" data-toggle="dropdown"><i class="fas fa-file-export"></i> Relatório</a>
+                            <a href="#relatorio" class="btn btn-primary"><i class="fas fa-file-export"></i> Relatório</a>
                         </div>
                     </div>
                 </div>
@@ -388,9 +388,9 @@ export default {
             this.$notify({ group: 'normal', type: 'success', text: 'Status atualizado com sucesso' })
         },
         $resetUnidadeDatas() {
-            this.invadido = ''
-            this.vendido = ''
-            this.status = ''
+            this.invadido = null
+            this.vendido = null
+            this.status = null
 
             this.contratos.data = []
             this.contratos.total = 0
@@ -410,18 +410,9 @@ export default {
 
                     // Limpando notificações antigas e exibindo as novas
                     this.$notify({ group: 'normal', clean: true })
-                    this.$notify({
-                        group: 'normal',
-                        type: 'success',
-                        text: 'Dados listados com sucesso',
-                        duration: 5000
-                     })
+                    this.$notify({ group: 'normal', type: 'success', text: 'Dados listados com sucesso', duration: 5000 })
                 } else {
-                    this.$notify({
-                        group: 'normal',
-                        type: 'warn',
-                        text: 'Nenhum dado encontrado para PEP <b>' + this.PEP + '</b>'
-                    })
+                    this.$notify({ group: 'normal', type: 'warn', text: 'Nenhum dado encontrado para PEP <b>' + this.PEP + '</b>' })
                 }
             }).catch((e) => {
                 console.log('err:', e)

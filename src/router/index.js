@@ -65,6 +65,10 @@ const router = new VueRouter({
 })
 
 router.beforeEach((to, from, next) => {
+    // Fechando qualquer modal aberta
+    $('.modal').modal('hide')
+
+    // Setando o titúlo da página de acordo com o nome da rota
     document.title = document.title.substring(0, document.title.indexOf(' - ')) + ' - ' + to.name
 
     next()

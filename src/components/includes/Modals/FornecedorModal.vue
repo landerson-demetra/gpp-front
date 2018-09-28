@@ -42,7 +42,7 @@
 
                                     <div class="form-group col-lg-4">
                                        <label for="CEP">CEP</label>
-                                       <input v-model="CEP" :class="{'is-invalid': CEPHasError}" v-mask="['#####-###']" type="text" placeholder="CEP..." class="form-control">
+                                       <input v-model="CEP" v-on:input="CEPchange" :class="{'is-invalid': CEPHasError}" v-mask="['#####-###']" type="text" placeholder="CEP..." class="form-control">
                                     </div>
                                     <div class="form-group col-lg-4">
                                        <label for="Logradouro">Logradouro</label>
@@ -129,6 +129,11 @@ export default {
             if(this.action == 'New')
                 this.reset()
         },
+        CEPchange(cep){
+            if(this.CEP && this.CEP.length < 9) return
+
+            this.$http.get(_.replace(this.$config.cep_url, '{cep}', this.CEP)).then(r => this.assignCepValues(r.data))
+        },
         assignCepValues(r){
             if(r.resultado == 0){
                 this.CEPHasError = true
@@ -182,11 +187,6 @@ export default {
         }
     },
     watch: {
-        CEP(cep){
-            if(cep && cep.length < 9) return
-
-            this.$http.get(_.replace(this.$config.cep_url, '{cep}', cep)).then(r => this.assignCepValues(r.data))
-        },
         datas(){
             if(this.action == 'Edit')
                 this.fill()
