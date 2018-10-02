@@ -4,7 +4,7 @@
             <div class="modal-dialog modal-lg shadow" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="modalResponsaveisLabel">Responsáveis </h5>
+                        <h5 class="modal-title" id="modalResponsaveisLabel">Responsáveis <small class="opacity-small">[ {{ this.PEP }} ]</small></h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
@@ -36,7 +36,7 @@
                         </ul>
                         <div class="tab-content" id="pills-tabContent">
                             <div class="tab-pane fade show active" id="pills-administradoras" role="tabpanel" aria-labelledby="pills-administradoras-tab">
-                                <div v-if="!this.datas.administradora" class="alert alert-warning">Nada encontrado</div>
+                                <div v-if="!this.datas.administradora" class="alert alert-warning">Nada encontrado.</div>
                                 <table v-else class="table table-bordered">
                                     <thead>
                                         <tr>
@@ -55,7 +55,7 @@
                                 </table>
                             </div>
                             <div class="tab-pane fade" id="pills-fornecedor-sap" role="tabpanel" aria-labelledby="pills-fornecedor-sap-tab">
-                                <div v-if="!this.datas.fornecedorsap" class="alert alert-warning">Nada encontrado</div>
+                                <div v-if="!this.datas.fornecedorsap" class="alert alert-warning">Nada encontrado.</div>
                                 <table v-else class="table table-bordered">
                                     <thead>
                                         <tr>
@@ -74,7 +74,7 @@
                                 </table>
                             </div>
                             <div class="tab-pane fade" id="pills-fornecedor-agua" role="tabpanel" aria-labelledby="pills-fornecedor-agua-tab">
-                                <div v-if="!this.datas.fornecedoragua" class="alert alert-warning">Nada encontrado</div>
+                                <div v-if="!this.datas.fornecedoragua" class="alert alert-warning">Nada encontrado.</div>
                                 <table v-else class="table table-bordered">
                                     <thead>
                                         <tr>
@@ -93,7 +93,7 @@
                                 </table>
                             </div>
                             <div class="tab-pane fade" id="pills-fornecedor-luz" role="tabpanel" aria-labelledby="pills-fornecedor-luz-tab">
-                                <div v-if="!this.datas.fornecedorluz" class="alert alert-warning">Nada encontrado</div>
+                                <div v-if="!this.datas.fornecedorluz" class="alert alert-warning">Nada encontrado.</div>
                                 <table v-else class="table table-bordered">
                                     <thead>
                                         <tr>
@@ -112,7 +112,7 @@
                                 </table>
                             </div>
                             <div class="tab-pane fade" id="pills-fornecedor-prefeitura" role="tabpanel" aria-labelledby="pills-prefeitur-tab">
-                                <div v-if="!this.datas.fornecedorluz" class="alert alert-warning">Nada encontrado</div>
+                                <div v-if="!this.datas.fornecedorluz" class="alert alert-warning">Nada encontrado.</div>
                                 <table v-else class="table table-bordered">
                                     <thead>
                                         <tr>
@@ -131,7 +131,7 @@
                                 </table>
                             </div>
                             <div class="tab-pane fade" id="pills-responsavel" role="tabpanel" aria-labelledby="pills-responsavel-tab">
-                                <div v-if="!this.datas.responsavel" class="alert alert-warning">Nada encontrado</div>
+                                <div v-if="!this.datas.responsavel" class="alert alert-warning">Nada encontrado.</div>
                                 <table v-else class="table table-bordered">
                                     <thead>
                                         <tr>

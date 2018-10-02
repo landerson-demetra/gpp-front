@@ -8,13 +8,13 @@
             <div class="col-12">
                 <div class="row bg-white shadow-sm p-3 my-3 justify-content-start">
                     <div class="input-group col-md-3">
-                        <input v-on:keyup.enter="fetchEmpreds(1)" v-model="S_Projeto" type="text" class="form-control" placeholder="Projeto (X.XXXX.XX.XX)...">
+                        <input v-on:input="S_SPE = $event.target.value.toUpperCase()" v-on:keyup.enter="fetchEmpreds(1)" v-model="S_SPE" type="text" class="form-control" placeholder="SPE (XXXX)...">
                     </div>
                     <div class="input-group col-md-3">
-                        <input v-on:keyup.enter="fetchEmpreds(1)" disabled="" v-model="S_Razao" type="text" class="form-control" placeholder="Razão Social...">
+                        <input v-on:input="S_Razao = $event.target.value.toUpperCase()" v-on:keyup.enter="fetchEmpreds(1)" v-model="S_Razao" type="text" class="form-control" placeholder="SPE Razão Social...">
                     </div>
                     <div class="input-group col-md-3">
-                        <input v-on:keyup.enter="fetchEmpreds(1)" v-model="S_Empre" type="text" class="form-control" placeholder="Empreendimento...">
+                        <input v-on:input="S_Empre = $event.target.value.toUpperCase()" v-on:keyup.enter="fetchEmpreds(1)" v-model="S_Empre" type="text" class="form-control" placeholder="Empreendimento...">
                     </div>
                     <div class="input-group col-md-2">
                         <select v-model="empreendimentos.paginator.per_page" class="form-control">
@@ -54,14 +54,12 @@
                                         <label></label>
                                     </div>
                                 </th>
-                                <th>{{ data.PEP }}</th>
-                                <th>[{{ data.spe }}] ...</th>
-                                <th>[{{ data.empreendimento_cod }}] {{ data.empreendimento_nome }}</th>
+                                <th>{{ data.projeto }}</th>
+                                <th>[{{ data.spe }}] {{ data.spe_razao_social }}</th>
+                                <th>{{ data.empreendimento_nome }}</th>
                                 <th>
                                     <div class="action-buttons text-center">
-                                        <button class="btn btn-primary" v-on:click="viewUnidades(data.PEP)"><i class="fas fa-building"></i></button>
-                                        <!-- <button data-toggle="modal" data-target="#modalEditarEmpreendimento" v-on:click="$setDadoActive(data)" class="btn btn-secondary"><i class="fas fa-edit"></i></button>
-                                        <button class="btn btn-danger"><i class="fas fa-trash-alt"></i></button> -->
+                                        <button class="btn btn-primary" v-on:click="viewUnidades(data.spe)"><i class="fas fa-building"></i></button>
                                     </div>
                                 </th>
                             </tr>
@@ -161,16 +159,16 @@
                         <table class="table table-units table-bordered table-striped shadow-sm">
                             <thead>
                                 <tr>
-                                    <th>Número</th>
                                     <th>Bloco</th>
+                                    <th>Unidade</th>
                                     <th>Status</th>
                                     <th>Ações</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr v-for="unidade in unidades.datasShow">
-                                    <th>{{ unidade.unidade_nome }}</th>
                                     <th>{{ unidade.bloco_nome }}</th>
+                                    <th>{{ unidade.unidade_cod }}</th>
                                     <th>...</th>
                                     <th>
                                         <router-link :to="{name: 'GestaoPatromonios', params: {pep: unidade.PEP}}" title="Gerenciar Patrimônios" class="btn btn-primary">Gerir</router-link>
@@ -223,7 +221,7 @@ export default {
         return {
             check_all: false,
             activeEmpre: '',
-            S_Projeto: '',
+            S_SPE: '',
             S_Razao: '',
             S_Empre: '',
             empreendimentos: {
@@ -287,7 +285,7 @@ export default {
                 let searchlower = self.unidades.searchTxt.toLowerCase()
 
                 return a.bloco_nome.toLowerCase().includes(searchlower)
-                    || a.unidade_nome.toLowerCase().includes(searchlower)
+                    || a.unidade_cod.toLowerCase().includes(searchlower)
             })
 
             if(this.unidades.datasSearch.length){
@@ -321,34 +319,24 @@ export default {
             }
         },
 
-        /*----------  Empreendimentos - Actions  ----------*/
-        $setDadoActive(datas) {
-            this.dadoActive = datas
-        },
-        updateEmpred(datas) {
-            console.log(datas)
-        },
-        deleteEmpred() {
-            console.log('Delete event')
-        },
-
         /*----------  Mostrar unidades  ----------*/
-        viewUnidades(PEP) {
+        viewUnidades(SPE) {
             this.$resetUnids()
 
             let found = _.filter(this.empreendimentos.datas, (o) => {
-                return o.PEP == PEP
+                return o.spe == SPE
             })
 
             this.activeEmpre = found[0]
-            this.fetchUnids(PEP)
+            this.fetchUnids(SPE)
         },
 
         /*----------  Fetch datas  ----------*/
         fetchEmpreds(page = 1) {
             get({ 
-                projeto: this.S_Projeto,
+                spe: this.S_SPE,
                 empreendimento: this.S_Empre,
+                razao_social: this.S_Razao,
                 page: page,
                 per_page: this.empreendimentos.paginator.per_page
             }).then((data) => {
@@ -359,7 +347,7 @@ export default {
             })
         },
         fetchUnids(PEP) {
-            listUnidades({ PEP: PEP }).then((data) => {
+            listUnidades({ SPE: PEP }).then((data) => {
                 this.unidades.datas = data
                 this._setPaginateUnids()
             })
