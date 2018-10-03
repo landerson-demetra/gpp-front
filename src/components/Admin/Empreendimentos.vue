@@ -148,7 +148,7 @@
             </div>
 
             <!-- Nenhum resultado encontrado -->
-            <div v-if="unidades.notfound || !this.unidades.datas.length">
+            <div v-if="!this.isFetching && (unidades.notfound || !this.unidades.datas.length)">
                 <div class="alert alert-secondary" role="alert">Nenhuma unidade encontrada <span v-if="this.unidades.searchTxt.length">para <b>{{ this.unidades.searchTxt }}</b></span></div>
             </div>
 
@@ -169,7 +169,7 @@
                                 <tr v-for="unidade in unidades.datasShow">
                                     <th>{{ unidade.bloco_nome }}</th>
                                     <th>{{ unidade.unidade_cod }}</th>
-                                    <th>...</th>
+                                    <th>{{ unidade.status_contrato }}</th>
                                     <th>
                                         <router-link :to="{name: 'GestaoPatromonios', params: {pep: unidade.PEP}}" title="Gerenciar Patrimônios" class="btn btn-primary">Gerir</router-link>
                                         <!-- <button class="btn btn-secondary"><i class="fas fa-edit"></i></button>
@@ -281,11 +281,11 @@ export default {
 
             var self = this
 
-            this.unidades.datasSearch = _.filter(this.unidades.datas, function(a){
+            this.unidades.datasSearch = _.filter(this.unidades.datas, (a) => {
                 let searchlower = self.unidades.searchTxt.toLowerCase()
 
-                return a.bloco_nome.toLowerCase().includes(searchlower)
-                    || a.unidade_cod.toLowerCase().includes(searchlower)
+                return a.bloco_nome.toLowerCase().includes(searchlower) ||
+                       a.unidade_cod.toString().toLowerCase().includes(searchlower)
             })
 
             if(this.unidades.datasSearch.length){
@@ -333,6 +333,9 @@ export default {
 
         /*----------  Fetch datas  ----------*/
         fetchEmpreds(page = 1) {
+            this.$resetUnids()
+            this.activeEmpre = ''
+
             get({ 
                 spe: this.S_SPE,
                 empreendimento: this.S_Empre,

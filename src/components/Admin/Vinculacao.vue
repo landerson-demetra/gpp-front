@@ -15,7 +15,7 @@
                         </div>
                         <div class="form-group col-md-6">
                             <label for="PEP">Projeto</label>
-                            <input v-model="PEP" type="text" class="form-control" placeholder="R.XXXX.99.99">
+                            <input disabled="" v-model="PEP" type="text" class="form-control" placeholder="R.XXXX.99.99">
                         </div>
                     </div>
                 </form>
@@ -170,7 +170,7 @@ export default {
 
         // Obtendo a lista de fornecedores
         getForList()
-            .then(r => _.forEach(r.results, v => this.fornecedores.push({ label: v.empreendimento_nome, value: v.PEP })))
+            .then(r => _.forEach(r.results, v => this.fornecedores.push({ label: v.empreendimento_nome, value: v.id })))
     },
     beforeDestroy() {
         Bus.$off()

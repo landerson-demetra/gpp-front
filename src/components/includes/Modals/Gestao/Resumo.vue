@@ -4,7 +4,7 @@
             <div class="modal-dialog modal-lg shadow" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="modalResumoLabel">Resumo</h5>
+                        <h5 class="modal-title" id="modalResumoLabel">Resumo <small class="opacity-small">[ {{ this.PEP }} ]</small></h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
@@ -92,7 +92,7 @@
 <script>
 export default {
     name: 'GestaoResumo',
-    props: ['datas'],
+    props: ['datas', 'PEP'],
     mounted() {
         
     }

@@ -2,7 +2,7 @@
     <div id="fornecedores" class="wow fadeIn" data-wow-duration="2s">
         <div class="card shadow border-0">
             <div class="card-header border-0 bg-primary text-white">
-                <h3 class="mt-0">Responsáveis</h3>
+                <h3 class="mt-0">Cadastro</h3>
             </div>
             <div class="card-body">
                 <form method="POST" v-on:submit.prevent>

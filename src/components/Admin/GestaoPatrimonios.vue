@@ -18,11 +18,11 @@
                             <div class="row">
                                 <div class="form-group col-md-4">
                                     <label for="PEP">PEP</label>
-                                    <input v-model="PEP" id="PEP" type="text" class="form-control" :class="{'is-invalid': pepIs == false}" placeholder="R.XXXX.99.99.99.9999">
+                                    <input v-on:input="PEP = $event.target.value.toUpperCase()" v-model="PEP" id="PEP" type="text" class="form-control" :class="{'is-invalid': pepIs == false}" placeholder="R.XXXX.99.99.99.9999">
                                 </div>
                                 <div class="form-group col-md-3">
-                                    <label for="Contribuinte">Contribuinte</label>
-                                    <input id="Contribuinte" type="text" class="form-control" placeholder="NºContribuinte" disabled>
+                                    <label for="Contribuinte">Nº Contribuinte</label>
+                                    <input v-model="Contribuinte" id="Contribuinte" type="text" class="form-control" placeholder="NºContribuinte" readonly>
                                 </div>
                                 <div class="form-group col-md-2">
                                     <label for="Vendido">Vendido</label>
@@ -129,7 +129,7 @@
             <!-- [ /Responsaveis modal ] -->
 
             <!-- [ Resumo ] -->
-                <GestaoResumo :datas="unidade_datas"></GestaoResumo>
+                <GestaoResumo :datas="unidade_datas" :PEP="PEP"></GestaoResumo>
             <!-- [ /Resumo ] -->
 
             <!-- [ Condomínios modals ] -->
@@ -188,6 +188,8 @@ export default {
             gestExpanded: false,
             datas: {},
 
+            Contribuinte: null,
+
             vendido: null,
             invadido: null,
             status: null,
@@ -234,17 +236,18 @@ export default {
                 tblStyle: 'table-layout: fixed',
                 tblClass: 'border table-responsive d-md-table',
                 columns: [
+                    { title: 'Status', field: 'status' },
                     { title: 'Documento SAP', field: 'doc_sap' },
                     { title: 'Periodo', field: 'periodo' },
                     { title: 'Vencimento', field: 'vencimento'},
                     { title: 'Valor', field: 'valor'},
                     { title: 'Valor Pago', field: 'valor_pago'},
+                    { title: 'Data Pgto', field: 'data_pgto'},
                     { title: 'Multa', field: 'multa'},
                     { title: 'Juros', field: 'juros'},
                     { title: 'Correção', field: 'correcao'},
                     { title: 'Fonte', field: 'fonte'},
                     { title: 'Total', field: 'total'},
-                    { title: 'Data Pgto', field: 'data_pgto'},
                     { title: 'Ação', fixed: 'right', tdComp: ActionButtons },
                 ].map(col => (col.colStyle = { width: '150px' }, col)),
                 data: [],
@@ -377,7 +380,7 @@ export default {
                 updateStatus({ invadido: this.invadido, status: this.status }, this.unidade_datas.status.id)
             } else {
                 storeStatus({
-                    PEP_Unidade: this.PEP,
+                    PEP: this.PEP,
                     invadido: this.invadido,
                     status: this.status
                 }).then(r => {
@@ -403,7 +406,7 @@ export default {
         },
         fetchDatas() {
             fetchGestao({ PEP: this.PEP }).then((data) => {
-                this.datas = data
+                this.datas = data.results
 
                 if(this.datas.length){
                     // Assinging values to the fields
@@ -421,7 +424,7 @@ export default {
         },
         fetchUnidadeDatas() {
             fetchUnidades({ PEP: this.PEP }).then((data) => {
-                this.unidade_datas = data
+                this.unidade_datas = data.results
                 // Assigning values to the fields
                 this.assignUnidadeValues()
             })
@@ -432,9 +435,9 @@ export default {
             // Assign empreendimentos
             this.empreendimentos = _.toArray(_.mapValues(this.datas, (o) => {
                 return {
-                    'label': o.empreendimento_nome,
-                    'value': o.empreendimento_cod,
-                    'PEP': o.PEP
+                    label: o.empreendimento_nome,
+                    value: o.empreendimento_cod,
+                    PEP: o.PEP
                 }
             }))
             this.empreendimento_selected = _.find(this.empreendimentos, (f) => {
@@ -448,7 +451,7 @@ export default {
                 let unidades = _.filter(o.unidades, (v) => {
                     return v.PEP_Empreendimento == this.empreendimento_selected.PEP
                 })
-                _.mapValues(unidades, (a) => blocosArr.push({ 'text' : a.bloco_nome, 'value' : a.bloco_cod}))
+                _.mapValues(unidades, (a) => blocosArr.push({ text : a.bloco_nome, value : a.bloco_cod}))
             })
 
             this.blocos = _.uniqBy(blocosArr, 'value')
@@ -468,9 +471,9 @@ export default {
                 let unidades = _.filter(o.unidades, (v) => {
                     return v.bloco_cod == this.bloco_selected
                 })
-                _.mapValues(unidades, (a) => unidadesArr.push({
-                    'text' : a.unidade_nome,
-                    'value' : a.unidade_cod
+                _.mapValues(_.orderBy(unidades, ['unidade_cod','asc']), (a) => unidadesArr.push({
+                    text: a.unidade_cod,
+                    value : a.unidade_cod
                 }))
             })
 
@@ -504,6 +507,9 @@ export default {
             if(!this.unidade_datas.iptus.length)
                 this.$notify({ group: 'normal', type: 'info', text: 'Não há IPTUs para PEP' })
 
+            /* [ Dados da unidade ] */
+            this.Contribuinte = this.unidade_datas.dadosunidade.length ? this.unidade_datas.dadosunidade[0].N_Contribuinte : 'N/Definido'
+
             /* [ Status ] */
             if(this.unidade_datas.status) {
                 this.invadido = this.unidade_datas.status.invadido
@@ -536,6 +542,7 @@ export default {
             _.forEach(this.unidade_datas.condominios, (v) => {
                 formated.push({
                     id: v.id,
+                    status: '',
                     periodo: v.periodo,
                     doc_sap: v.doc_sap ? v.doc_sap : 'N/Informado',
                     vencimento: v.vencimento,
@@ -588,17 +595,18 @@ export default {
                 let v = r.results
                 this.condominios.total++
                 this.condominios.data.push({
+                    status: '',
                     periodo: v.periodo,
                     doc_sap: v.doc_sap ? v.doc_sap : 'N/Informado',
                     vencimento: v.vencimento,
                     valor: this.$options.filters.currency(v.valor),
                     valor_pago: this.$options.filters.currency(v.valor_pago),
+                    data_pgto: (v.data_pagamento ? v.data_pagamento : 'N/Pago'),
                     multa: v.multa + '%' ,
                     juros: v.juros + '%',
                     correcao: v.correcao + '%',
                     fonte: v.fonte,
                     total: '...',
-                    data_pgto: (v.data_pagamento ? v.data_pagamento : 'N/Pago'),
                     raw: v
                 })
 
@@ -618,6 +626,7 @@ export default {
                     index = this.condominios.data.map(e => e.id).indexOf(this.dadoActive.id)
 
                 // Atualizando o condomínio na lista
+                this.condominios.data[index].status = ''
                 this.condominios.data[index].periodo = v.periodo
                 this.condominios.data[index].doc_sap = v.doc_sap ? v.doc_sap : 'N/Informado'
                 this.condominios.data[index].vencimento = v.vencimento

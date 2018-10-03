@@ -181,7 +181,7 @@ export default {
             if(parsed) {
                 let PEP = reMountPEP({ letter: 'R', spe: parsed.spe, empreendimento: parsed.empreendimento, fase: parsed.fase })
 
-                get(PEP).then(r => self.datas = r.results).catch(e => console.log(e))
+                get(PEP).then(r => self.datas = r.results)
             }
         }
     },

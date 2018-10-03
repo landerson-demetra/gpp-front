@@ -53,7 +53,7 @@
                         </thead>
                         <tbody>
                             <tr v-for="dado in dados_unidade">
-                                <td>{{ dado.PEP_Unidade }}</td>
+                                <td>{{ dado.PEP }}</td>
                                 <td>{{ dado.N_Contribuinte }}</td>
                                 <td>{{ dado.usuario }}</td>
                                 <td>{{ dado.senha }}</td>
@@ -133,7 +133,7 @@ export default {
             })
         },
         saveDado(datas){
-            datas.PEP_Unidade = this.PEP
+            datas.PEP = this.PEP
 
             store(datas).then(r => {
                 if(r.results)
@@ -211,6 +211,9 @@ export default {
 
         if(this.PEP)
             this.$initPEP(this.PEP)
+    },
+    beforeDestroy() {
+        Bus.$off()
     }
 }
 </script>
