@@ -39,7 +39,7 @@
                                         <label></label>
                                     </div>
                                 </th>
-                                <th>Projeto</th>
+                                <!-- <th>Projeto</th> -->
                                 <th>SPE - Razão Social</th>
                                 <th>Empreendimento</th>
                                 <th></th>
@@ -54,12 +54,12 @@
                                         <label></label>
                                     </div>
                                 </th>
-                                <th>{{ data.projeto }}</th>
+                                <!-- <th>{{ data.projeto }}</th> -->
                                 <th>[{{ data.spe }}] {{ data.spe_razao_social }}</th>
                                 <th>{{ data.empreendimento_nome }}</th>
                                 <th>
                                     <div class="action-buttons text-center">
-                                        <button class="btn btn-primary" v-on:click="viewUnidades(data.spe)"><i class="fas fa-building"></i></button>
+                                        <button class="btn btn-primary" v-on:click="viewUnidades(data.id)"><i class="fas fa-building"></i></button>
                                     </div>
                                 </th>
                             </tr>
@@ -320,15 +320,15 @@ export default {
         },
 
         /*----------  Mostrar unidades  ----------*/
-        viewUnidades(SPE) {
+        viewUnidades(idProjeto) {
             this.$resetUnids()
 
             let found = _.filter(this.empreendimentos.datas, (o) => {
-                return o.spe == SPE
+                return o.id == idProjeto
             })
 
             this.activeEmpre = found[0]
-            this.fetchUnids(SPE)
+            this.fetchUnids(idProjeto)
         },
 
         /*----------  Fetch datas  ----------*/
@@ -349,9 +349,9 @@ export default {
                 this._setPaginateEmpreds(resp)
             })
         },
-        fetchUnids(PEP) {
-            listUnidades({ SPE: PEP }).then((data) => {
-                this.unidades.datas = data
+        fetchUnids(idProjeto) {
+            listUnidades({ id_projeto: idProjeto }).then((data) => {
+                this.unidades.datas = data.results
                 this._setPaginateUnids()
             })
         },

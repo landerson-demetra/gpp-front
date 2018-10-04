@@ -2,7 +2,7 @@
     <div class="gpp-admin-header">
         <div class="header-details bg-primary">
             <div class="container">
-                <p class="text-left">Olá, {{ profile.name }}! - Ultimo acesso (01/08 ás 15:50) | <a href="#meudadados" class="badge badge-primary text-white p-1"><i class="fas fa-user"></i> Meu dados</a> | <router-link :to="{ name: 'logout' }" title="Sair do sistema" class="badge badge-primary text-white p-1"><i class="fas fa-sign-out-alt"></i> Logout</router-link></p>
+                <p class="text-left">Olá, {{ profile.name }}! - Ultimo acesso (01/08 ás 15:50) | <a href="#meudadados" class="badge badge-primary text-white p-1"><i class="fas fa-user"></i> Meu dados</a> | <router-link :to="{ name: 'logout' }" title="Sair do sistema" class="badge badge-primary text-white p-1"><i class="fas fa-sign-out-alt"></i> Logout</router-link> | <router-link :to="{ name: 'testes' }" title="Página testes" class="badge badge-primary text-white p-1">Testes</router-link></p>
             </div>
         </div>
         <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-lg">
@@ -24,7 +24,7 @@
                         <li class="nav-item dropdown">
                             <a href="#" class="nav-link dropdown-toggle" id="navbarDropdownCadastro" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Cadastros</a>
                             <div class="dropdown-menu" aria-labelledby="navbarDropdownCadastro">
-                                <router-link :to="{ name: 'Responsaveis' }" class="dropdown-item"><i class="fas fa-handshake"></i> Responsáveis</router-link>
+                                <router-link :to="{ name: 'Responsaveis' }" class="dropdown-item"><i class="fas fa-handshake"></i> Cadastro</router-link>
                                 <router-link :to="{ name: 'Vinculacao' }" class="dropdown-item"><i class="fas fa-sync"></i> Vinculação</router-link>
                                 <router-link :to="{ name: 'DadosUnidade' }" class="dropdown-item"><i class="fas fa-building"></i> Dados da Unidade</router-link>
                             </div>

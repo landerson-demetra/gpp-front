@@ -6,7 +6,14 @@ import GestaoPatrimonios from '@/components/Admin/GestaoPatrimonios'
 import Empreendimentos from '@/components/Admin/Empreendimentos'
 import Permissoes from '@/components/Admin/Permissoes'
 
+import Testes from '@/components/Admin/Testes'
+
 export default [
+    {
+        path: 'testes',
+        component: Testes,
+        name: 'Testes'
+    },
     {
         path: 'responsaveis',
         component: Responsaveis,
