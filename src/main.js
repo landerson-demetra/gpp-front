@@ -16,6 +16,8 @@ import Notifications from 'vue-notification'
 import VueCurrencyFilter from 'vue-currency-filter'
 import VueMoney from 'v-money'
 import VueTheMask from 'vue-the-mask'
+import VeeValidate from 'vee-validate'
+import Validatept_BR from 'vee-validate/dist/locale/pt_BR'
 import GppErrors from './components/includes/GppErrors'
 import WOW from 'wowjs'
 
@@ -29,6 +31,7 @@ Vue.prototype.$http = http
 
 /* [ Configs ] */
 Vue.config.productionTip = false
+VeeValidate.Validator.localize('pt_BR', Validatept_BR)
 
 /* [ Use's ] */
 Vue.use(Vuex)
@@ -37,6 +40,7 @@ Vue.use(Notifications)
 Vue.use(VueCurrencyFilter, Vue.prototype.$config.currency)
 Vue.use(VueMoney, Vue.prototype.$config.vMoney)
 Vue.use(VueTheMask)
+Vue.use(VeeValidate)
 
 /* [ Register components ] */
 Vue.component('v-select', vSelect)

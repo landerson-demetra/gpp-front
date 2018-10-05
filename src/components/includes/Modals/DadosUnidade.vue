@@ -14,25 +14,43 @@
                             <p>Você tem certeza que deseja deletar o dado da unidade referente a PEP <b>{{ this.datas.PEP_Unidade }}</b>?</p>
                         </div>
                         <div v-else>
-                            <form>
+                            <form v-on:submit.prevent="onSubmit">
                                 <div class="row" v-if="this.action == 'Edit'">
                                     <div class="form-group col-md-5">
-                                        <label for="PEP">PEP</label>
-                                        <input id="PEP" type="text" class="form-control" disabled="" v-model="PEP">
+                                        <label for="PEP_Unidade">PEP</label>
+                                        <input v-model="PEP" id="PEP_Unidade" type="text" class="form-control" disabled="">
                                     </div>
                                 </div>
                                 <div class="row">
                                     <div class="form-group col-md-4">
-                                        <label for="NContribuinte">NºContribuinte</label>
-                                        <input id="NContribuinte" type="text" placeholder="Número do contribuinte..." class="form-control" v-model="NContribuinte">
+                                        <label>NºContribuinte</label>
+                                        <input v-model="NContribuinte"
+                                               v-validate="'required|numeric'"
+                                               data-vv-as="Número do contribuinte"
+                                               name="n_contribuinte"
+                                               :class="{'is-invalid': errors.has('n_contribuinte')}"
+                                        type="text" placeholder="Número do contribuinte..." class="form-control">
+                                        <div class="invalid-feedback">{{ errors.first('n_contribuinte') }}</div>
                                     </div>
                                     <div class="form-group col-md-4">
-                                        <label for="NContribuinte">Usuário</label>
-                                        <input id="NContribuinte" type="text" placeholder="Usuário..." class="form-control" v-model="Usuario">
+                                        <label>Usuário</label>
+                                        <input v-model="Usuario"
+                                               v-validate="'required'"
+                                               data-vv-as="Usuário"
+                                               :class="{'is-invalid': errors.has('usuario')}"
+                                               name="usuario"
+                                        type="text" placeholder="Usuário..." class="form-control">
+                                        <div class="invalid-feedback">{{ errors.first('usuario') }}</div>
                                     </div>
                                     <div class="form-group col-md-4">
-                                        <label for="NContribuinte">Senha</label>
-                                        <input id="NContribuinte" type="text" placeholder="Senha..." class="form-control" v-model="Senha">
+                                        <label>Senha</label>
+                                        <input v-model="Senha"
+                                               v-validate="'required'"
+                                               data-vv-as="Senha"
+                                               :class="{'is-invalid': errors.has('senha')}"
+                                               name="senha"
+                                               type="password" placeholder="Senha..." class="form-control">
+                                        <div class="invalid-feedback">{{ errors.first('senha') }}</div>
                                     </div>
                                 </div>
                             </form>
@@ -41,11 +59,11 @@
                     <div class="modal-footer">
                         <div v-if="this.action !== 'Delete'">
                             <button type="button" class="btn btn-default" v-on:click="this.closeEvent" data-dismiss="modal">Fechar</button>
-                            <button v-on:click="this.emitOkEvent" type="button" class="btn btn-primary"><i class="fas fa-check"></i> Salvar</button>
+                            <button v-on:click="onSubmit" type="button" class="btn btn-primary"><i class="fas fa-check"></i> Salvar</button>
                         </div>
                         <div v-else>
                             <button type="button" class="btn btn-default" data-dismiss="modal">Não</button>
-                            <button v-if="this.action == 'Delete'" v-on:click="this.emitOkEvent" type="button" class="btn btn-danger"><i class="fas fa-trash"></i> Sim, tenho.</button>
+                            <button v-if="this.action == 'Delete'" v-on:click="onSubmit" type="button" class="btn btn-danger"><i class="fas fa-trash"></i> Sim, tenho.</button>
                         </div>
                     </div>
                 </div>
@@ -72,15 +90,31 @@ export default {
         }
     },
     methods: {
-        emitOkEvent(){
-            Bus.$emit('ev' + this.name, (this.action !== 'Delete' ? this.getFields : true))
+        onSubmit(){
+            if(this.action == 'Delete') {
+                Bus.$emit('ev' + this.name, (this.action !== 'Delete' ? this.getFields : true))
+            }
+
+            if(this.action == 'New' || this.action == 'Edit') {
+                this.$validator.validate().then(result => {
+                    if(result) {
+                        return Bus.$emit('ev' + this.name, (this.action !== 'Delete' ? this.getFields : true))
+                    } else {
+                        this.$notify({
+                            group: 'normal',
+                            type: 'warn',
+                            text: 'Corrija os campos informados.'
+                        })
+                    }
+                })
+            }
         },
         closeEvent(){
             if(this.action == 'New')
                 this.reset()
         },
         fill(){
-            this.PEP =  this.datas.PEP_Unidade
+            this.PEP =  this.datas.PEP
             this.NContribuinte =  this.datas.N_Contribuinte
             this.Usuario = this.datas.usuario
             this.Senha = this.datas.senha

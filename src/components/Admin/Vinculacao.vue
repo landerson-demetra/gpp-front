@@ -43,13 +43,13 @@
                         </thead>
                         <tbody>
                             <tr>
-                                <th :title="fornecedor_selected.label"><router-link :to="{ name: 'GestaoPatromonios', params: { pep: vinculacao.PEP_Empreendimento }}" class="nav-link">{{ vinculacao.PEP_Empreendimento }}</router-link></th>
+                                <th :title="fornecedor_selected.label"><router-link :to="{ name: 'GestaoPatromonios', params: { pep: fornecedor_selected.projeto }}" class="nav-link">{{ fornecedor_selected.projeto }}</router-link></th>
                                 <td><a href="#">{{ vinculacao.administradora ? vinculacao.administradora.nome : 'N/informado' }}</a></td>
                                 <td><a href="#">{{ vinculacao.fornecedorsap ? vinculacao.fornecedorsap.nome : 'N/informado' }}</a></td>
                                 <td><a href="#">{{ vinculacao.fornecedoragua ? vinculacao.fornecedoragua.nome : 'N/informado' }}</a></td>
                                 <td><a href="#">{{ vinculacao.fornecedorluz ? vinculacao.fornecedorluz.nome : 'N/informado' }}</a></td>
                                 <td><a href="#">{{ vinculacao.prefeitura ? vinculacao.prefeitura.nome : 'N/informado' }}</a></td>
-                                <td><a href="#">{{ vinculacao.responsavel ? vinculacao.responsavel.name : 'N/informado' }}</a></td>
+                                <td><a href="#">{{ vinculacao.responsavel ? vinculacao.responsavel : 'N/informado' }}</a></td>
                                 <td>{{ vinculacao.is_ind ? 'Sim' : 'Não' }}</td>
                                 <td>
                                     <div class="action-buttons text-center">
@@ -109,16 +109,19 @@ export default {
 
             this.fetch()
 
-            this.PEP = selected.value
+            this.PEP = selected.projeto
         }
     },
     methods: {
         fetch() {
             get(this.fornecedor_selected.value)
-                .then(r => this.vinculacao = r.results)
+                .then(r => {
+                    this.vinculacao = r.results
+                    this.vinculacao.projeto = this.fornecedor_selected.projeto
+                })
         },
         saveVinculacao(datas) {
-            datas.PEP_Empreendimento = this.PEP
+            datas.id_projeto = this.fornecedor_selected.value
 
             store(datas).then(r => {
                 // Buscando novamente os registro, melhor do que inserir manualmente 
@@ -170,7 +173,7 @@ export default {
 
         // Obtendo a lista de fornecedores
         getForList()
-            .then(r => _.forEach(r.results, v => this.fornecedores.push({ label: v.empreendimento_nome, value: v.id })))
+            .then(r => _.forEach(r.results, v => this.fornecedores.push({ label: v.empreendimento_nome, value: v.id, projeto: v.projeto })))
     },
     beforeDestroy() {
         Bus.$off()

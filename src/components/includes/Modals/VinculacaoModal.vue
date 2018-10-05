@@ -11,13 +11,13 @@
                     </div>
                     <div class="modal-body">
                         <div v-if="this.datas && this.action == 'Delete'">
-                            <p>Você tem certeza que deseja deletar a vinculação para o projeto <b>{{ this.datas.PEP_Empreendimento }}</b>?</p>
+                            <p>Você tem certeza que deseja deletar a vinculação para o projeto <b>{{ this.datas.projeto }}</b>?</p>
                         </div>
                         <div v-else>
                             <form v-on:submit.prevent>
                                 <div class="row">
-                                    <div class="form-group col-md-6" v-if="this.action == 'Edit'">
-                                        <label for="PEP">PEP</label>
+                                    <div class="form-group col-md-8" v-if="this.action == 'Edit'">
+                                        <label for="PEP">Projeto</label>
                                         <input v-model="PEP" disabled="" id="PEP" type="text" class="form-control">
                                     </div>
                                     <div class="form-group col-md-4">
@@ -28,39 +28,41 @@
                                             <option value="0">Não</option>
                                         </select>
                                     </div>
-                                </div>
-                                <div class="row">
-                                    <div class="form-group col-md-4">
+                                    <div class="form-group col-md-6">
                                         <label for="ADM">ADM</label>
                                         <v-select v-model="Administradora" id="ADM" placeholder="Selecione..." :options="administradoras">
                                             <span slot="no-options">Nenhuma administradora encontrada.</span>
                                         </v-select>
                                     </div>
-                                    <div class="form-group col-md-4">
+                                    <div class="form-group col-md-6">
                                         <label for="Fornecedor">Fornecedor SAP</label>
                                         <v-select v-model="FornecedorSap" id="ADM" placeholder="Selecione..." :options="fornecedores_sap">
                                             <span slot="no-options">Nenhum fornecedor SAP encontrado.</span>
                                         </v-select>
                                     </div>
-                                    <div class="form-group col-md-4">
+                                    <div class="form-group col-md-6">
                                         <label for="Fornecedor">Fornecedor Água</label>
                                         <v-select v-model="FornecedorAgua" id="ADM" placeholder="Selecione..." :options="fornecedores_agua">
                                             <span slot="no-options">Nenhum fornecedor para água encontrado.</span>
                                         </v-select>
                                     </div>
-                                    <div class="form-group col-md-4">
+                                    <div class="form-group col-md-6">
                                         <label for="Fornecedor">Fornecedor Luz</label>
                                         <v-select v-model="FornecedorLuz" id="ADM" placeholder="Selecione..." :options="fornecedores_luz">
                                             <span slot="no-options">Nenhum fornecedor para luz encontrado.</span>
                                         </v-select>
                                     </div>
-                                    <div class="form-group col-md-4">
+                                    <div class="form-group col-md-6">
                                         <label for="Prefeitura">Prefeitura</label>
                                         <v-select v-model="Prefeitura" id="ADM" placeholder="Selecione..." :options="prefeituras">
                                             <span slot="no-options">Nenhuma prefeitura encontrada.</span>
                                         </v-select>
                                     </div>
-                                </div>
+                                    <div class="form-group col-md-12">
+                                        <label Responsavel="Prefeitura">Responsável</label>
+                                        <input v-model="Responsavel" class="form-control" id="Responsavel" placeholder="Nome do responsável..." type="text">
+                                    </div>
+                                 </div>
                             </form>
                         </div>
                     </div>
@@ -120,7 +122,7 @@ export default {
         fill(){
             if(!this.datas) return
 
-            this.PEP = this.datas.PEP_Empreendimento
+            this.PEP = this.datas.projeto
             this.isInd = this.datas.is_ind
 
             if(this.datas.administradora)
@@ -138,7 +140,7 @@ export default {
             if(this.datas.prefeitura)
                 this.Prefeitura = {label: this.datas.prefeitura.nome, value: this.datas.prefeitura.id}
 
-            //this.Responsavel = this.datas.resp_id
+            this.Responsavel = this.datas.responsavel
         },
         reset(){
             this.isInd = ''
@@ -147,7 +149,7 @@ export default {
             this.FornecedorAgua = ''
             this.FornecedorLuz = ''
             this.Prefeitura = ''
-            //this.Responsavel = ''
+            this.Responsavel = ''
         }
     },
     watch: {
@@ -171,7 +173,7 @@ export default {
                 'forn_agua_id': (this.FornecedorAgua ? this.FornecedorAgua.value : null),
                 'forn_luz_id': (this.FornecedorLuz ? this.FornecedorLuz.value : null),
                 'pref_id': (this.Prefeitura ? this.Prefeitura.value : null),
-                //'resp_id': this.Responsavel.value,
+                'responsavel': this.Responsavel,
             }
         }
     },

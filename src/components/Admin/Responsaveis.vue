@@ -39,7 +39,7 @@
                         <div class="form-group col-lg-6"><b>Cidade:</b> <span>{{ this.fornecedor_selected_datas.end_cidade }}</span></div>
                         <div class="form-group col-lg-6"><b>Estado:</b> <span>{{ this.fornecedor_selected_datas.end_estado }}</span></div>
                         <div class="form-group col-lg-6"><b>Site:</b> <span><a :href="this.fornecedor_selected_datas.site" target="_blank">{{ this.fornecedor_selected_datas.site }}</a></span></div>
-                        <div class="form-group col-lg-6"><b>Responsável:</b> <span>{{ this.fornecedor_selected_datas.responsavel_id }}</span></div>
+                        <div class="form-group col-lg-6"><b>Responsável:</b> <span>{{ this.fornecedor_selected_datas.responsavel }}</span></div>
                     </div>
 
                     <div class="row mb-4">

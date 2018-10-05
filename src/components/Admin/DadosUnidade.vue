@@ -67,9 +67,9 @@
                         </tbody>
                     </table>
 
-                    <div class="row" v-if="this.pep_exists">
+                    <div class="row" v-if="pep_exists">
                         <div class="col text-right">
-                            <button class="btn btn-success" data-toggle="modal" data-target="#modalNovoDado"><i class="fas fa-plus"></i> Adicionar</button>
+                            <button :disabled="dados_unidade.length > 0" class="btn btn-success" data-toggle="modal" data-target="#modalNovoDado"><i class="fas fa-plus"></i> Adicionar</button>
                         </div>
                     </div>
                 </div>
@@ -185,6 +185,8 @@ export default {
                 this.pep_exists = false
                 return
             }
+
+            console.log(this.dados_unidade.length)
 
             this.fetch()
         },

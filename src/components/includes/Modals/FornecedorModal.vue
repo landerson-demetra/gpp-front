@@ -23,7 +23,7 @@
                                     </div>
                                     <div class="form-group col-lg-3">
                                         <label for="numero_sap">Número SAP <span class="text-danger">*</span></label>
-                                        <input v-model="NumeroSAP" type="text" id="numero_sap" placeholder="Número SAP..." class="form-control" required="">
+                                        <input v-model="NumeroSAP" v-mask="['########','#########']" type="text" id="numero_sap" placeholder="Número SAP..." class="form-control" required="">
                                     </div>
                                     <div class="form-group col-lg-3">
                                         <label for="cpf_cnpj">CNPJ/CPF <span class="text-danger">*</span></label>

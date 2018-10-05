@@ -5,7 +5,8 @@
                 <h3 class="mt-0">Gerenciar permissões</h3>
             </div>
             <div class="card-body">
-                <div id="accordion">
+                <div class="alert alert-warning">Em construção.</div>
+                <div id="accordion" class="is-fetching">
                     <div class="card">
                         <div class="card-header" id="headingOne">
                             <h5 class="mb-0">
@@ -142,11 +143,11 @@
                             </div>
                         </div>
                     </div>
-                </div>
 
-                <div class="text-right mt-5">
-                    <div class="btn btn-secondary">Resetar</div>
-                    <div class="btn btn-primary"><i class="fas fa-check"></i> Salvar</div>
+                    <div class="text-right mt-5">
+                        <div class="btn btn-secondary">Resetar</div>
+                        <div class="btn btn-primary"><i class="fas fa-check"></i> Salvar</div>
+                    </div>
                 </div>
             </div>
         </div>

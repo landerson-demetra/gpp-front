@@ -99,11 +99,12 @@ export default {
             //
             Dividas: [
                 {label: 'Sim', value: 'S'},
-                {label: 'Não', value: 'N'}, 
+                {label: 'Não', value: 'N'}
             ],
             Statuses: [
+                {label: 'N/Definido', value: null},
                 {label: 'Aberto', value: 'A'},
-                {label: 'Renegociado', value: 'R'},
+                {label: 'Renegociado', value: 'R'}
             ],
             Fontes: [
                 {label: 'Relatório', value: 'R'},

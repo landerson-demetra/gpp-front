@@ -39,7 +39,7 @@
                                         <label></label>
                                     </div>
                                 </th>
-                                <!-- <th>Projeto</th> -->
+                                <th>Projeto</th>
                                 <th>SPE - Razão Social</th>
                                 <th>Empreendimento</th>
                                 <th></th>
@@ -54,7 +54,7 @@
                                         <label></label>
                                     </div>
                                 </th>
-                                <!-- <th>{{ data.projeto }}</th> -->
+                                <th>{{ data.projeto }}</th>
                                 <th>[{{ data.spe }}] {{ data.spe_razao_social }}</th>
                                 <th>{{ data.empreendimento_nome }}</th>
                                 <th>

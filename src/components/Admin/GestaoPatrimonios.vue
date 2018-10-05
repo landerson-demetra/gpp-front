@@ -107,10 +107,20 @@
                                 </div>
                             </div>
                             <div class="tab-pane fade" id="agua" role="tabpanel" aria-labelledby="agua-tab">
-                                
+                                <datatable :HeaderSettings="false" :Pagination="false" v-bind="$data.aguas" />
+                                <div v-if="this.pepIs == 'unidade'" class="row">
+                                    <div class="col mt-4 no-gutters text-right">
+                                        <button class="btn btn-success" data-toggle="modal" data-target="#modalNovaAgua"><i class="fas fa-plus"></i> Adicionar</button>
+                                    </div>
+                                </div>
                             </div>
                             <div class="tab-pane fade" id="luz" role="tabpanel" aria-labelledby="luz-tab">
-                                
+                                <datatable :HeaderSettings="false" :Pagination="false" v-bind="$data.luzes" />
+                                <div v-if="this.pepIs == 'unidade'" class="row">
+                                    <div class="col mt-4 no-gutters text-right">
+                                        <button class="btn btn-success" data-toggle="modal" data-target="#modalNovaLuz"><i class="fas fa-plus"></i> Adicionar</button>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -125,7 +135,7 @@
             </div>
 
             <!-- [ Responsaveis modal ] -->
-                <Responsaveis :PEP="PEP"></Responsaveis>
+                <!-- <Responsaveis :PEP="PEP"></Responsaveis> -->
             <!-- [ /Responsaveis modal ] -->
 
             <!-- [ Resumo ] -->
@@ -150,6 +160,24 @@
                 <CUDCondominios action="Delete" name="DeletarIptu" title="Deletar IPTU" :datas="dadoActive"></CUDCondominios>
             </div>
             <!-- [ /IPTUs modals ] -->
+
+            <!-- [ Aguas modals ] -->
+                <!-- Novo -->
+                <CUDAguas action="New" name="NovaAgua" title="Cadastrar Água"></CUDAguas>
+                <!-- Editar -->
+                <CUDAguas action="Edit" name="EditarAgua" title="Editar Água" :datas="dadoActive"></CUDAguas>
+                <!-- Deletar -->
+                <CUDAguas action="Delete" name="DeletarAgua" title="Deletar Água" :datas="dadoActive"></CUDAguas>
+            <!-- [ /Aguas modals ] -->
+
+            <!-- [ Luzes modals ] -->
+                <!-- Novo -->
+                <CUDLuzes action="New" name="NovaLuz" title="Cadastrar Luz"></CUDLuzes>
+                <!-- Editar -->
+                <CUDLuzes action="Edit" name="EditarLuz" title="Editar Luz" :datas="dadoActive"></CUDLuzes>
+                <!-- Deletar -->
+                <CUDLuzes action="Delete" name="DeletarLuz" title="Deletar Luz" :datas="dadoActive"></CUDLuzes>
+            <!-- [ /Luzes modals ] -->
         </div>
     </div>
 </template>
@@ -164,6 +192,8 @@ import { fetchUnidades, fetchGestao } from '../../api/gestao'
 import { store as storeStatus, update as updateStatus } from '../../api/status'
 import { store as storeCond, update as editCond, deletedata as delCond } from '../../api/condominios'
 import { store as storeIptu, update as editIptu, deletedata as delIptu } from '../../api/iptus'
+import { store as storeAgua, update as editAgua, deletedata as delAgua } from '../../api/agua'
+import { store as storeLuz, update as editLuz, deletedata as delLuz } from '../../api/luz'
 
 // Components
 import GestaoResumo from '../includes/Modals/Gestao/Resumo'
@@ -171,6 +201,8 @@ import Responsaveis from '../includes/Modals/Gestao/Responsaveis'
 import ActionButtons from '../includes/Buttons/ActionButtons'
 import CUDCondominios from '../includes/Modals/Gestao/CUD_Condominios'
 import CUDIptus from '../includes/Modals/Gestao/CUD_Iptus'
+import CUDAguas from '../includes/Modals/Gestao/CUD_Aguas'
+import CUDLuzes from '../includes/Modals/Gestao/CUD_Luzes'
 
 export default {
     name: 'GestaoPatrimonios',
@@ -178,7 +210,9 @@ export default {
         GestaoResumo,
         Responsaveis,
         CUDCondominios,
-        CUDIptus
+        CUDIptus,
+        CUDAguas,
+        CUDLuzes
     },
     data() {
         return {
@@ -248,14 +282,12 @@ export default {
                     { title: 'Correção', field: 'correcao'},
                     { title: 'Fonte', field: 'fonte'},
                     { title: 'Total', field: 'total'},
-                    { title: 'Ação', fixed: 'right', tdComp: ActionButtons },
+                    { title: 'Ação', fixed: 'right', tdComp: ActionButtons }
                 ].map(col => (col.colStyle = { width: '150px' }, col)),
                 data: [],
                 total: 0,
                 query: {},
-                xprops: {
-                    evName: 'Condominio',
-                }
+                xprops: { evName: 'Condominio' }
             },
 
             iptus: {
@@ -274,44 +306,54 @@ export default {
                     { title: 'Total', field: 'total' },
                     { title: 'Dívida ativa', field: 'divida_ativa'},
                     { title: 'Fonte', field: 'fonte'},
-                    { title: 'Ação', fixed: 'right', tdComp: ActionButtons },
+                    { title: 'Ação', fixed: 'right', tdComp: ActionButtons }
                 ].map(col => (col.colStyle = { width: '150px' }, col)),
                 data: [],
                 total: 0,
                 query: {},
-                xprops: {
-                    evName: 'Iptu'
-                }
+                xprops: { evName: 'Iptu' }
             },
 
             aguas: {
-                tblClass: 'border table-responsive-sm',
+                fixHeaderAndSetBodyMaxHeight: 300,
+                tblStyle: 'table-layout: fixed',
+                tblClass: 'border table-responsive d-md-table',
                 columns: [
-                    { title: 'Contrato', field: 'contrato' },
-                    { title: 'Nome', field: 'nome' },
-                    { title: 'CPF/CNPJ', field: 'cpfcnpj'},
-                    { title: 'Valor contrato', field: 'vlcontrato' },
-                    { title: 'Data do contrato', field: 'drcontrato'},
                     { title: 'Status', field: 'status' },
-                ],
+                    { title: 'Documento SAP', field: 'doc_sap' },
+                    { title: 'Periodo', field: 'periodo' },
+                    { title: 'Vencimento', field: 'vencimento'},
+                    { title: 'Valor', field: 'valor'},
+                    { title: 'Valor Pago', field: 'valor_pago'},
+                    { title: 'Data Pgto', field: 'data_pagamento'},
+                    { title: 'Fonte', field: 'fonte'},
+                    { title: 'Ação', fixed: 'right', tdComp: ActionButtons }
+                ].map(col => (col.colStyle = { width: '150px' }, col)),
                 data: [],
                 total: 0,
-                query: {}
+                query: {},
+                xprops: { evName: 'Agua' }
             },
 
             luzes: {
-                tblClass: 'border table-responsive-sm',
+                fixHeaderAndSetBodyMaxHeight: 300,
+                tblStyle: 'table-layout: fixed',
+                tblClass: 'border table-responsive d-md-table',
                 columns: [
-                    { title: 'Contrato', field: 'contrato' },
-                    { title: 'Nome', field: 'nome' },
-                    { title: 'CPF/CNPJ', field: 'cpfcnpj'},
-                    { title: 'Valor contrato', field: 'vlcontrato', sortable: true},
-                    { title: 'Data do contrato', field: 'drcontrato'},
-                    { title: 'Status', field: 'status', sortable: true},
-                ],
+                    { title: 'Status', field: 'status' },
+                    { title: 'Documento SAP', field: 'doc_sap' },
+                    { title: 'Periodo', field: 'periodo' },
+                    { title: 'Vencimento', field: 'vencimento'},
+                    { title: 'Valor', field: 'valor'},
+                    { title: 'Valor Pago', field: 'valor_pago'},
+                    { title: 'Data Pgto', field: 'data_pagamento'},
+                    { title: 'Fonte', field: 'fonte'},
+                    { title: 'Ação', fixed: 'right', tdComp: ActionButtons }
+                ].map(col => (col.colStyle = { width: '150px' }, col)),
                 data: [],
                 total: 0,
-                query: {}
+                query: {},
+                xprops: { evName: 'Luz' }
             },
         }
     },
@@ -409,12 +451,11 @@ export default {
                 this.datas = data.results
 
                 if(this.datas.length){
-                    // Assinging values to the fields
-                    this.assignValues()
-
                     // Limpando notificações antigas e exibindo as novas
                     this.$notify({ group: 'normal', clean: true })
-                    this.$notify({ group: 'normal', type: 'success', text: 'Dados listados com sucesso', duration: 5000 })
+
+                    // Assinging values to the fields
+                    this.assignValues()
                 } else {
                     this.$notify({ group: 'normal', type: 'warn', text: 'Nenhum dado encontrado para PEP <b>' + this.PEP + '</b>' })
                 }
@@ -423,10 +464,15 @@ export default {
             })
         },
         fetchUnidadeDatas() {
+            this.isFetching = false
             fetchUnidades({ PEP: this.PEP }).then((data) => {
                 this.unidade_datas = data.results
+
                 // Assigning values to the fields
                 this.assignUnidadeValues()
+
+                // Notificando o usuário
+                this.$notify({ group: 'normal', type: 'success', text: 'Dados listados com sucesso', duration: 3000 })
             })
         },
         assignValues() {
@@ -488,8 +534,6 @@ export default {
                 this.fetchUnidadeDatas()
             else
                 this.$resetUnidadeDatas()
-
-            // Resumo de patrimônios
         },
         assignUnidadeValues(){
             if(_.isEmpty(this.unidade_datas))
@@ -542,7 +586,7 @@ export default {
             _.forEach(this.unidade_datas.condominios, (v) => {
                 formated.push({
                     id: v.id,
-                    status: '',
+                    status: (v.status ? v.status : 'N/Informado'),
                     periodo: v.periodo,
                     doc_sap: v.doc_sap ? v.doc_sap : 'N/Informado',
                     vencimento: v.vencimento,
@@ -551,7 +595,7 @@ export default {
                     multa: v.multa + '%' ,
                     juros: v.juros + '%',
                     correcao: v.correcao + '%',
-                    fonte: v.fonte,
+                    fonte: (v.fonte == 'R' ? 'Relatório' : 'Projeção'),
                     total: '...',
                     data_pgto: (v.data_pagamento ? v.data_pagamento : 'N/Pago'),
                     raw: v
@@ -566,7 +610,7 @@ export default {
             _.forEach(this.unidade_datas.iptus, (v) => {
                 formated.push({
                     id: v.id,
-                    status: v.status,
+                    status: (v.status ? v.status : 'N/Informado'),
                     periodo: v.periodo,
                     parcela: v.parcela,
                     vencimento: v.vencimento,
@@ -576,20 +620,62 @@ export default {
                     correcao_monetaria: v.correcao_monetaria + '%',
                     total: '...',
                     divida_ativa: v.divida_ativa,
-                    fonte: v.fonte,
+                    fonte: (v.fonte == 'R' ? 'Relatório' : 'Projeção'),
                     raw: v
                 })
             })
 
             this.iptus.total = formated.length
             this.iptus.data = formated
+
+            /* [ Aguas ] */
+            formated = []
+            _.forEach(this.unidade_datas.aguas, (v) => {
+                formated.push({
+                    id: v.id,
+                    status: (v.status ? v.status : 'N/Informado'),
+                    doc_sap: v.doc_sap ? v.doc_sap : 'N/Informado',
+                    periodo: v.periodo,
+                    vencimento: v.vencimento,
+                    valor: this.$options.filters.currency(v.valor),
+                    valor_pago: this.$options.filters.currency(v.valor_pago),
+                    fonte: (v.fonte == 'R' ? 'Relatório' : 'Projeção'),
+                    total: '...',
+                    data_pagamento: (v.data_pagamento ? v.data_pagamento : 'N/Pago'),
+                    raw: v
+                })
+            })
+
+            this.aguas.total = formated.length
+            this.aguas.data = formated
+
+            /* [ Aguas ] */
+            formated = []
+            _.forEach(this.unidade_datas.luzes, (v) => {
+                formated.push({
+                    id: v.id,
+                    status: (v.status ? v.status : 'N/Informado'),
+                    periodo: v.periodo,
+                    doc_sap: v.doc_sap ? v.doc_sap : 'N/Informado',
+                    vencimento: v.vencimento,
+                    valor: this.$options.filters.currency(v.valor),
+                    valor_pago: this.$options.filters.currency(v.valor_pago),
+                    fonte: (v.fonte == 'R' ? 'Relatório' : 'Projeção'),
+                    total: '...',
+                    data_pagamento: (v.data_pagamento ? v.data_pagamento : 'N/Pago'),
+                    raw: v
+                })
+            })
+
+            this.luzes.total = formated.length
+            this.luzes.data = formated
         },
 
         /*============================================
         =            Condominios - Events            =
         ============================================*/
         saveCond(datas){
-            datas.PEP_Unidade = this.PEP
+            datas.PEP = this.PEP
 
             storeCond(datas).then(r => {
                 let v = r.results
@@ -626,7 +712,7 @@ export default {
                     index = this.condominios.data.map(e => e.id).indexOf(this.dadoActive.id)
 
                 // Atualizando o condomínio na lista
-                this.condominios.data[index].status = ''
+                this.condominios.data[index].status = (v.status ? v.status : 'N/Informado')
                 this.condominios.data[index].periodo = v.periodo
                 this.condominios.data[index].doc_sap = v.doc_sap ? v.doc_sap : 'N/Informado'
                 this.condominios.data[index].vencimento = v.vencimento
@@ -670,7 +756,7 @@ export default {
         =            IPTUS - Events            =
         ======================================*/
         saveIptu(datas) {
-            datas.PEP_Unidade = this.PEP
+            datas.PEP = this.PEP
 
             storeIptu(datas).then(r => {
                 let v = r.results
@@ -692,7 +778,7 @@ export default {
                     index = this.iptus.data.map(e => e.id).indexOf(this.dadoActive.id)
 
                 // Atualizando o Iptu na lista
-                this.iptus.data[index].status = v.status
+                this.iptus.data[index].status = (v.status ? v.status : 'N/Informado')
                 this.iptus.data[index].periodo = v.periodo
                 this.iptus.data[index].parcela = v.parcela
                 this.iptus.data[index].vencimento = v.vencimento
@@ -729,6 +815,139 @@ export default {
             })
         },
         /*=====  End of IPTUS - Events  ======*/
+
+        /*=====================================
+        =            Água - Events            =
+        =====================================*/
+        saveAgua(datas) {
+            datas.PEP = this.PEP
+
+            storeAgua(datas).then(r => {
+                let v = r.results
+                v.raw = v
+                this.aguas.data.push(r.results)
+
+                // Notificando o usuário
+                this.$notify({group:'normal', type:'success', text:'Água cadastrada com sucesso'})
+
+                // Fechando a modal
+                $('.modal').modal('hide')
+            }).catch(e => {
+                console.log(e)
+            })
+        },
+        updateAgua(datas) {
+            editAgua(datas, this.dadoActive.id).then(r => {
+                let v = r.results,
+                    index = this.aguas.data.map(e => e.id).indexOf(this.dadoActive.id)
+
+                // Atualizando a água na lista
+                this.aguas.data[index].status = (v.status ? v.status : 'N/Informado')
+                this.aguas.data[index].doc_sap = (v.doc_sap ? v.doc_sap : 'N/Informado')
+                this.aguas.data[index].periodo = v.periodo
+                this.aguas.data[index].vencimento = v.vencimento
+                this.aguas.data[index].valor = this.$options.filters.currency(v.valor)
+                this.aguas.data[index].valor_pago = this.$options.filters.currency(v.valor_pago)
+                this.aguas.data[index].multa = v.multa + '%' 
+                this.aguas.data[index].juros = v.juros + '%'
+                this.aguas.data[index].correcao = v.correcao + '%'
+                this.aguas.data[index].fonte = (v.fonte == 'R' ? 'Relatório' : 'Projeção')
+                this.aguas.data[index].total = '...'
+                this.aguas.data[index].data_pagamento = (v.data_pagamento ? v.data_pagamento : 'N/Pago')
+                this.aguas.data[index].raw = v
+
+                // Notificando o usuário
+                this.$notify({group:'normal', type:'success', text:'Água atualizada com sucesso'})
+
+                // Fechando a modal
+                $('.modal').modal('hide')
+            }).catch(e => {
+                console.log(e)
+            })
+        },
+        deleteAgua() {
+            delAgua(this.dadoActive.id).then(r => {
+                // Removendo a água da lista
+                let index = this.aguas.data.map(e => e.id).indexOf(this.dadoActive.id)
+                this.aguas.data.splice(index, 1)
+
+                // Notificando o usuário
+                this.$notify({ group:'normal', type:'success', text:'Água deletada com sucesso' })
+
+                // Fechando a modal
+                $('.modal').modal('hide')
+            }).catch(e => {
+                console.log(e)
+            })
+        },
+        /*=====  End of Água - Events  ======*/
+
+        /*====================================
+        =            Luz - Events            =
+        ====================================*/
+        saveLuz(datas) {
+            datas.PEP = this.PEP
+
+            storeLuz(datas).then(r => {
+                let v = r.results
+                v.raw = v
+                this.luzes.data.push(r.results)
+
+                // Notificando o usuário
+                this.$notify({group:'normal', type:'success', text:'Luz cadastrada com sucesso'})
+
+                // Fechando a modal
+                $('.modal').modal('hide')
+            }).catch(e => {
+                console.log(e)
+            })
+        },
+        updateLuz(datas) {
+            editLuz(datas, this.dadoActive.id).then(r => {
+                let v = r.results,
+                    index = this.luzes.data.map(e => e.id).indexOf(this.dadoActive.id)
+
+                // Atualizando a luz na lista
+                this.luzes.data[index].status = (v.status ? v.status : 'N/Informado')
+                this.luzes.data[index].doc_sap = v.doc_sap ? v.doc_sap : 'N/Informado'
+                this.luzes.data[index].periodo = v.periodo
+                this.luzes.data[index].vencimento = v.vencimento
+                this.luzes.data[index].valor = this.$options.filters.currency(v.valor)
+                this.luzes.data[index].valor_pago = this.$options.filters.currency(v.valor_pago)
+                this.luzes.data[index].multa = v.multa + '%' 
+                this.luzes.data[index].juros = v.juros + '%'
+                this.luzes.data[index].correcao = v.correcao + '%'
+                this.luzes.data[index].fonte = (v.fonte == 'R' ? 'Relatório' : 'Projeção')
+                this.luzes.data[index].total = '...'
+                this.luzes.data[index].data_pagamento = (v.data_pagamento ? v.data_pagamento : 'N/Pago')
+                this.luzes.data[index].raw = v
+
+                // Notificando o usuário
+                this.$notify({group:'normal', type:'success', text:'Luz atualizada com sucesso'})
+
+                // Fechando a modal
+                $('.modal').modal('hide')
+            }).catch(e => {
+                console.log(e)
+            })
+        },
+        deleteLuz() {
+            delLuz(this.dadoActive.id).then(r => {
+                // Removendo a luz da lista
+                let index = this.luzes.data.map(e => e.id).indexOf(this.dadoActive.id)
+                this.luzes.data.splice(index, 1)
+
+                // Notificando o usuário
+                this.$notify({ group:'normal', type:'success', text:'Água deletada com sucesso' })
+
+                // Fechando a modal
+                $('.modal').modal('hide')
+            }).catch(e => {
+                console.log(e)
+            })
+        }
+        /*=====  End of Luz - Events  ======*/
+
     },
     mounted(){
         if(this.PEP) this.$initPep(this.PEP)
@@ -738,34 +957,29 @@ export default {
         ==============================*/
         Bus.$on('isFetching', is => this.isFetching = is)
 
+        // Dado active
+        Bus.$on('evActiveDado', datas => this.dadoActive = datas)
+
         // Save events
         Bus.$on('evNovoCondominio', datas => this.saveCond(datas))
         Bus.$on('evNovoIptu', datas => this.saveIptu(datas))
+        Bus.$on('evNovaAgua', datas => this.saveAgua(datas))
+        Bus.$on('evNovaLuz', datas => this.saveLuz(datas))
 
         // Edit events
-        Bus.$on('evActCondominioEdit', datas => this.dadoActive = datas)
         Bus.$on('evEditarCondominio', datas => this.updateCond(datas))
-
-        Bus.$on('evActIptuEdit', datas => this.dadoActive = datas)
         Bus.$on('evEditarIptu', datas => this.updateIptu(datas))
+        Bus.$on('evEditarAgua', datas => this.updateAgua(datas))
+        Bus.$on('evEditarLuz', datas => this.updateLuz(datas))
 
         // Delete events
-        Bus.$on('evActCondominioDelete', datas => this.dadoActive = datas)
         Bus.$on('evDeletarCondominio', this.deleteCond)
-
-        Bus.$on('evActIptuDelete', datas => this.dadoActive = datas)
         Bus.$on('evDeletarIptu', this.deleteIptu)
+        Bus.$on('evDeletarAgua', this.deleteAgua)
+        Bus.$on('evDeletarLuz', this.deleteLuz)
     },
     beforeDestroy(){
-        // ..
         Bus.$off()
-        // Bus.$off([
-        //     'evNovoCondominio',
-        //     'evActCondominioEdit',
-        //     'evEditarCondominio',
-        //     'evActCondominioDelete',
-        //     'evDeletarCondominio'
-        // ])
     }
 }
 </script>
