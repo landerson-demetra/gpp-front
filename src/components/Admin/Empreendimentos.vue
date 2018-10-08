@@ -82,47 +82,45 @@
 
             <div class="row mb-5">
                 <div class="col-md-12">
-                    <form action="" method="POST" v-on:submit.prevent="">
+                    <form action="" method="POST" v-on:submit.prevent="vincularEmpreds">
                         <div class="row">
                             <div class="form-group col-md-3">
-                                <v-select placeholder="Administrador" :options="[]">
-                                    <span slot="no-options">Nenhum administrador encontrado.</span>
+                                <v-select v-model="vinculacao.adm_sel" placeholder="Administrador" :options="vinculacao.administradoras">
+                                    <span slot="no-options">Nenhuma administradora encontrada.</span>
                                 </v-select>
                             </div>
                             <div class="form-group col-md-3">
-                                <v-select placeholder="Fornecedor SAP" :options="[]">
-                                    <span slot="no-options">Nenhum fornecedor encontrado.</span>
+                                <v-select v-model="vinculacao.forn_sap_sel" placeholder="Fornecedor SAP" :options="vinculacao.fornecedores_sap">
+                                    <span slot="no-options">Nenhum fornecedor SAP encontrado.</span>
                                 </v-select>
                             </div>
                             <div class="form-group col-md-3">
-                                <v-select placeholder="Fornecedor Água" :options="[]">
-                                    <span slot="no-options">Nenhum fornecedor encontrado.</span>
+                                <v-select v-model="vinculacao.forn_agua_sel" placeholder="Fornecedor Água" :options="vinculacao.fornecedores_agua">
+                                    <span slot="no-options">Nenhum fornecedor água encontrado.</span>
                                 </v-select>
                             </div>
                             <div class="form-group col-md-3">
-                                <v-select placeholder="Fornecedor Luz" :options="[]">
-                                    <span slot="no-options">Nenhum forneceder encontrado.</span>
+                                <v-select v-model="vinculacao.forn_luz_sel" placeholder="Fornecedor Luz" :options="vinculacao.fornecedores_luz">
+                                    <span slot="no-options">Nenhum forneceder luz encontrado.</span>
                                 </v-select>
                             </div>
                             <div class="form-group col-md-3">
-                                <v-select placeholder="Prefeitura" :options="[]">
+                                <v-select v-model="vinculacao.prefeitura_sel" placeholder="Prefeitura" :options="vinculacao.prefeituras">
                                     <span slot="no-options">Nenhuma prefeitura encontrada.</span>
                                 </v-select>
                             </div>
                             <div class="form-group col-md-3">
-                                <select class="form-control" name="individualizado" id="individualizado">
-                                    <option value="null">Individualizado</option> 
-                                    <option value="0">Não</option> 
-                                    <option value="1">Sim</option> 
+                                <select v-model="vinculacao.isInd" class="form-control">
+                                    <option value="0" selected="">Individualizado</option>
+                                    <option value="1">Sim</option>
+                                    <option value="0">Não</option>
                                 </select>
                             </div>
                             <div class="form-group col-6">
-                                <v-select name="Reponsavel" placeholder="Reponsável" :options="[]">
-                                    <span slot="no-options">Nenhum responsavel encontrado.</span>
-                                </v-select>
+                                <input v-model="vinculacao.responsavel" class="form-control" id="Responsavel" placeholder="Nome do responsável..." type="text">
                             </div>
                             <div class="col-12">
-                                <button class="btn btn-success"><i class="fas fa-sync"></i> Vincular</button>
+                                <button type="submit" class="btn btn-success"><i class="fas fa-sync"></i> Vincular</button>
                             </div>
                         </div>
                     </form>
@@ -139,6 +137,19 @@
 
             <!-- Busca -->
             <div class="row my-3 justify-content-end" v-if="!isFetching">
+                <div class="input-group mb-3 col-md-6">
+                    <select v-model="bloco_selected" class="form-control">
+                        <option :value="null">Todos os blocos</option>
+                        <option v-for="bloco in blocos" :value="bloco">{{ bloco }}</option>
+                    </select>
+                    <select v-model="status_selected" class="form-control">
+                        <option :value="null">Todos os status</option>
+                        <option v-for="stat in status" :value="stat.STATUS">{{ stat.STATUS }}</option>
+                    </select>
+                    <select v-model="unidades.paginator.per_page" class="form-control">
+                        <option v-for="max in [10,30,60,100,150,200]" :value="max">Mostrar: {{ max }}</option> 
+                    </select>
+                </div>
                 <div class="input-group mb-3 col-md-6">
                     <input v-model="unidades.searchTxt" type="text" class="form-control" placeholder="Busque por uma unidade (Bloco/Unidade) min.2">
                     <div class="input-group-append">
@@ -208,7 +219,10 @@ import EmpreendimentoModal from '../includes/Modals/EmpreendimentoModal'
 
 // Api calls
 import { get, search } from '../../api/empreendimentos'
+import { get as getStatus } from '../../api/status-contrato'
+import { get as getForList } from '../../api/fornecedor'
 import { list as listUnidades } from '../../api/unidades'
+import { storeMany } from '../../api/vinculacoes'
 
 export default {
     name: 'Empreendimento',
@@ -229,6 +243,26 @@ export default {
                 checkeds: [],
                 paginator: { current_page: 1, per_page: 5, limit_pages: 6 }
             },
+            vinculacao: {
+                administradoras: [],
+                fornecedores_sap: [],
+                fornecedores_agua: [],
+                fornecedores_luz: [],
+                prefeituras: [],
+
+                // Models
+                adm_sel: null,
+                forn_sap_sel: null,
+                forn_agua_sel: null,
+                forn_luz_sel: null,
+                prefeitura_sel: null,
+                isInd: 0,
+                responsavel: null,
+            },
+            status: [],
+            status_selected: null,
+            blocos: [],
+            bloco_selected: null,
             unidades: {
                 datas: [],
                 datasShow: [],
@@ -236,7 +270,7 @@ export default {
                 checkeds: [],
                 searchTxt: '',
                 notfound: false,
-                paginator: { per_page: 6, limit_pages: 6, current_page: 1 }
+                paginator: { per_page: 10, limit_pages: 6, current_page: 1 }
             },
             dadoActive: [],
             isFetching: undefined
@@ -250,6 +284,76 @@ export default {
                 }catch(e){}
             },
             deep: true
+        },
+        bloco_selected: function(bloco){
+            if(bloco == null) {
+                this.unidades.datasSearch = []
+                this.unidades.notfound = false
+                this._setPaginateUnids()
+                return
+            }
+
+            this.unidades.datasSearch = _.filter(this.unidades.datas, (v) => {
+                if(this.status_selected !== null)
+                    return v.bloco_nome == bloco && v.status_contrato == this.status_selected
+                else
+                    return v.bloco_nome == bloco
+            })
+
+            if(this.unidades.datasSearch.length){
+                this.unidades.notfound = false
+                this.unidades.paginator.current_page = 1
+                this._setPaginateUnids()
+            }else{
+                this.unidades.notfound = true
+            }
+        },
+        status_selected: function(status){
+            if(status == null) {
+                this.unidades.datasSearch = []
+                this.unidades.notfound = false
+                this._setPaginateUnids()
+                return
+            }
+
+            this.unidades.datasSearch = _.filter(this.unidades.datas, (v) => {
+                if(this.bloco_selected !== null)
+                    return v.status_contrato == status && v.bloco_selected == this.bloco_selected
+                else
+                    return v.status_contrato == status
+            })
+
+            if(this.unidades.datasSearch.length){
+                this.unidades.notfound = false
+                this.unidades.paginator.current_page = 1
+                this._setPaginateUnids()
+            }else{
+                this.unidades.notfound = true
+            }
+        },
+        'unidades.paginator.per_page': function(){
+            this.unidades.paginator.current_page = 1
+            this._setPaginateUnids()
+        },
+        'unidades.searchTxt': function(newv){
+            if(this.unidades.searchTxt !== '' && this.unidades.searchTxt.length < 2) return
+
+            var self = this
+
+            this.unidades.datasSearch = _.filter(this.unidades.datas, (a) => {
+                let searchlower = self.unidades.searchTxt.toLowerCase()
+
+                return a.bloco_nome.toLowerCase().includes(searchlower) ||
+                       a.unidade_cod.toString().toLowerCase().includes(searchlower)
+            })
+
+            if(this.unidades.datasSearch.length){
+                this.unidades.notfound = false
+                this.unidades.paginator.current_page = 1
+                this._setPaginateUnids()
+            }else{
+                this.unidades.notfound = true
+            }
         },
         check_all: function(v){
             var self = this,
@@ -275,27 +379,6 @@ export default {
         'empreendimentos.paginator.per_page': function(){
             this.empreendimentos.paginator.current_page = 1
             this.fetchEmpreds()
-        },
-        'unidades.searchTxt': function(newv){
-            if(this.unidades.searchTxt !== '' && this.unidades.searchTxt.length < 2) return
-
-            var self = this
-
-            this.unidades.datasSearch = _.filter(this.unidades.datas, (a) => {
-                let searchlower = self.unidades.searchTxt.toLowerCase()
-
-                return a.bloco_nome.toLowerCase().includes(searchlower) ||
-                       a.unidade_cod.toString().toLowerCase().includes(searchlower)
-            })
-
-            if(this.unidades.datasSearch.length){
-                this.unidades.notfound = false
-
-                this.unidades.paginator.current_page = 1
-                this._setPaginateUnids()
-            }else{
-                this.unidades.notfound = true
-            }
         }
     },
     methods: {
@@ -317,6 +400,36 @@ export default {
                 let index = this.empreendimentos.checkeds.indexOf(input.attr('value'))
                 this.empreendimentos.checkeds.splice(index, 1)
             }
+        },
+
+        /*----------  Vincular empreendimentos  ----------*/
+        vincularEmpreds() {
+            // Montando os dados para criar as vinculações
+            let datas = {
+                'empreendimentos': this.empreendimentos.checkeds,
+                'vinculacoes': {
+                    'is_ind': this.vinculacao.isInd,
+                    'adm_id': (this.vinculacao.adm_sel ? this.vinculacao.adm_sel.value : null),
+                    'forn_sap_id': (this.vinculacao.forn_sap_sel ? this.vinculacao.forn_sap_sel.value : null),
+                    'forn_agua_id': (this.vinculacao.forn_agua_sel ? this.vinculacao.forn_agua_sel.value : null),
+                    'forn_luz_id': (this.vinculacao.forn_luz_sel ? this.vinculacao.forn_agua_sel.value : null),
+                    'pref_id': (this.vinculacao.prefeitura_sel ? this.vinculacao.prefeitura_sel.value : null),
+                    'responsavel': this.vinculacao.responsavel
+                }
+            }
+
+            // Salva as vinculações
+            storeMany(datas).then(r => {
+                if(r.results.createds > 0) {
+                    let text = r.results.createds > 1 ? r.results.createds + ' vinculações criadas com sucesso.' : 'Vinculação criada com sucesso.'
+                    this.$notify({ group: 'normal', type: 'success', text: text })
+                }
+
+                if(r.results.founds > 0) {
+                    let text = r.results.founds > 1 ? r.results.founds + ' Vinculações já existiam para os empreendimentos selecionado.' : 'Empreendimento já vinculado.'
+                    this.$notify({ group: 'normal', type: 'warn', text: text })
+                }
+            })
         },
 
         /*----------  Mostrar unidades  ----------*/
@@ -347,12 +460,25 @@ export default {
                 this.empreendimentos.datas = resp.data || []
 
                 this._setPaginateEmpreds(resp)
+
+                // Carrega os status
+                getStatus().then((data) => {
+                    this.status  = data.results
+                })
             })
         },
         fetchUnids(idProjeto) {
             listUnidades({ id_projeto: idProjeto }).then((data) => {
                 this.unidades.datas = data.results
                 this._setPaginateUnids()
+
+                // Blocos da unidade
+                var blcs = []
+                _.forEach(_.mapValues(this.unidades.datas, 'bloco_nome'), (v) => {
+                    if(!blcs.includes(v)) blcs.push(v)
+                })
+
+                this.blocos = blcs
             })
         },
 
@@ -405,6 +531,8 @@ export default {
 
         /*----------  Resets  ----------*/
         $resetUnids() {
+            this.bloco_selected = null
+            this.status_selected = null
             this.unidades.searchTxt = ''
             this.unidades.datas = []
             this.unidades.datasShow = []
@@ -414,7 +542,29 @@ export default {
         }, 
     },
     mounted() {
+        var self = this
+
         this.fetchEmpreds()
+
+        // Lista de fornecedores
+        // Obtendo a lista de fornecedores
+        getForList().then(r => {
+            _.forEach(r.results, v => {
+                let pushObj = { label: v.nome, value: v.id }
+
+                if(v.segmentos.includes('Administradora'))
+                    self.vinculacao.administradoras.push(pushObj)
+                if(v.segmentos.includes('Fornecedor SAP'))
+                    self.vinculacao.fornecedores_sap.push(pushObj)
+                if(v.segmentos.includes('Fornecedor Água'))
+                    self.vinculacao.fornecedores_agua.push(pushObj)
+                if(v.segmentos.includes('Fornecedor Luz'))
+                    self.vinculacao.fornecedores_luz.push(pushObj)
+                if(v.segmentos.includes('Prefeitura'))
+                    self.vinculacao.prefeituras.push(pushObj)
+            })
+        })
+
         Bus.$on('isFetching', is => this.isFetching = is)
 
         // Edit events

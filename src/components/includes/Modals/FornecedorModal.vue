@@ -25,17 +25,21 @@
                                         <label for="numero_sap">Número SAP <span class="text-danger">*</span></label>
                                         <input v-model="NumeroSAP" v-mask="['########','#########']" type="text" id="numero_sap" placeholder="Número SAP..." class="form-control" required="">
                                     </div>
-                                    <div class="form-group col-lg-3">
+                                     <div class="form-group col-lg-12">
+                                        <label for="Segmento">Segmento(s) <span class="text-danger">*</span></label>
+                                        <v-select :close-on-select="false" taggable push-tags v-model="Segmentos" placeholder="Selecione um ou mais segmento(s)..." multiple :options="['Prefeitura', 'Administradora', 'Fornecedor SAP', 'Fornecedor Água', 'Fornecedor Luz']"></v-select>
+                                    </div>
+                                    <div class="form-group col-lg-6">
                                         <label for="cpf_cnpj">CNPJ/CPF <span class="text-danger">*</span></label>
                                         <input v-model="cpf_cnpj" id="cpf_cnpj" v-mask="['###.###.###-##', '##.###.###/####-##']" name="cnpj_cpf" type="text" placeholder="CNPJ/CPF do fornecedor..." class="form-control" required="">
                                     </div>
-                                    <div class="form-group col-lg-3">
+                                    <div class="form-group col-lg-6">
                                         <label for="site">Site</label>
                                         <input v-model="Site" type="text" id="site" placeholder="Site..." class="form-control">
                                     </div>
-                                     <div class="form-group col-lg-6">
-                                        <label for="Segmento">Segmento(s) <span class="text-danger">*</span></label>
-                                        <v-select :close-on-select="false" taggable push-tags v-model="Segmentos" placeholder="Selecione um ou mais segmento(s)..." multiple :options="['Prefeitura', 'Administradora', 'Fornecedor SAP', 'Fornecedor Água', 'Fornecedor Luz']"></v-select>
+                                    <div class="form-group col-lg-12">
+                                        <label for="Responsavel">Responsável</label>
+                                        <input v-model="Responsavel" id="Responsavel" type="text" placeholder="Responsável..." class="form-control">
                                     </div>
 
                                     <div class="col-12"><h5>Endereço</h5><hr></div>
@@ -64,12 +68,6 @@
                                         <label for="Cidade">Cidade</label>
                                         <input v-model="Cidade" type="text" placeholder="Cidade..." class="form-control">
                                     </div>
-                                    <!-- <div class="form-group col-lg-12">
-                                        <label for="Responsavel">Responsável</label>
-                                        <v-select name="Nome" id="Nome" v-model="Responsavel" placeholder="Selecione um responsável..." :options="[]">
-                                            <span slot="no-options">Nenhum responsável encontrado.</span>
-                                        </v-select>
-                                    </div> -->
                                 </div>
                             </form>
                         </div>
@@ -142,7 +140,6 @@ export default {
                 this.Bairro = ''
                 this.Estado = ''
                 this.Cidade = ''
-                this.Responsavel = ''
 
                 return
             }
@@ -162,6 +159,7 @@ export default {
             this.cpf_cnpj = this.datas.cnpj_cpf
             this.Site = this.datas.site
             this.Segmentos = this.datas.segmentos
+            this.Responsavel = this.datas.responsavel
             //
             this.CEP = this.datas.end_cep
             this.Logradouro = this.datas.end_logradouro
@@ -176,6 +174,7 @@ export default {
             this.cpf_cnpj = ''
             this.Site = ''
             this.Segmentos = ''
+            this.Responsavel = ''
             //
             this.CEPHasError = false
             this.CEP = ''
@@ -200,6 +199,7 @@ export default {
                 segmentos: this.Segmentos,
                 cnpj_cpf: this.cpf_cnpj,
                 site: this.Site,
+                responsavel: this.Responsavel,
                 end_cep: this.CEP,
                 end_logradouro: this.Logradouro,
                 end_numero: this.Numero,

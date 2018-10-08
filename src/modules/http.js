@@ -10,15 +10,29 @@ const http = axios.create({ baseURL: config.base_url })
 
 http.defaults.headers.common['Authorization'] = 'Bearer ' + localStorage.getItem(config.token_name)
 
+/* [ Numero de requisiçoes pendentes ] */
+var pRequests = 0
+
 http.interceptors.request.use((config) => {
+    pRequests++
+    //
     Bus.$emit('isFetching', true)
     return config
-}, err => Bus.$emit('isFetching', false))
+}, (err) => {
+    pRequests--
+    return Promise.reject(err)
+})
 
 http.interceptors.response.use((response) => {
-    Bus.$emit('isFetching', false)
+    pRequests--
+    //
+    if(pRequests == 0) {
+        Bus.$emit('isFetching', false)
+    }
     return response
 }, (err) => {
+    pRequests--
+    //
     Bus.$emit('isFetching', false)
 
     return new Promise((resolve, reject) => {

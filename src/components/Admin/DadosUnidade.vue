@@ -2,7 +2,7 @@
     <div id="DadosUnidade" class="wow fadeIn" data-wow-duration="2s">
         <div class="card shadow border-0">
             <div class="card-header border-0 bg-primary text-white">
-                <h3 class="mt-0">Dados da Unidade <small class="opacity-small" v-if="this.pep_exists">[ {{ this.PEP }} ]</small></h3>
+                <h3 class="mt-0">Dados da Unidade <small class="opacity-small" v-if="isFetching">[ Aguarde... ]</small><small class="opacity-small" v-if="pep_exists && !isFetching">[ {{ PEP }} ]</small></h3>
             </div>
             <div class="card-body">
                 <form action="">
@@ -69,7 +69,7 @@
 
                     <div class="row" v-if="pep_exists">
                         <div class="col text-right">
-                            <button :disabled="dados_unidade.length > 0" class="btn btn-success" data-toggle="modal" data-target="#modalNovoDado"><i class="fas fa-plus"></i> Adicionar</button>
+                            <button class="btn btn-success" data-toggle="modal" data-target="#modalNovoDado"><i class="fas fa-plus"></i> Adicionar</button>
                         </div>
                     </div>
                 </div>
@@ -77,13 +77,13 @@
         </div>
     
         <!-- Novo dado -->
-        <DadosUnidadeModal action="New" name="NovoDado" title="Cadastrar Dado da Unidade"></DadosUnidadeModal>
+        <DadosUnidadeModal :dadosunidade="dados_unidade" action="New" name="NovoDado" title="Cadastrar Dado da Unidade"></DadosUnidadeModal>
 
         <!-- Editar dado -->
-        <DadosUnidadeModal :datas="dados_unidade_selected" action="Edit" name="EditarDado" title="Editar Dado da Unidade"></DadosUnidadeModal>
+        <DadosUnidadeModal :dadosunidade="dados_unidade" :datas="dados_unidade_selected" action="Edit" name="EditarDado" title="Editar Dado da Unidade"></DadosUnidadeModal>
 
         <!-- Deletar dado -->
-        <DadosUnidadeModal :datas="dados_unidade_selected" action="Delete" name="DeletarDado" title="Deletar dado da unidade"></DadosUnidadeModal>
+        <DadosUnidadeModal :dadosunidade="dados_unidade" :datas="dados_unidade_selected" action="Delete" name="DeletarDado" title="Deletar dado da unidade"></DadosUnidadeModal>
     </div>
 </template>
 
@@ -147,12 +147,8 @@ export default {
         },
         updateDado(fields){
             update(this.dados_unidade_selected.id, fields).then(r => {
-                // Atualizando o dado da unidade na listagem
-                let index = this.dados_unidade.map(e => e.id).indexOf(this.dados_unidade_selected.id)
-                this.dados_unidade[index] = r.results
-
-                // Forçando a atualização da DOM
-                this.$forceUpdate()
+                // Re-atualizando a página, melhor do que atualizar no índice
+                this.$initPEP()
 
                 // Notificando o usuário
                 this.$notify({group:'normal', type:'success', text: 'Dado da unidade atualizado com sucesso'})
@@ -165,9 +161,8 @@ export default {
         },
         deleteDado(){
             deletedata(this.dados_unidade_selected.id).then(r => {
-                // Removendo o fornecedor deletado da lista de fornecedores
-                let index = this.dados_unidade.map((e) => e.id).indexOf(this.dados_unidade_selected.id)
-                this.dados_unidade.splice(index, 1)
+                // Re-atualizando a página, melhor do que remover do índice
+                this.$initPEP()
 
                 // Notificando o usuário
                 this.$notify({group: 'normal', type: 'success', text: 'Dado da unidade deletado com sucesso'})
@@ -186,8 +181,6 @@ export default {
                 return
             }
 
-            console.log(this.dados_unidade.length)
-
             this.fetch()
         },
         _setDadosUnidadeDatas(datas){
@@ -201,6 +194,8 @@ export default {
     },
     mounted(){
         var self = this
+
+        Bus.$on('isFetching', is => this.isFetching = is)
 
         // Save events
         Bus.$on('evNovoDado', datas => self.saveDado(datas))

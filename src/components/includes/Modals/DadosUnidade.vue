@@ -29,6 +29,7 @@
                                                data-vv-as="Número do contribuinte"
                                                name="n_contribuinte"
                                                :class="{'is-invalid': errors.has('n_contribuinte')}"
+                                               :disabled="contribuinte_blocked"
                                         type="text" placeholder="Número do contribuinte..." class="form-control">
                                         <div class="invalid-feedback">{{ errors.first('n_contribuinte') }}</div>
                                     </div>
@@ -78,10 +79,12 @@ import {mask} from 'vue-the-mask'
 
 export default {
     name: 'DadosUnidadeModal',
-    props: ['action','name','title','datas'],
+    props: ['action','name','title','datas','dadosunidade'],
     directives: {mask},
     data() {
         return  {
+            contribuinte_blocked: false,
+
             // Form dado da unidade
             PEP: '',
             NContribuinte: '',
@@ -114,12 +117,18 @@ export default {
                 this.reset()
         },
         fill(){
+            if(this.dadosunidade.length > 1) {
+                this.contribuinte_blocked  = true
+            } else {
+                this.contribuinte_blocked = false
+            }
             this.PEP =  this.datas.PEP
             this.NContribuinte =  this.datas.N_Contribuinte
             this.Usuario = this.datas.usuario
             this.Senha = this.datas.senha
         },
         reset(){
+            this.contribuinte_blocked  = false
             this.PEP  = ''
             this.NContribuinte  = ''
             this.Usuario  = ''
@@ -136,6 +145,12 @@ export default {
         datas(){
             if(this.action == 'Edit')
                 this.fill()
+        },
+        dadosunidade(dados) {
+            if(this.action !== 'New' || !this.dadosunidade.length) return
+
+            this.contribuinte_blocked = true
+            this.NContribuinte = this.dadosunidade[0].N_Contribuinte
         }
     },
     computed: {

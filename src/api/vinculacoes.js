@@ -14,6 +14,13 @@ const store = (datas) => {
     })
 }
 
+const storeMany = (datas) => {
+    return new Promise((resolve, reject) => {
+        http.post('vinculacao/storemany', datas)
+            .then(r => resolve(r.data)).catch(r => reject(e))
+    })
+}
+
 const update = (datas, id) => {
     datas._method = 'PATCH'
     return new Promise((resolve, reject) => {
@@ -29,4 +36,4 @@ const deletedata = (id) => {
     })
 }
 
-export { get, store, update, deletedata }
+export { get, store, storeMany, update, deletedata }

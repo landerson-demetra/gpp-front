@@ -9,8 +9,9 @@
                     <div class="row">
                         <div class="form-group col-md-4">
                             <label for="SAP">Número SAP</label>
-                            <select name="SAP" id="SAP" class="form-control">
-                                <option value="">N/Informado</option>
+                            <select v-model="numero_sap_selected" id="SAP" class="form-control">
+                                <option :value="null">N/Informado</option>
+                                <option v-for="numero in numeros_sap" :value="numero">{{ numero }}</option>
                             </select>
                         </div>
                         <div class="form-group col-md-6">
@@ -148,6 +149,8 @@ export default {
             isFetching: false,
 
             fornecedores: [],
+            numeros_sap: [],
+            numero_sap_selected: null,
             fornecedor_selected: false,
             fornecedor_selected_datas: [],
             fornecedor_selected_contatos: [],
@@ -288,11 +291,22 @@ export default {
         /*=====  End of Contatos do fornecedor  ======*/
     },
     watch: {
+        numero_sap_selected(numerosap) {
+            if(!numerosap) return
+
+            // Selecionando o fornecedor na lista
+            // Fazendo isso não precisamos de mais nada
+            // Já que temos um watch abaixo.
+            this.fornecedor_selected = _.find(this.fornecedores, o => o.numero_sap == numerosap)
+        },
         fornecedor_selected(selected){
             if(!selected) return
 
             // Devemos resetar os contatos
             this.fornecedor_selected_contatos = []
+
+            // Selecionando o numero SAP no select
+            this.numero_sap_selected = selected.numero_sap
 
             // Dados do fornecedor
             get({ id: selected.value })
@@ -322,7 +336,12 @@ export default {
 
         // Lista de fornecedores
         get()
-            .then(r => _.forEach(r.results, v => self.fornecedores.push({ label: v.nome, value: v.id })))
+            .then((r) => _.forEach(r.results, (v) => {
+                self.fornecedores.push({ label: v.nome, value: v.id, numero_sap: v.numero_sap })
+            }))
+            .then((v) => {
+                _.forEach(_.mapValues(v, 'numero_sap'), v => self.numeros_sap.push(v))
+            })
 
         // isFetching trick
         Bus.$on('isFetching', is => self.isFetching = is)
@@ -341,14 +360,6 @@ export default {
     },
     beforeDestroy(){
         Bus.$off()
-        // Bus.$off([
-        //     'evNovoFornecedor',
-        //     'evNovoContato',
-        //     'evEditarFornecedor',
-        //     'evEditarContato',
-        //     'evDeletarFornecedor',
-        //     'evDeletarContato'
-        // ])
     }
 }
 </script>

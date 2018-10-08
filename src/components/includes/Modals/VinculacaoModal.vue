@@ -143,7 +143,7 @@ export default {
             this.Responsavel = this.datas.responsavel
         },
         reset(){
-            this.isInd = ''
+            this.isInd = 0
             this.Administradora = ''
             this.FornecedorSap = ''
             this.FornecedorAgua = ''

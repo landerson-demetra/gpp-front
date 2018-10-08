@@ -429,7 +429,7 @@ export default {
                     this.unidade_datas.status = r.results
                 })
             }
-
+            //
             this.$notify({ group: 'normal', clean: true })
             this.$notify({ group: 'normal', type: 'success', text: 'Status atualizado com sucesso' })
         },
@@ -472,6 +472,7 @@ export default {
                 this.assignUnidadeValues()
 
                 // Notificando o usuário
+                this.$notify({ group: 'normal', clean: true })
                 this.$notify({ group: 'normal', type: 'success', text: 'Dados listados com sucesso', duration: 3000 })
             })
         },
