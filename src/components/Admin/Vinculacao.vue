@@ -2,7 +2,7 @@
     <div id="vinculacao" class="wow fadeIn" data-wow-duration="2s">
         <div class="card shadow border-0">
             <div class="card-header border-0 bg-primary text-white">
-                <h3 class="mt-0">Vinculação</h3>
+                <h3 class="mt-0">Vinculação <small class="opacity-small" v-if="isFetching">[ Aguarde... ]</small></h3>
             </div>
             <div class="card-body" :class="{'is-fetching': isFetching}">
                 <form>

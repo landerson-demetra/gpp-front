@@ -387,6 +387,8 @@ export default {
             if(event.target.nodeName == 'BUTTON' || event.target.nodeName == 'I')
                 return
 
+            this.activeEmpre = ''
+
             let tr = $('.table').find('tr[id='+ id +']'),
                 input = tr.find('input')
 
@@ -593,7 +595,7 @@ export default {
 
 .checked{
     background-color: #F1F1F1;
-    box-shadow: 0 0 .3em #CCC;
+    box-shadow: inset 0 0 .3em #CCC;
 }
 
 .table-units{

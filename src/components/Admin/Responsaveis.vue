@@ -164,11 +164,12 @@ export default {
         saveFornecedor(datas){
             store(datas).then(r => {
                 // Adicionando o forncedor recém criado á lista de fornecedores
-                this.fornecedores.push({ label: r.results.nome, value: r.results.id })
+                this.fornecedores.push({ label: r.results.nome, value: r.results.id, numero_sap: r.results.numero_sap })
 
-                // Atribuindo os dados do fornecedor recém criado
-                this.fornecedor_selected = this.fornecedores[this.fornecedores.length - 1]
-                this.fornecedor_selected_datas = r.results
+                // Selecionando o numero SAP na lista,
+                // Automaticamente selecionando o empreendimento.
+                this.numeros_sap.push(r.results.numero_sap)
+                this.numero_sap_selected = r.results.numero_sap
 
                 // Notificando o usuário
                 this.$notify({group:'normal', type:'success', text:'Fornecedor cadastrado com sucesso'})

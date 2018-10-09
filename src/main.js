@@ -45,6 +45,11 @@ Vue.use(VeeValidate)
 /* [ Register components ] */
 Vue.component('v-select', vSelect)
 
+/* [ Filtros ] */
+Vue.filter('cpfcnpj', (str, mask) => {
+  return str
+})
+
 new Vue({
   router,
   store,

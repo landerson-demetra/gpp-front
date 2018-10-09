@@ -11,7 +11,7 @@
                     </div>
                     <div v-if="!this.datas" class="modal-body">
                         <div class="alert alert-warning">Não há vinculações</div>
-                        <router-link :to="{ name: 'Vinculacao' }" class="btn btn-success"><i class="fas fa-sync"></i> Vinculação PEP</router-link>
+                        <router-link :to="{ name: 'Vinculacao' }" class="btn btn-success"><i class="fas fa-sync"></i> Vinculação</router-link>
                     </div>
                     <div v-else class="modal-body">
                         <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
@@ -140,7 +140,7 @@
                                     </thead>
                                     <tbody>
                                         <tr>
-                                            <td>{{ this.datas.responsavel.name }}</td>
+                                            <td>{{ this.datas.responsavel }}</td>
                                         </tr>
                                     </tbody>
                                 </table>
@@ -162,32 +162,22 @@ import { get } from '../../../../api/vinculacoes'
 
 export default {
     name: 'Responsaveis',
-    props: ['PEP'],
+    props: ['Projeto', 'PEP'],
     data() {
         return {
             datas: null
         }
     },
     watch: {
-        PEP() {
-            this.parseAndFetch()
+        Projeto() {
+            this.fetch()
         }
     },
     methods: {
-        parseAndFetch() {
-            var self = this
-            let parsed = parsePEP(this.PEP)
-
-            if(parsed) {
-                let PEP = reMountPEP({ letter: 'R', spe: parsed.spe, empreendimento: parsed.empreendimento, fase: parsed.fase })
-
-                get(PEP).then(r => self.datas = r.results)
-            }
+        fetch() {
+            // Vinculações
+            get(this.Projeto.id).then(r => this.datas = r.results)
         }
-    },
-    mounted() {
-        if(this.PEP)
-            this.parseAndFetch()
     }
 }
 </script>

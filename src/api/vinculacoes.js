@@ -1,8 +1,8 @@
 import http from '../modules/http'
 
-const get = (PEP) => {
+const get = (idProjeto) => {
     return new Promise((resolve, reject) => {
-        http.get('vinculacao/pep/' + PEP)
+        http.get('vinculacao/projeto/' + idProjeto)
             .then(r => resolve(r.data)).catch(e => reject(e))
     })
 }

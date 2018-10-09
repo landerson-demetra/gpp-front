@@ -11,8 +11,8 @@
                     </div>
                     <div class="modal-body">
                         <div v-if="this.action == 'Delete'">
-                            <p>Você tem certeza que deseja deletar o fornecedor <b>{{ this.datas.nome }}</b> e todos os seus <b>contatos</b>?</p>
-                            <p><div class="badge badge-primary p-2" v-for="segmento in this.datas.segmentos">{{ segmento }}</div></p>
+                            <p>Você tem certeza que deseja deletar o cadastro de <b>{{ this.datas.nome }}</b> e todos os seus <b>contatos</b>?</p>
+                            <p><div class="badge badge-primary m-1 p-2" v-for="segmento in this.datas.segmentos">{{ segmento }}</div></p>
                         </div>
                         <div v-else>
                             <form>
@@ -23,7 +23,7 @@
                                     </div>
                                     <div class="form-group col-lg-3">
                                         <label for="numero_sap">Número SAP <span class="text-danger">*</span></label>
-                                        <input v-model="NumeroSAP" v-mask="['########','#########']" type="text" id="numero_sap" placeholder="Número SAP..." class="form-control" required="">
+                                        <input v-model="NumeroSAP" v-mask="['#########']" type="text" id="numero_sap" placeholder="Número SAP..." class="form-control" required="">
                                     </div>
                                      <div class="form-group col-lg-12">
                                         <label for="Segmento">Segmento(s) <span class="text-danger">*</span></label>
@@ -54,7 +54,7 @@
                                     </div>
                                     <div class="form-group col-lg-4">
                                        <label for="Numero">Número</label>
-                                       <input v-model="Numero" ref="numero" type="text" placeholder="Número..." class="form-control">
+                                       <input v-model="Numero" ref="numero" v-mask="['#####']" type="text" placeholder="Número..." class="form-control">
                                     </div>
                                     <div class="form-group col-lg-4">
                                         <label for="Estado">Bairro</label>

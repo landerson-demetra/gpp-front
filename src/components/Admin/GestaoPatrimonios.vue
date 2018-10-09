@@ -135,7 +135,7 @@
             </div>
 
             <!-- [ Responsaveis modal ] -->
-                <!-- <Responsaveis :PEP="PEP"></Responsaveis> -->
+                <Responsaveis :PEP="PEP" :Projeto="empreendimento_selected"></Responsaveis>
             <!-- [ /Responsaveis modal ] -->
 
             <!-- [ Resumo ] -->
@@ -484,7 +484,7 @@ export default {
                 return {
                     label: o.empreendimento_nome,
                     value: o.empreendimento_cod,
-                    PEP: o.PEP
+                    id: o.id
                 }
             }))
             this.empreendimento_selected = _.find(this.empreendimentos, (f) => {
@@ -572,7 +572,7 @@ export default {
                     contrato: v.id_contrato,
                     nome: v.nome,
                     vlr_contrato: this.$options.filters.currency(v.vlr_contrato),
-                    cnpj_cpf: v.cnpj_cpf,
+                    cnpj_cpf: this.$options.filters.cpfcnpj(v.cnpj_cpf),
                     dt_contrato: v.dt_contrato,
                     status_contrato: v.status_contrato,
                     modelo_contrato: v.modelo_contrato
