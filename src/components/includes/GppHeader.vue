@@ -29,14 +29,6 @@
                                 <router-link :to="{ name: 'DadosUnidade' }" class="dropdown-item"><i class="fas fa-building"></i> Dados da Unidade</router-link>
                             </div>
                         </li>
-                        <li class="nav-item dropdown">
-                            <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                            Importações
-                            </a>
-                            <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                                <a class="dropdown-item" href="#"><i class="fas fa-file-excel"></i> Importar Excel</a>
-                            </div>
-                        </li>
                         <li class="nav-item">
                             <router-link :to="{ name: 'Empreendimentos' }" class="nav-link">Empreendimentos</router-link>
                         </li>

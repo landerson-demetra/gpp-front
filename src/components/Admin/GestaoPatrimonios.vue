@@ -565,14 +565,16 @@ export default {
                 this.status = null
             }
 
+            var F = this.$options.filters;
+
             /* [ Contratos ] */
             var formated = []
             _.forEach(this.unidade_datas.contratos, (v) => {
                 formated.push({
                     contrato: v.id_contrato,
                     nome: v.nome,
-                    vlr_contrato: this.$options.filters.currency(v.vlr_contrato),
-                    cnpj_cpf: this.$options.filters.cpfcnpj(v.cnpj_cpf),
+                    vlr_contrato: F.currency(v.vlr_contrato),
+                    cnpj_cpf: F.cpfcnpj(v.cnpj_cpf),
                     dt_contrato: v.dt_contrato,
                     status_contrato: v.status_contrato,
                     modelo_contrato: v.modelo_contrato
@@ -591,13 +593,13 @@ export default {
                     periodo: v.periodo,
                     doc_sap: v.doc_sap ? v.doc_sap : 'N/Informado',
                     vencimento: v.vencimento,
-                    valor: this.$options.filters.currency(v.valor),
-                    valor_pago: this.$options.filters.currency(v.valor_pago),
-                    multa: v.multa + '%' ,
-                    juros: v.juros + '%',
-                    correcao: v.correcao + '%',
+                    valor: F.currency(v.valor),
+                    valor_pago: v.valor_pago > 0 ? F.currency(v.valor_pago) : 'N/Pago',
+                    multa: '(' + v.multa + '%) ' + F.currency(v.valor_multa),
+                    juros: '(' + v.juros + '%) ' + F.currency(v.valor_juros),
+                    correcao: '(' + v.correcao + '%) ' + F.currency(v.valor_correcao),
                     fonte: (v.fonte == 'R' ? 'Relatório' : 'Projeção'),
-                    total: '...',
+                    total: F.currency(v.total),
                     data_pgto: (v.data_pagamento ? v.data_pagamento : 'N/Pago'),
                     raw: v
                 })
@@ -615,7 +617,7 @@ export default {
                     periodo: v.periodo,
                     parcela: v.parcela,
                     vencimento: v.vencimento,
-                    valor_principal: this.$options.filters.currency(v.valor_principal),
+                    valor_principal: F.currency(v.valor_principal),
                     multa: v.multa + '%',
                     juros: v.juros + '%',
                     correcao_monetaria: v.correcao_monetaria + '%',
@@ -638,8 +640,8 @@ export default {
                     doc_sap: v.doc_sap ? v.doc_sap : 'N/Informado',
                     periodo: v.periodo,
                     vencimento: v.vencimento,
-                    valor: this.$options.filters.currency(v.valor),
-                    valor_pago: this.$options.filters.currency(v.valor_pago),
+                    valor: F.currency(v.valor),
+                    valor_pago: F.currency(v.valor_pago),
                     fonte: (v.fonte == 'R' ? 'Relatório' : 'Projeção'),
                     total: '...',
                     data_pagamento: (v.data_pagamento ? v.data_pagamento : 'N/Pago'),
@@ -650,7 +652,7 @@ export default {
             this.aguas.total = formated.length
             this.aguas.data = formated
 
-            /* [ Aguas ] */
+            /* [ Luz ] */
             formated = []
             _.forEach(this.unidade_datas.luzes, (v) => {
                 formated.push({
@@ -659,8 +661,8 @@ export default {
                     periodo: v.periodo,
                     doc_sap: v.doc_sap ? v.doc_sap : 'N/Informado',
                     vencimento: v.vencimento,
-                    valor: this.$options.filters.currency(v.valor),
-                    valor_pago: this.$options.filters.currency(v.valor_pago),
+                    valor: F.currency(v.valor),
+                    valor_pago: F.currency(v.valor_pago),
                     fonte: (v.fonte == 'R' ? 'Relatório' : 'Projeção'),
                     total: '...',
                     data_pagamento: (v.data_pagamento ? v.data_pagamento : 'N/Pago'),

@@ -7,22 +7,19 @@
         <div class="row" :class="{'is-fetching': isFetching}" >
             <div class="col-12">
                 <div class="row bg-white shadow-sm p-3 my-3 justify-content-start">
-                    <div class="input-group col-md-3">
-                        <input v-on:input="S_SPE = $event.target.value.toUpperCase()" v-on:keyup.enter="fetchEmpreds(1)" v-model="S_SPE" type="text" class="form-control" placeholder="SPE (XXXX)...">
-                    </div>
-                    <div class="input-group col-md-3">
+                    <div class="input-group mb-3 col-md-12">
+                        <input v-on:input="S_SPE = $event.target.value.toUpperCase()" v-on:keyup.enter="fetchEmpreds(1)" v-model="S_SPE" v-mask="['XXXX']" type="text" class="form-control" placeholder="SPE (XXXX)...">
                         <input v-on:input="S_Razao = $event.target.value.toUpperCase()" v-on:keyup.enter="fetchEmpreds(1)" v-model="S_Razao" type="text" class="form-control" placeholder="SPE Razão Social...">
-                    </div>
-                    <div class="input-group col-md-3">
                         <input v-on:input="S_Empre = $event.target.value.toUpperCase()" v-on:keyup.enter="fetchEmpreds(1)" v-model="S_Empre" type="text" class="form-control" placeholder="Empreendimento...">
-                    </div>
-                    <div class="input-group col-md-2">
+                        <select v-on:change="fetchEmpreds(1)" v-model="S_Order" class="form-control">
+                            <option :value="null">Ordem: Mais antigos</option> 
+                            <option value="id,desc">Ordem: Mais novos</option> 
+                            <option value="empreendimento_nome,asc">Ordem: Nome</option> 
+                            <option value="dt_lancamento,desc">Ordem: Data</option> 
+                        </select>
                         <select v-model="empreendimentos.paginator.per_page" class="form-control">
                             <option v-for="max in [5,15,25,50,100]" :value="max">Mostrar: {{ max }}</option> 
                         </select>
-                    </div>
-
-                    <div class="col-md-1">
                         <button class="btn btn-primary" v-on:click="fetchEmpreds(1)"><i class="fas fa-search"></i></button>
                     </div>
                 </div>
@@ -213,6 +210,7 @@
 import Bus from '../../bus'
 import Paginator from '../includes/Paginator'
 import GridLoader from 'vue-spinner/src/GridLoader'
+import {mask} from 'vue-the-mask'
 
 // Modals
 import EmpreendimentoModal from '../includes/Modals/EmpreendimentoModal'
@@ -226,6 +224,7 @@ import { storeMany } from '../../api/vinculacoes'
 
 export default {
     name: 'Empreendimento',
+    directives: {mask},
     components: {
         Paginator,
         GridLoader,
@@ -238,6 +237,7 @@ export default {
             S_SPE: '',
             S_Razao: '',
             S_Empre: '',
+            S_Order: null,
             empreendimentos: {
                 datas: [],
                 checkeds: [],
@@ -455,6 +455,7 @@ export default {
                 spe: this.S_SPE,
                 empreendimento: this.S_Empre,
                 razao_social: this.S_Razao,
+                order: this.S_Order,
                 page: page,
                 per_page: this.empreendimentos.paginator.per_page
             }).then((data) => {

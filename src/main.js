@@ -46,7 +46,20 @@ Vue.use(VeeValidate)
 Vue.component('v-select', vSelect)
 
 /* [ Filtros ] */
-Vue.filter('cpfcnpj', (str, mask) => {
+Vue.filter('cpfcnpj', (str) => {
+  str = str.replace(/\D/g, '')
+
+  if (str.length <= 14) {
+    str = str.replace(/(\d{3})(\d)/, '$1.$2')
+    str = str.replace(/(\d{3})(\d)/, '$1.$2')
+    str = str.replace(/(\d{3})(\d{1,2})$/, '$1-$2')
+  } else {
+    str = str.replace(/^(\d{2})(\d)/, '$1.$2')
+    str = str.replace(/^(\d{2})\.(\d{3})(\d)/, '$1.$2.$3')
+    str = str.replace(/\.(\d{3})(\d)/, '.$1/$2')
+    str = str.replace(/(\d{4})(\d)/, '$1-$2')
+  }
+
   return str
 })
 
