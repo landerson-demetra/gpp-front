@@ -20,6 +20,10 @@
                                         <label for="status">Status <span class="text-danger">*</span></label>
                                         <v-select v-model="Status" id="status" :options="Statuses"></v-select>
                                     </div>
+                                    <div class="form-group col-lg-4">
+                                        <label for="doc_sap">NºDocumento SAP</label>
+                                        <input v-model="DocSAP" type="text" id="doc_sap" placeholder="Número do documento no SAP..." class="form-control">
+                                    </div>
                                     <div class="form-group col-lg-3">
                                         <label for="parcela">Nº da Parcela <span class="text-danger">*</span></label>
                                         <the-mask v-model="Parcela" :mask="['#','##','###']" type="text" id="parcela" placeholder="Nº" class="form-control" />
@@ -87,6 +91,7 @@ export default {
     data() {
         return {
             Status: '',
+            DocSAP: '',
             Parcela: '',
             Periodo: '',
             Vencimento: '',
@@ -125,6 +130,7 @@ export default {
         },
         fill(){
             this.Status = _.find(this.Statuses, f => f.value == this.datas.status)
+            this.DocSAP = this.datas.doc_sap
             this.Parcela = this.datas.parcela
             this.Periodo = this.datas.periodo
             this.Vencimento = this.datas.vencimento
@@ -137,6 +143,7 @@ export default {
         },
         reset(){
             this.Status = ''
+            this.DocSAP = ''
             this.Parcela = ''
             this.Periodo = ''
             this.Vencimento = ''
@@ -158,6 +165,7 @@ export default {
         getFields() {
             return {
                 status: this.Status.value,
+                doc_sap: this.DocSAP,
                 periodo: this.Periodo,
                 parcela: this.Parcela,
                 vencimento: this.Vencimento,

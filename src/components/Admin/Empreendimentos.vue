@@ -177,7 +177,7 @@
                                 <tr v-for="unidade in unidades.datasShow">
                                     <th>{{ unidade.bloco_nome }}</th>
                                     <th>{{ unidade.unidade_cod }}</th>
-                                    <th>{{ unidade.status_contrato }}</th>
+                                    <th>{{ unidade.status_contrato || 'N/Definido' }}</th>
                                     <th>
                                         <router-link :to="{name: 'GestaoPatromonios', params: {pep: unidade.PEP}}" title="Gerenciar Patrimônios" class="btn btn-primary">Gerir</router-link>
                                         <!-- <button class="btn btn-secondary"><i class="fas fa-edit"></i></button>

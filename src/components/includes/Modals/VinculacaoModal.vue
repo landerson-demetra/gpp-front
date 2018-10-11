@@ -29,7 +29,7 @@
                                         </select>
                                     </div>
                                     <div class="form-group col-md-6">
-                                        <label for="ADM">ADM</label>
+                                        <label for="ADM">Administradora</label>
                                         <v-select v-model="Administradora" id="ADM" placeholder="Selecione..." :options="administradoras">
                                             <span slot="no-options">Nenhuma administradora encontrada.</span>
                                         </v-select>

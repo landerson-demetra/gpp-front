@@ -22,7 +22,7 @@
 
                 <hr>
 
-                <div v-if="!this.fornecedor_selected" class="alert alert-secondary text-center"><i class="fas fa-exclamation-circle"></i> Você precisa escolher um empreendimento/condomínio</div>
+                <div v-if="!this.fornecedor_selected" class="alert alert-secondary text-center"><i class="fas fa-exclamation-circle"></i> Escolha um empreendimento</div>
 
                 <div v-if="this.fornecedor_selected && !this.vinculacao" class="alert alert-secondary text-center"><i class="fas fa-exclamation-circle"></i> Não há vinculações para PEP</div>
 

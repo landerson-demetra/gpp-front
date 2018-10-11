@@ -27,7 +27,7 @@
                                     </div>
                                      <div class="form-group col-lg-12">
                                         <label for="Segmento">Segmento(s) <span class="text-danger">*</span></label>
-                                        <v-select :close-on-select="false" taggable push-tags v-model="Segmentos" placeholder="Selecione um ou mais segmento(s)..." multiple :options="['Prefeitura', 'Administradora', 'Fornecedor SAP', 'Fornecedor Água', 'Fornecedor Luz']"></v-select>
+                                        <v-select multiple taggable push-tags v-model="Segmentos" placeholder="Selecione um ou mais segmento(s)..." :close-on-select="false" :options="['Prefeitura', 'Administradora', 'Fornecedor SAP', 'Fornecedor Água', 'Fornecedor Luz']"></v-select>
                                     </div>
                                     <div class="form-group col-lg-6">
                                         <label for="cpf_cnpj">CNPJ/CPF <span class="text-danger">*</span></label>

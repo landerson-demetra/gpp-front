@@ -8,7 +8,7 @@
                             <h3 class="col-md-7 mt-0">Gestão de Patrimônios <span v-if="this.isFetching">[Aguarde...]</span></h3>
                             <div class="col-md-5 text-right d-none d-lg-block bg-black">
                                 <button :disabled="!pepIs" class="btn btn-primary border-0 border-dark" data-toggle="modal" data-target="#modalResponsaveis"><i class="fas fa-users"></i> Responsáveis</button>
-                                <button :disabled="!pepIs" class="btn btn-primary border-0 border-dark">Ações Jurídicas</button>
+                                <button :disabled="!pepIs" data-toggle="modal" data-target="#modalAcoesJudiciais" class="btn btn-primary border-0 border-dark">Ações Judiciais</button>
                                 <button :disabled="this.pepIs !== 'unidade'" data-toggle="modal" data-target="#modalResumo" class="btn btn-primary border-0 border-dark"><i class="fas fa-money-check-alt"></i> Resumo</button>
                             </div>
                         </div>
@@ -18,7 +18,7 @@
                             <div class="row">
                                 <div class="form-group col-md-4">
                                     <label for="PEP">PEP</label>
-                                    <input v-on:input="PEP = $event.target.value.toUpperCase()" v-model="PEP" id="PEP" type="text" class="form-control" :class="{'is-invalid': pepIs == false}" placeholder="R.XXXX.99.99.99.9999">
+                                    <input v-on:input="PEP = $event.target.value.toUpperCase()" v-mask="['X.XXXX.##.##.##.####']" v-model="PEP" id="PEP" type="text" class="form-control" :class="{'is-invalid': pepIs == false}" placeholder="R.XXXX.99.99.99.9999">
                                 </div>
                                 <div class="form-group col-md-3">
                                     <label for="Contribuinte">Nº Contribuinte</label>
@@ -138,6 +138,10 @@
                 <Responsaveis :PEP="PEP" :Projeto="empreendimento_selected"></Responsaveis>
             <!-- [ /Responsaveis modal ] -->
 
+            <!-- [ Ações Judiciais ] -->
+                <AcoesJudiciais></AcoesJudiciais>
+            <!-- [ /Ações Judiciais ] -->
+
             <!-- [ Resumo ] -->
                 <GestaoResumo :datas="unidade_datas" :PEP="PEP"></GestaoResumo>
             <!-- [ /Resumo ] -->
@@ -185,6 +189,7 @@
 <script>
 import Bus from '../../bus'
 import { mapState } from 'vuex'
+import { mask } from 'vue-the-mask'
 import { parsePEP, reMountPEP } from '../../modules/pep'
 
 // Api calls
@@ -198,6 +203,7 @@ import { store as storeLuz, update as editLuz, deletedata as delLuz } from '../.
 // Components
 import GestaoResumo from '../includes/Modals/Gestao/Resumo'
 import Responsaveis from '../includes/Modals/Gestao/Responsaveis'
+import AcoesJudiciais from '../includes/Modals/Gestao/AcoesJudiciais'
 import ActionButtons from '../includes/Buttons/ActionButtons'
 import CUDCondominios from '../includes/Modals/Gestao/CUD_Condominios'
 import CUDIptus from '../includes/Modals/Gestao/CUD_Iptus'
@@ -206,9 +212,11 @@ import CUDLuzes from '../includes/Modals/Gestao/CUD_Luzes'
 
 export default {
     name: 'GestaoPatrimonios',
+    directives: {mask},
     components: {
-        GestaoResumo,
         Responsaveis,
+        AcoesJudiciais,
+        GestaoResumo,
         CUDCondominios,
         CUDIptus,
         CUDAguas,
@@ -296,6 +304,7 @@ export default {
                 tblClass: 'border table-responsive d-md-table',
                 columns: [
                     { title: 'Status', field: 'status' },
+                    { title: 'Documento SAP', field: 'doc_sap' },
                     { title: 'Periodo', field: 'periodo' },
                     { title: 'Parcela', field: 'parcela' },
                     { title: 'Vencimento', field: 'vencimento' },
@@ -613,7 +622,8 @@ export default {
             _.forEach(this.unidade_datas.iptus, (v) => {
                 formated.push({
                     id: v.id,
-                    status: (v.status ? v.status : 'N/Informado'),
+                    status:  v.status || 'N/Informado',
+                    doc_sap: v.doc_sap || 'N/Informado',
                     periodo: v.periodo,
                     parcela: v.parcela,
                     vencimento: v.vencimento,
@@ -781,7 +791,8 @@ export default {
                     index = this.iptus.data.map(e => e.id).indexOf(this.dadoActive.id)
 
                 // Atualizando o Iptu na lista
-                this.iptus.data[index].status = (v.status ? v.status : 'N/Informado')
+                this.iptus.data[index].status = v.status || 'N/Informado'
+                this.iptus.data[index].doc_sap = v.doc_sap || 'N/Informado'
                 this.iptus.data[index].periodo = v.periodo
                 this.iptus.data[index].parcela = v.parcela
                 this.iptus.data[index].vencimento = v.vencimento
