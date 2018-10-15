@@ -5,11 +5,11 @@
                 <div class="card shadow border-0">
                     <div class="card-header border-0 bg-primary text-white">
                         <div class="row">
-                            <h3 class="col-md-7 mt-0">Gestão de Patrimônios <span v-if="this.isFetching">[Aguarde...]</span></h3>
+                            <h3 class="col-md-7 mt-0">Gestão de Patrimônios <small class="opacity-small" v-if="isFetching">[ Aguarde... ]</small></h3>
                             <div class="col-md-5 text-right d-none d-lg-block bg-black">
                                 <button :disabled="!pepIs" class="btn btn-primary border-0 border-dark" data-toggle="modal" data-target="#modalResponsaveis"><i class="fas fa-users"></i> Responsáveis</button>
                                 <button :disabled="!pepIs" data-toggle="modal" data-target="#modalAcoesJudiciais" class="btn btn-primary border-0 border-dark">Ações Judiciais</button>
-                                <button :disabled="this.pepIs !== 'unidade'" data-toggle="modal" data-target="#modalResumo" class="btn btn-primary border-0 border-dark"><i class="fas fa-money-check-alt"></i> Resumo</button>
+                                <button :disabled="pepIs !== 'unidade'" data-toggle="modal" data-target="#modalResumo" class="btn btn-primary border-0 border-dark"><i class="fas fa-money-check-alt"></i> Resumo</button>
                             </div>
                         </div>
                     </div>
@@ -672,7 +672,7 @@ export default {
                     doc_sap: v.doc_sap ? v.doc_sap : 'N/Informado',
                     vencimento: v.vencimento,
                     valor: F.currency(v.valor),
-                    valor_pago: F.currency(v.valor_pago),
+                    valor_pago: v.valor_pago > 0 ? F.currency(v.valor_pago) : 'N/Pago',
                     fonte: (v.fonte == 'R' ? 'Relatório' : 'Projeção'),
                     total: '...',
                     data_pagamento: (v.data_pagamento ? v.data_pagamento : 'N/Pago'),
@@ -699,7 +699,7 @@ export default {
                     doc_sap: v.doc_sap ? v.doc_sap : 'N/Informado',
                     vencimento: v.vencimento,
                     valor: this.$options.filters.currency(v.valor),
-                    valor_pago: this.$options.filters.currency(v.valor_pago),
+                    valor_pago: v.valor_pago > 0 ? this.$options.filters.currency(v.valor_pago) : 'N/Pago',
                     data_pgto: (v.data_pagamento ? v.data_pagamento : 'N/Pago'),
                     multa: v.multa + '%' ,
                     juros: v.juros + '%',
@@ -730,7 +730,7 @@ export default {
                 this.condominios.data[index].doc_sap = v.doc_sap ? v.doc_sap : 'N/Informado'
                 this.condominios.data[index].vencimento = v.vencimento
                 this.condominios.data[index].valor = this.$options.filters.currency(v.valor)
-                this.condominios.data[index].valor_pago = this.$options.filters.currency(v.valor_pago)
+                this.condominios.data[index].valor_pago = v.valor_pago > 0 ? this.$options.filters.currency(v.valor_pago) : 'N/Pago'
                 this.condominios.data[index].multa = v.multa + '%' 
                 this.condominios.data[index].juros = v.juros + '%'
                 this.condominios.data[index].correcao = v.correcao + '%'
@@ -861,7 +861,7 @@ export default {
                 this.aguas.data[index].periodo = v.periodo
                 this.aguas.data[index].vencimento = v.vencimento
                 this.aguas.data[index].valor = this.$options.filters.currency(v.valor)
-                this.aguas.data[index].valor_pago = this.$options.filters.currency(v.valor_pago)
+                this.aguas.data[index].valor_pago = v.valor_pago > 0 ? this.$options.filters.currency(v.valor_pago) : 'N/Pago'
                 this.aguas.data[index].multa = v.multa + '%' 
                 this.aguas.data[index].juros = v.juros + '%'
                 this.aguas.data[index].correcao = v.correcao + '%'
@@ -927,7 +927,7 @@ export default {
                 this.luzes.data[index].periodo = v.periodo
                 this.luzes.data[index].vencimento = v.vencimento
                 this.luzes.data[index].valor = this.$options.filters.currency(v.valor)
-                this.luzes.data[index].valor_pago = this.$options.filters.currency(v.valor_pago)
+                this.luzes.data[index].valor_pago = v.valor_pago > 0 ? this.$options.filters.currency(v.valor_pago) : 'N/Pago'
                 this.luzes.data[index].multa = v.multa + '%' 
                 this.luzes.data[index].juros = v.juros + '%'
                 this.luzes.data[index].correcao = v.correcao + '%'

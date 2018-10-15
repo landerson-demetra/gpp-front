@@ -141,7 +141,7 @@ export default {
     computed: {
         getFields() {
             return {
-                status: this.status.value,
+                status: this.Status.value,
                 doc_sap: this.DocSAP,
                 periodo: this.Periodo,
                 vencimento: this.Vencimento,

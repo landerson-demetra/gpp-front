@@ -59,7 +59,7 @@
                     </div>
                     <div class="modal-footer">
                         <div v-if="this.action !== 'Delete'">
-                            <button type="button" class="btn btn-default" v-on:click="this.closeEvent" data-dismiss="modal">Fechar</button>
+                            <button type="button" class="btn btn-default" v-on:click="onClose" data-dismiss="modal">Fechar</button>
                             <button v-on:click="onSubmit" type="button" class="btn btn-primary"><i class="fas fa-check"></i> Salvar</button>
                         </div>
                         <div v-else>
@@ -94,25 +94,20 @@ export default {
     },
     methods: {
         onSubmit(){
+            // Não teremos validação na action 'Delete'.
             if(this.action == 'Delete') {
-                Bus.$emit('ev' + this.name, (this.action !== 'Delete' ? this.getFields : true))
+                return Bus.$emit('ev' + this.name, (this.action !== 'Delete' ? this.getFields : true))
             }
 
-            if(this.action == 'New' || this.action == 'Edit') {
-                this.$validator.validate().then(result => {
-                    if(result) {
-                        return Bus.$emit('ev' + this.name, (this.action !== 'Delete' ? this.getFields : true))
-                    } else {
-                        this.$notify({
-                            group: 'normal',
-                            type: 'warn',
-                            text: 'Corrija os campos informados.'
-                        })
-                    }
-                })
-            }
+            // Verifica por erros de validação.
+            this.$validator.validate().then(result => {
+                if(result)
+                    Bus.$emit('ev' + this.name, (this.action !== 'Delete' ? this.getFields : true))
+                else
+                    this.$notify({ group: 'normal', type: 'warn', text: 'Corrija os campos informados.' })
+            })
         },
-        closeEvent(){
+        onClose(){
             if(this.action == 'New')
                 this.reset()
         },
