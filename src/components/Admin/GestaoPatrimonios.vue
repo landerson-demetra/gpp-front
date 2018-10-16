@@ -13,7 +13,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="card-body" :class="{'is-fetching': this.isFetching}">
+                    <div class="card-body" :class="{'is-fetching': isFetching}">
                         <form action="#noaction">
                             <div class="row">
                                 <div class="form-group col-md-4">
