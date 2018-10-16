@@ -95,14 +95,13 @@ export default {
     methods: {
         onSubmit(){
             // Não teremos validação na action 'Delete'.
-            if(this.action == 'Delete') {
-                return Bus.$emit('ev' + this.name, (this.action !== 'Delete' ? this.getFields : true))
-            }
+            if(this.action == 'Delete')
+                return Bus.$emit('ev' + this.name, true)
 
             // Verifica por erros de validação.
             this.$validator.validate().then(result => {
                 if(result)
-                    Bus.$emit('ev' + this.name, (this.action !== 'Delete' ? this.getFields : true))
+                    Bus.$emit('ev' + this.name, this.getFields)
                 else
                     this.$notify({ group: 'normal', type: 'warn', text: 'Corrija os campos informados.' })
             })

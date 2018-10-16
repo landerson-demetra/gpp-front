@@ -9,9 +9,9 @@
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
-                    <div v-if="!this.datas" class="modal-body">
+                    <div v-if="!datas" class="modal-body">
                         <div class="alert alert-warning">Não há vinculações</div>
-                        <router-link :to="{ name: 'Vinculacao' }" class="btn btn-success"><i class="fas fa-sync"></i> Vinculação</router-link>
+                        <router-link :to="{ name: 'Vinculacao', params: { projeto: getProjeto } }"class="btn btn-success"><i class="fas fa-sync"></i> Vinculação</router-link>
                     </div>
                     <div v-else class="modal-body">
                         <ul class="nav nav-pills mb-3" id="pills-tab" role="tablist">
@@ -36,7 +36,7 @@
                         </ul>
                         <div class="tab-content" id="pills-tabContent">
                             <div class="tab-pane fade show active" id="pills-administradoras" role="tabpanel" aria-labelledby="pills-administradoras-tab">
-                                <div v-if="!this.datas.administradora" class="alert alert-warning">Nada encontrado.</div>
+                                <div v-if="!datas.administradora" class="alert alert-warning">Nada encontrado.</div>
                                 <table v-else class="table table-bordered">
                                     <thead>
                                         <tr>
@@ -55,7 +55,7 @@
                                 </table>
                             </div>
                             <div class="tab-pane fade" id="pills-fornecedor-sap" role="tabpanel" aria-labelledby="pills-fornecedor-sap-tab">
-                                <div v-if="!this.datas.fornecedorsap" class="alert alert-warning">Nada encontrado.</div>
+                                <div v-if="!datas.fornecedorsap" class="alert alert-warning">Nada encontrado.</div>
                                 <table v-else class="table table-bordered">
                                     <thead>
                                         <tr>
@@ -74,7 +74,7 @@
                                 </table>
                             </div>
                             <div class="tab-pane fade" id="pills-fornecedor-agua" role="tabpanel" aria-labelledby="pills-fornecedor-agua-tab">
-                                <div v-if="!this.datas.fornecedoragua" class="alert alert-warning">Nada encontrado.</div>
+                                <div v-if="!datas.fornecedoragua" class="alert alert-warning">Nada encontrado.</div>
                                 <table v-else class="table table-bordered">
                                     <thead>
                                         <tr>
@@ -93,7 +93,7 @@
                                 </table>
                             </div>
                             <div class="tab-pane fade" id="pills-fornecedor-luz" role="tabpanel" aria-labelledby="pills-fornecedor-luz-tab">
-                                <div v-if="!this.datas.fornecedorluz" class="alert alert-warning">Nada encontrado.</div>
+                                <div v-if="!datas.fornecedorluz" class="alert alert-warning">Nada encontrado.</div>
                                 <table v-else class="table table-bordered">
                                     <thead>
                                         <tr>
@@ -112,7 +112,7 @@
                                 </table>
                             </div>
                             <div class="tab-pane fade" id="pills-fornecedor-prefeitura" role="tabpanel" aria-labelledby="pills-prefeitur-tab">
-                                <div v-if="!this.datas.fornecedorluz" class="alert alert-warning">Nada encontrado.</div>
+                                <div v-if="!datas.fornecedorluz" class="alert alert-warning">Nada encontrado.</div>
                                 <table v-else class="table table-bordered">
                                     <thead>
                                         <tr>
@@ -131,7 +131,7 @@
                                 </table>
                             </div>
                             <div class="tab-pane fade" id="pills-responsavel" role="tabpanel" aria-labelledby="pills-responsavel-tab">
-                                <div v-if="!this.datas.responsavel" class="alert alert-warning">Nada encontrado.</div>
+                                <div v-if="!datas.responsavel" class="alert alert-warning">Nada encontrado.</div>
                                 <table v-else class="table table-bordered">
                                     <thead>
                                         <tr>
@@ -166,6 +166,12 @@ export default {
     data() {
         return {
             datas: null
+        }
+    },
+    computed: {
+        getProjeto() {
+            if(this.PEP)
+                return this.PEP.substring(0, 12)
         }
     },
     watch: {

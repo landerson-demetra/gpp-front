@@ -173,7 +173,12 @@ export default {
 
         // Obtendo a lista de fornecedores
         getForList()
-            .then(r => _.forEach(r.results, v => this.fornecedores.push({ label: v.empreendimento_nome, value: v.id, projeto: v.projeto })))
+            .then(r => {
+                _.forEach(r.results, v => this.fornecedores.push({ label: v.empreendimento_nome, value: v.id, projeto: v.projeto }))
+
+                if(this.$route.params.projeto)
+                   this.fornecedor_selected = _.find(this.fornecedores, (v) => v.projeto == this.$route.params.projeto)
+            })
     },
     beforeDestroy() {
         Bus.$off()

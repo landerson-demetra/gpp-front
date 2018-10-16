@@ -22,7 +22,7 @@
                             </form>
 
                             <!-- Erros -->
-                            <div v-for="error in errors" class="alert alert-secondary mt-3 " role="alert">
+                            <div v-for="error in errors_l" class="alert alert-secondary mt-3 " role="alert">
                                <i class="fas fa-exclamation-triangle"></i> {{ error }}
                             </div>
                         </div>
@@ -41,7 +41,7 @@ export default {
   data() {
     return {
         authenticating: false,
-        errors: [],
+        errors_l: [],
         email: 'admin@pdg.com.br',
         password: '123'
     }
@@ -50,16 +50,16 @@ export default {
     checkForm: function(e) {
         e.preventDefault()
 
-        this.errors = []
+        this.errors_l = []
 
         if(this.email && this.password)
             return this.Login()
 
         if(!this.email)
-            this.errors.push('Você precisa informar um e-mail')
+            this.errors_l.push('Você precisa informar um e-mail')
 
         if(!this.password)
-            this.errors.push('Você precisa informar uma senha')
+            this.errors_l.push('Você precisa informar uma senha')
     },
     Login: function() {
         this.authenticating = true
@@ -68,7 +68,7 @@ export default {
             this.$router.push({ name: 'painel' })
         }).catch(() => {
             this.authenticating = false
-            this.errors.push('E-mail ou senha incorreto(s)')
+            this.errors_l.push('E-mail ou senha incorreto(s)')
         })
     }
   },

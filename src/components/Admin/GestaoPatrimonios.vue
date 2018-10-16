@@ -8,7 +8,7 @@
                             <h3 class="col-md-7 mt-0">Gestão de Patrimônios <small class="opacity-small" v-if="isFetching">[ Aguarde... ]</small></h3>
                             <div class="col-md-5 text-right d-none d-lg-block bg-black">
                                 <button :disabled="!pepIs" class="btn btn-primary border-0 border-dark" data-toggle="modal" data-target="#modalResponsaveis"><i class="fas fa-users"></i> Responsáveis</button>
-                                <button :disabled="!pepIs" data-toggle="modal" data-target="#modalAcoesJudiciais" class="btn btn-primary border-0 border-dark">Ações Judiciais</button>
+                                <button :disabled="pepIs !== 'unidade'" data-toggle="modal" data-target="#modalAcoesJudiciais" class="btn btn-primary border-0 border-dark">Ações Judiciais</button>
                                 <button :disabled="pepIs !== 'unidade'" data-toggle="modal" data-target="#modalResumo" class="btn btn-primary border-0 border-dark"><i class="fas fa-money-check-alt"></i> Resumo</button>
                             </div>
                         </div>
@@ -127,7 +127,7 @@
                     <div class="card-footer bg-primary text-white border-0 text-right">
                         <div class="btn-group" role="group" aria-label="Basic example">
                             <button type="button" class="btn btn-primary"><i class="fas fa-file-upload"></i> Anexar</button>
-                            <button type="button" class="btn btn-primary"><i class="fas fa-print"></i> Imprimir</button>
+                            <!-- <button type="button" class="btn btn-primary"><i class="fas fa-print"></i> Imprimir</button> -->
                             <a href="#relatorio" class="btn btn-primary"><i class="fas fa-file-export"></i> Relatório</a>
                         </div>
                     </div>
@@ -139,7 +139,7 @@
             <!-- [ /Responsaveis modal ] -->
 
             <!-- [ Ações Judiciais ] -->
-                <AcoesJudiciais></AcoesJudiciais>
+                <AcoesJudiciais :PEP="PEP"></AcoesJudiciais>
             <!-- [ /Ações Judiciais ] -->
 
             <!-- [ Resumo ] -->
@@ -227,7 +227,6 @@ export default {
             PEP: this.$route.params.pep || null,
             pepParsed: {},
             pepIs: null,
-            gestExpanded: false,
             datas: {},
 
             Contribuinte: null,
@@ -335,6 +334,10 @@ export default {
                     { title: 'Valor', field: 'valor'},
                     { title: 'Valor Pago', field: 'valor_pago'},
                     { title: 'Data Pgto', field: 'data_pagamento'},
+                    { title: 'Multa', field: 'multa' },
+                    { title: 'Juros', field: 'juros' },
+                    { title: 'Correção', field: 'correcao_monetaria' },
+                    { title: 'Total', field: 'total' },
                     { title: 'Fonte', field: 'fonte'},
                     { title: 'Ação', fixed: 'right', tdComp: ActionButtons }
                 ].map(col => (col.colStyle = { width: '150px' }, col)),
@@ -356,6 +359,10 @@ export default {
                     { title: 'Valor', field: 'valor'},
                     { title: 'Valor Pago', field: 'valor_pago'},
                     { title: 'Data Pgto', field: 'data_pagamento'},
+                    { title: 'Multa', field: 'multa' },
+                    { title: 'Juros', field: 'juros' },
+                    { title: 'Correção', field: 'correcao_monetaria' },
+                    { title: 'Total', field: 'total' },
                     { title: 'Fonte', field: 'fonte'},
                     { title: 'Ação', fixed: 'right', tdComp: ActionButtons }
                 ].map(col => (col.colStyle = { width: '150px' }, col)),
@@ -473,7 +480,6 @@ export default {
             })
         },
         fetchUnidadeDatas() {
-            this.isFetching = false
             fetchUnidades({ PEP: this.PEP }).then((data) => {
                 this.unidade_datas = data.results
 
@@ -628,10 +634,10 @@ export default {
                     parcela: v.parcela,
                     vencimento: v.vencimento,
                     valor_principal: F.currency(v.valor_principal),
-                    multa: v.multa + '%',
-                    juros: v.juros + '%',
-                    correcao_monetaria: v.correcao_monetaria + '%',
-                    total: '...',
+                    multa: '(' + v.multa + '%) ' + F.currency(v.valor_multa),
+                    juros: '(' + v.juros + '%) ' + F.currency(v.valor_juros),
+                    correcao_monetaria: '(' + v.correcao_monetaria + '%) ' + F.currency(v.valor_correcao),
+                    total: F.currency(v.total),
                     divida_ativa: v.divida_ativa,
                     fonte: (v.fonte == 'R' ? 'Relatório' : 'Projeção'),
                     raw: v
@@ -652,8 +658,11 @@ export default {
                     vencimento: v.vencimento,
                     valor: F.currency(v.valor),
                     valor_pago: F.currency(v.valor_pago),
+                    multa: '(' + v.multa + '%) ' + F.currency(v.valor_multa),
+                    juros: '(' + v.juros + '%) ' + F.currency(v.valor_juros),
+                    correcao_monetaria: '(' + v.correcao_monetaria + '%) ' + F.currency(v.valor_correcao),
                     fonte: (v.fonte == 'R' ? 'Relatório' : 'Projeção'),
-                    total: '...',
+                    total: F.currency(v.total),
                     data_pagamento: (v.data_pagamento ? v.data_pagamento : 'N/Pago'),
                     raw: v
                 })
@@ -673,8 +682,11 @@ export default {
                     vencimento: v.vencimento,
                     valor: F.currency(v.valor),
                     valor_pago: v.valor_pago > 0 ? F.currency(v.valor_pago) : 'N/Pago',
+                    multa: '(' + v.multa + '%) ' + F.currency(v.valor_multa),
+                    juros: '(' + v.juros + '%) ' + F.currency(v.valor_juros),
+                    correcao_monetaria: '(' + v.correcao_monetaria + '%) ' + F.currency(v.valor_correcao),
                     fonte: (v.fonte == 'R' ? 'Relatório' : 'Projeção'),
-                    total: '...',
+                    total: F.currency(v.total),
                     data_pagamento: (v.data_pagamento ? v.data_pagamento : 'N/Pago'),
                     raw: v
                 })
@@ -694,20 +706,24 @@ export default {
                 let v = r.results
                 this.condominios.total++
                 this.condominios.data.push({
-                    status: '',
+                    status: v.status,
                     periodo: v.periodo,
                     doc_sap: v.doc_sap ? v.doc_sap : 'N/Informado',
                     vencimento: v.vencimento,
                     valor: this.$options.filters.currency(v.valor),
                     valor_pago: v.valor_pago > 0 ? this.$options.filters.currency(v.valor_pago) : 'N/Pago',
                     data_pgto: (v.data_pagamento ? v.data_pagamento : 'N/Pago'),
-                    multa: v.multa + '%' ,
-                    juros: v.juros + '%',
-                    correcao: v.correcao + '%',
+                    multa: '(' + v.multa + '%) ' + F.currency(v.valor_multa),
+                    juros: '(' + v.juros + '%) ' + F.currency(v.valor_juros),
+                    correcao:'(' + v.correcao + '%) ' + F.currency(v.valor_correcao),
                     fonte: v.fonte,
-                    total: '...',
+                    total: F.currency(v.total),
                     raw: v
                 })
+
+                this.condominios.data[index].multa = '(' + v.multa + '%) ' + F.currency(v.valor_multa),
+                this.condominios.data[index].juros = '(' + v.juros + '%) ' + F.currency(v.valor_juros),
+                this.condominios.data[index].correcao = '(' + v.correcao + '%) ' + F.currency(v.valor_correcao),
 
                 // Notificando o usuário
                 this.$notify({group:'normal', type:'success', text:'Condomínio criado com sucesso'})
@@ -722,20 +738,21 @@ export default {
         updateCond(datas){
             editCond(datas, this.dadoActive.id).then(r => {
                 let v = r.results,
-                    index = this.condominios.data.map(e => e.id).indexOf(this.dadoActive.id)
+                    index = this.condominios.data.map(e => e.id).indexOf(this.dadoActive.id),
+                    F = this.$options.filters
 
                 // Atualizando o condomínio na lista
-                this.condominios.data[index].status = (v.status ? v.status : 'N/Informado')
+                this.condominios.data[index].status = v.status || 'N/Informado'
                 this.condominios.data[index].periodo = v.periodo
                 this.condominios.data[index].doc_sap = v.doc_sap ? v.doc_sap : 'N/Informado'
                 this.condominios.data[index].vencimento = v.vencimento
-                this.condominios.data[index].valor = this.$options.filters.currency(v.valor)
-                this.condominios.data[index].valor_pago = v.valor_pago > 0 ? this.$options.filters.currency(v.valor_pago) : 'N/Pago'
-                this.condominios.data[index].multa = v.multa + '%' 
-                this.condominios.data[index].juros = v.juros + '%'
-                this.condominios.data[index].correcao = v.correcao + '%'
-                this.condominios.data[index].fonte = v.fonte
-                this.condominios.data[index].total = '...'
+                this.condominios.data[index].valor = F.currency(v.valor)
+                this.condominios.data[index].valor_pago = v.valor_pago > 0 ? F.currency(v.valor_pago) : 'N/Pago'
+                this.condominios.data[index].multa = '(' + v.multa + '%) ' + F.currency(v.valor_multa),
+                this.condominios.data[index].juros = '(' + v.juros + '%) ' + F.currency(v.valor_juros),
+                this.condominios.data[index].correcao = '(' + v.correcao + '%) ' + F.currency(v.valor_correcao),
+                this.condominios.data[index].fonte = (v.fonte == 'R' ? 'Relatório' : 'Projeção')
+                this.condominios.data[index].total = F.currency(v.total)
                 this.condominios.data[index].data_pgto = (v.data_pagamento ? v.data_pagamento : 'N/Pago')
                 this.condominios.data[index].raw = v
 
@@ -797,9 +814,9 @@ export default {
                 this.iptus.data[index].parcela = v.parcela
                 this.iptus.data[index].vencimento = v.vencimento
                 this.iptus.data[index].valor_principal = this.$options.filters.currency(v.valor_principal)
-                this.iptus.data[index].multa = v.multa + '%'
-                this.iptus.data[index].juros = v.juros + '%'
-                this.iptus.data[index].correcao_monetaria = v.correcao_monetaria + '%'
+                this.iptus.data[index].multa = '(' + v.multa + '%) ' + F.currency(v.valor_multa)
+                this.iptus.data[index].juros = '(' + v.juros + '%) ' + F.currency(v.valor_juros)
+                this.iptus.data[index].correcao_monetaria = '(' + v.correcao_monetaria + '%) ' + F.currency(v.valor_correcao)
                 this.iptus.data[index].divida_ativa = v.divida_ativa
                 this.iptus.data[index].fonte = v.fonte
                 this.iptus.data[index].raw = v
@@ -837,9 +854,20 @@ export default {
             datas.PEP = this.PEP
 
             storeAgua(datas).then(r => {
-                let v = r.results
+                let v = r.results,
+                    F = this.$options.filters
+
                 v.raw = v
-                this.aguas.data.push(r.results)
+
+                // Results format
+                v.valor_pago = v.valor_pago || 'N/Pago'
+                v.data_pagamento = v.data_pagamento || 'N/Pago'
+                v.fonte = (v.fonte == 'R' ? 'Relatório' : 'Projeção')
+                v.multa = '(' + v.multa + '%) ' + F.currency(v.valor_multa)
+                v.juros = '(' + v.juros + '%) ' + F.currency(v.valor_juros)
+                v.correcao_monetaria ='(' + v.correcao_monetaria + '%) ' + F.currency(v.valor_correcao)
+
+                this.aguas.data.push(v)
 
                 // Notificando o usuário
                 this.$notify({group:'normal', type:'success', text:'Água cadastrada com sucesso'})
@@ -853,20 +881,21 @@ export default {
         updateAgua(datas) {
             editAgua(datas, this.dadoActive.id).then(r => {
                 let v = r.results,
-                    index = this.aguas.data.map(e => e.id).indexOf(this.dadoActive.id)
+                    index = this.aguas.data.map(e => e.id).indexOf(this.dadoActive.id),
+                    F = this.$options.filters
 
                 // Atualizando a água na lista
                 this.aguas.data[index].status = (v.status ? v.status : 'N/Informado')
                 this.aguas.data[index].doc_sap = (v.doc_sap ? v.doc_sap : 'N/Informado')
                 this.aguas.data[index].periodo = v.periodo
                 this.aguas.data[index].vencimento = v.vencimento
-                this.aguas.data[index].valor = this.$options.filters.currency(v.valor)
-                this.aguas.data[index].valor_pago = v.valor_pago > 0 ? this.$options.filters.currency(v.valor_pago) : 'N/Pago'
-                this.aguas.data[index].multa = v.multa + '%' 
-                this.aguas.data[index].juros = v.juros + '%'
-                this.aguas.data[index].correcao = v.correcao + '%'
+                this.aguas.data[index].valor = F.currency(v.valor)
+                this.aguas.data[index].valor_pago = v.valor_pago > 0 ? F.currency(v.valor_pago) : 'N/Pago'
+                this.aguas.data[index].multa = '(' + v.multa + '%) ' + F.currency(v.valor_multa)
+                this.aguas.data[index].juros = '(' + v.juros + '%) ' + F.currency(v.valor_juros)
+                this.aguas.data[index].correcao = '(' + v.correcao + '%) ' + F.currency(v.valor_correcao)
                 this.aguas.data[index].fonte = (v.fonte == 'R' ? 'Relatório' : 'Projeção')
-                this.aguas.data[index].total = '...'
+                this.aguas.data[index].total = F.currency(v.total)
                 this.aguas.data[index].data_pagamento = (v.data_pagamento ? v.data_pagamento : 'N/Pago')
                 this.aguas.data[index].raw = v
 
@@ -903,9 +932,20 @@ export default {
             datas.PEP = this.PEP
 
             storeLuz(datas).then(r => {
-                let v = r.results
+                let v = r.results,
+                    F = this.$options.filters
+
                 v.raw = v
-                this.luzes.data.push(r.results)
+
+                // Results format
+                v.valor_pago = v.valor_pago || 'N/Pago'
+                v.data_pagamento = v.data_pagamento || 'N/Pago'
+                v.fonte = (v.fonte == 'R' ? 'Relatório' : 'Projeção')
+                v.multa = '(' + v.multa + '%) ' + F.currency(v.valor_multa)
+                v.juros = '(' + v.juros + '%) ' + F.currency(v.valor_juros)
+                v.correcao_monetaria ='(' + v.correcao_monetaria + '%) ' + F.currency(v.valor_correcao)
+
+                this.luzes.data.push(v)
 
                 // Notificando o usuário
                 this.$notify({group:'normal', type:'success', text:'Luz cadastrada com sucesso'})
@@ -919,20 +959,21 @@ export default {
         updateLuz(datas) {
             editLuz(datas, this.dadoActive.id).then(r => {
                 let v = r.results,
-                    index = this.luzes.data.map(e => e.id).indexOf(this.dadoActive.id)
+                    index = this.luzes.data.map(e => e.id).indexOf(this.dadoActive.id),
+                    F = this.$options.filters
 
                 // Atualizando a luz na lista
                 this.luzes.data[index].status = (v.status ? v.status : 'N/Informado')
                 this.luzes.data[index].doc_sap = v.doc_sap ? v.doc_sap : 'N/Informado'
                 this.luzes.data[index].periodo = v.periodo
                 this.luzes.data[index].vencimento = v.vencimento
-                this.luzes.data[index].valor = this.$options.filters.currency(v.valor)
-                this.luzes.data[index].valor_pago = v.valor_pago > 0 ? this.$options.filters.currency(v.valor_pago) : 'N/Pago'
-                this.luzes.data[index].multa = v.multa + '%' 
-                this.luzes.data[index].juros = v.juros + '%'
-                this.luzes.data[index].correcao = v.correcao + '%'
+                this.luzes.data[index].valor = F.currency(v.valor)
+                this.luzes.data[index].valor_pago = v.valor_pago > 0 ? F.currency(v.valor_pago) : 'N/Pago'
+                this.aguas.data[index].multa = '(' + v.multa + '%) ' + F.currency(v.valor_multa)
+                this.aguas.data[index].juros = '(' + v.juros + '%) ' + F.currency(v.valor_juros)
+                this.aguas.data[index].correcao = '(' + v.correcao + '%) ' + F.currency(v.valor_correcao)
                 this.luzes.data[index].fonte = (v.fonte == 'R' ? 'Relatório' : 'Projeção')
-                this.luzes.data[index].total = '...'
+                this.luzes.data[index].total = F.currency(v.total)
                 this.luzes.data[index].data_pagamento = (v.data_pagamento ? v.data_pagamento : 'N/Pago')
                 this.luzes.data[index].raw = v
 

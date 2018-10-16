@@ -22,19 +22,45 @@
                                     </div>
                                     <div class="form-group col-lg-4">
                                         <label for="doc_sap">NºDocumento SAP</label>
-                                        <input v-model="DocSAP" type="text" id="doc_sap" placeholder="Número do documento no SAP..." class="form-control">
+                                        <input v-model="DocSAP"
+                                               v-validate="'min:8|numeric'"
+                                               data-vv-as="NºDocumento SAP"
+                                               name="doc_sap"
+                                               :class="{'is-invalid': errors.has('doc_sap')}"
+                                        type="text" id="doc_sap" placeholder="Número do documento no SAP..." class="form-control">
+                                        <div class="invalid-feedback">{{ errors.first('doc_sap') }}</div>
                                     </div>
                                     <div class="form-group col-lg-4">
                                         <label for="periodo">Periodo (MM/YY) <span class="text-danger">*</span></label>
-                                        <input v-model="Periodo" v-mask="['##/##']" type="text" id="periodo" placeholder="__/__" class="form-control">
+                                        <input v-model="Periodo"
+                                               v-mask="['##/##']"
+                                               v-validate="'required|date_format:MM/YY'"
+                                               data-vv-as="Periodo"
+                                               name="periodo"
+                                               :class="{'is-invalid': errors.has('periodo')}"
+                                            type="text" id="periodo" placeholder="__/__" class="form-control">
+                                        <div class="invalid-feedback">{{ errors.first('periodo') }}</div>
                                     </div>
                                     <div class="form-group col-lg-4">
                                         <label for="vencimento">Vencimento <span class="text-danger">*</span></label>
-                                        <input v-model="Vencimento" v-mask="['##/##/####']" type="text" id="vencimento" placeholder="__/__/____" class="form-control">
+                                        <input v-model="Vencimento"
+                                               v-mask="['##/##/####']"
+                                               v-validate="'required|date_format:DD/MM/YYYY'"
+                                               data-vv-as="Vencimento"
+                                               name="vencimento"
+                                               :class="{'is-invalid': errors.has('vencimento')}"
+                                        type="text" id="vencimento" placeholder="__/__/____" class="form-control">
+                                        <div class="invalid-feedback">{{ errors.first('vencimento') }}</div>
                                     </div>
                                     <div class="form-group col-lg-4">
                                         <label for="valor">Valor <span class="text-danger">*</span></label>
-                                        <money v-model="Valor" type="text" id="valor" placeholder="Valor da parcela..." class="form-control"></money>
+                                        <money v-model="Valor"
+                                               v-validate="'required|min_value:1'"
+                                               data-vv-as="Valor"
+                                               name="valor"
+                                               :class="{'is-invalid': errors.has('valor')}"
+                                            type="text" id="valor" placeholder="Valor da parcela..." class="form-control"></money>
+                                            <div class="invalid-feedback">{{ errors.first('valor') }}</div>
                                     </div>
                                     <div class="form-group col-lg-4">
                                         <label for="valor_pago">Valor Pago</label>
@@ -54,11 +80,18 @@
                                     </div>
                                     <div class="form-group col-lg-6">
                                         <label for="fonte">Fonte de dados <span class="text-danger">*</span></label>
-                                        <v-select v-model="Fonte" id="fonte" placeholder="Selecione uma fonte..." :options="Fontes"></v-select>
+                                        <v-select v-model="Fonte" :options="Fontes" id="fonte" placeholder="Selecione uma fonte..."></v-select>
                                     </div>
                                     <div class="form-group col-lg-6">
                                         <label for="data_pagamento">Data de pagamento</label>
-                                        <input v-model="DataPGTO" v-mask="['##/##/####']" type="text" id="data_pagamento" placeholder="Data de pagamento..." class="form-control">
+                                        <input v-model="DataPGTO"
+                                               v-mask="['##/##/####']"
+                                               v-validate="'date_format:DD/MM/YYYY'"
+                                               data-vv-as="Data de pagamento"
+                                               name="data_pagamento"
+                                               :class="{'is-invalid': errors.has('data_pagamento')}"
+                                        type="text" id="data_pagamento" placeholder="Data de pagamento..." class="form-control">
+                                        <div class="invalid-feedback">{{ errors.first('data_pagamento') }}</div>
                                     </div>
                                 </div>
                             </form>
@@ -67,11 +100,11 @@
                     <div class="modal-footer">
                         <div v-if="this.action !== 'Delete'">
                             <button type="button" class="btn btn-default" v-on:click="this.closeEvent" data-dismiss="modal">Fechar</button>
-                            <button v-on:click.prevent="emitOkEvent" type="button" class="btn btn-primary"><i class="fas fa-check"></i> Salvar</button>
+                            <button v-on:click.prevent="onSubmit" type="button" class="btn btn-primary"><i class="fas fa-check"></i> Salvar</button>
                         </div>
                         <div v-else>
                             <button type="button" class="btn btn-default" data-dismiss="modal">Não</button>
-                            <button v-if="this.action == 'Delete'" v-on:click="this.emitOkEvent" type="button" class="btn btn-danger"><i class="fas fa-trash"></i> Sim, tenho.</button>
+                            <button v-if="this.action == 'Delete'" v-on:click="this.onSubmit" type="button" class="btn btn-danger"><i class="fas fa-trash"></i> Sim, tenho.</button>
                         </div>
                     </div>
                 </div>
@@ -91,7 +124,7 @@ export default {
     data() {
         return  {
             // Form condominios
-            Status: '',
+            Status: 'Aberto',
             DocSAP: '',
             Periodo: '',
             Vencimento: '',
@@ -103,12 +136,7 @@ export default {
             Fonte: '',
             DataPGTO: '',
             //
-            Statuses: [
-                {label: 'N/Definido', value: null},
-                {label: 'Aberto', value: 'Aberto'},
-                {label: 'Renegociado', value: 'Renegociado'},
-                {label: 'Pago', value: 'Pago'}
-            ],
+            Statuses: ['Aberto', 'Renegociado', 'Pago'],
             Fontes: [
                 {label: 'Relatório', value: 'R'},
                 {label: 'Projeção', value: 'P'}
@@ -116,18 +144,29 @@ export default {
         }
     },
     methods: {
-        emitOkEvent(){
-            Bus.$emit('ev' + this.name, (this.action !== 'Delete' ? this.getFields : true))
+        onSubmit(){
+            // Não teremos validação na action 'Delete'.
+            if(this.action == 'Delete')
+                return Bus.$emit('ev' + this.name, true)
 
-            if(this.action == 'New')
-                this.reset()
+            // Verifica por erros de validação.
+            this.$validator.validate().then(result => {
+                if(result) {
+                    Bus.$emit('ev' + this.name, this.getFields)
+
+                    // Reseta os campos após enviar o evento
+                    if(this.action == 'New') this.reset()
+                } else {
+                    this.$notify({ group: 'normal', type: 'warn', text: 'Corrija os campos informados.' })
+                }
+            })  
         },
         closeEvent(){
             if(this.action == 'New')
                 this.reset()
         },
         fill(){
-            this.Status = _.find(this.Statuses, f => f.value == this.datas.status)
+            this.Status = this.datas.status
             this.DocSAP = this.datas.doc_sap
             this.Periodo = this.datas.periodo
             this.Vencimento = this.datas.vencimento
@@ -162,7 +201,7 @@ export default {
     computed: {
         getFields() {
             return {
-                status: this.Status.value,
+                status: this.Status,
                 doc_sap: this.DocSAP,
                 periodo: this.Periodo,
                 vencimento: this.Vencimento,

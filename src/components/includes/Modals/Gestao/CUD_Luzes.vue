@@ -40,6 +40,18 @@
                                         <label for="valor_pago">Valor Pago</label>
                                         <money v-model="ValorPago" type="text" id="valor_pago" placeholder="Valor pago da parcela..." class="form-control"></money>
                                     </div>
+                                    <div class="form-group col-lg-4">
+                                        <label for="multa">Multa (%) <span class="text-danger">*</span></label>
+                                        <input v-model="Multa" v-mask="['#%','##%','###%']" type="text" id="multa" placeholder="Multa da parcela..." class="form-control">
+                                    </div>
+                                    <div class="form-group col-lg-4">
+                                        <label for="juros">Juros (%) <span class="text-danger">*</span></label>
+                                        <input v-model="Juros" v-mask="['#%','##%','###%']" type="text" id="juros" placeholder="Juros da parcela..." class="form-control">
+                                    </div>
+                                    <div class="form-group col-lg-4">
+                                        <label for="correcao">Correção (%) <span class="text-danger">*</span></label>
+                                        <input v-model="Correcao" v-mask="['#%','##%','###%']" type="text" id="correcao" placeholder="Correção da parcela..." class="form-control">
+                                    </div>
                                     <div class="form-group col-lg-6">
                                         <label for="data_pagamento">Data de pagamento</label>
                                         <input v-model="DataPGTO" v-mask="['##/##/####']" type="text" id="data_pagamento" placeholder="__/__/____" class="form-control">
@@ -85,6 +97,9 @@ export default {
             Vencimento: '',
             Valor: '',
             ValorPago: '',
+            Multa: 0,
+            Juros: 0,
+            Correcao: 0,
             Fonte: '',
             DataPGTO: '',
             //
@@ -118,6 +133,9 @@ export default {
             this.Vencimento = this.datas.vencimento
             this.Valor = this.datas.valor
             this.ValorPago = (this.datas.valor_pago ? this.datas.valor_pago : 0)
+            this.Multa = this.datas.multa
+            this.Juros = this.datas.juros
+            this.Correcao = this.datas.correcao_monetaria
             this.Fonte = _.find(this.Fontes, f => f.value == this.datas.fonte)
             this.DataPGTO = this.datas.data_pagamento
         },
@@ -128,6 +146,9 @@ export default {
             this.Vencimento = ''
             this.Valor = ''
             this.ValorPago = ''
+            this.Multa = 0
+            this.Juros = 0
+            this.Correcao = 0
             this.Fonte = this.Fontes[0]
             this.DataPGTO = ''
         }
@@ -147,6 +168,9 @@ export default {
                 vencimento: this.Vencimento,
                 valor: this.Valor,
                 valor_pago: this.ValorPago,
+                multa: this.Multa,
+                juros: this.Juros,
+                correcao_monetaria: this.Correcao,
                 fonte: this.Fonte.value,
                 data_pagamento: this.DataPGTO
             }

@@ -20,7 +20,7 @@ export default [
         name: 'Responsaveis'
     },
     {
-        path: 'vinculacao',
+        path: 'vinculacao/:projeto?',
         component: Vinculacao,
         name: 'Vinculacao'
     },
