@@ -44,18 +44,18 @@
                         </thead>
                         <tbody>
                             <!-- Listagem -->
-                            <tr :id="data.id" v-on:click="checkUncheckTr(data.id)" v-for="data in empreendimentos.datas">
+                            <tr class="align-middle" :id="data.id" v-on:click="checkUncheckTr(data.id)" v-for="data in empreendimentos.datas">
                                 <th class="text-center">
                                     <div class="checkbox checkbox-success" style="pointer-events: none">
                                         <input type="checkbox" :value="data.id" class="styled">
                                         <label></label>
                                     </div>
                                 </th>
-                                <th>{{ data.projeto }}</th>
-                                <th>[{{ data.spe }}] {{ data.spe_razao_social }}</th>
-                                <th>{{ data.empreendimento_nome }}</th>
+                                <th class="align-middle">{{ data.projeto }}</th>
+                                <th class="align-middle">[{{ data.spe }}] {{ data.spe_razao_social }}</th>
+                                <th class="align-middle">{{ data.empreendimento_nome }}</th>
                                 <th>
-                                    <div class="action-buttons text-center">
+                                    <div class="action-buttons text-center align-middle">
                                         <button class="btn btn-primary" v-on:click="viewUnidades(data.id)"><i class="fas fa-building"></i></button>
                                     </div>
                                 </th>

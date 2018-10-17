@@ -480,6 +480,7 @@ export default {
             })
         },
         fetchUnidadeDatas() {
+            this.isFetching = false
             fetchUnidades({ PEP: this.PEP }).then((data) => {
                 this.unidade_datas = data.results
 

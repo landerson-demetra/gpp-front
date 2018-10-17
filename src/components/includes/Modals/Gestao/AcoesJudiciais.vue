@@ -59,6 +59,8 @@ export default {
     },
     watch: {
         PEP() {
+            if(!this.PEP || this.PEP.length !== 20) return
+
             this.fetchAcoes()
         }
     },
@@ -74,7 +76,7 @@ export default {
         }
     },
     mounted() {
-        if(this.PEP)
+        if(this.PEP && this.PEP.length == 20)
             this.fetchAcoes()
     }
 }
