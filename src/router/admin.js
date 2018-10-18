@@ -4,16 +4,10 @@ import Vinculacao from '@/components/Admin/Vinculacao'
 import DadosUnidade from '@/components/Admin/DadosUnidade'
 import GestaoPatrimonios from '@/components/Admin/GestaoPatrimonios'
 import Empreendimentos from '@/components/Admin/Empreendimentos'
+import Relatorios from '@/components/Admin/Relatorios'
 import Permissoes from '@/components/Admin/Permissoes'
 
-import Testes from '@/components/Admin/Testes'
-
 export default [
-    {
-        path: 'testes',
-        component: Testes,
-        name: 'Testes'
-    },
     {
         path: 'responsaveis',
         component: Responsaveis,
@@ -38,6 +32,11 @@ export default [
         path: 'empreendimentos',
         component: Empreendimentos,
         name: 'Empreendimentos'
+    },
+    {
+        path: 'relatorios',
+        component: Relatorios,
+        name: 'Relatorios'
     },
     {
         path: 'permissoes',

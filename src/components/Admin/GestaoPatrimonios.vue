@@ -125,7 +125,7 @@
                         </div>
                     </div>
                     <div class="card-footer bg-primary text-white border-0 text-right">
-                        <div class="btn-group" role="group" aria-label="Basic example">
+                        <div class="btn-group" role="group">
                             <button type="button" class="btn btn-primary"><i class="fas fa-file-upload"></i> Anexar</button>
                             <!-- <button type="button" class="btn btn-primary"><i class="fas fa-print"></i> Imprimir</button> -->
                             <a href="#relatorio" class="btn btn-primary"><i class="fas fa-file-export"></i> Relatório</a>
