@@ -37,16 +37,25 @@
                         </li> -->
                     </ul>
                 </div>
-          </div>
+                
+                <!-- Loader -->
+                <scale-loader class="mx-auto" :loading="isFetching" :color="'#26256A'" :size="'10px'"></scale-loader>
+            </div>
         </nav>
     </div>
 </template>
 
 <script>
+import Bus from '../../bus'
+import ScaleLoader from 'vue-spinner/src/ScaleLoader'
 import { mapState } from 'vuex'
 
 export default {
     name: 'GppHeader',
-    computed: mapState({ profile: state => state.user.profile })
+    data() { return { isFetching: false } },
+    components: { ScaleLoader },
+    computed: mapState({ profile: state => state.user.profile }),
+    mounted() {  Bus.$on('isFetching', is => this.isFetching = is) },
+    beforeDestroy() { Bus.$off() }
 }
 </script>

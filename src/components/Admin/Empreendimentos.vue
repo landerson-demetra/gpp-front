@@ -18,7 +18,7 @@
                             <option value="dt_lancamento,desc">Ordem: Data</option> 
                         </select>
                         <select v-model="empreendimentos.paginator.per_page" class="form-control">
-                            <option v-for="max in [5,15,25,50,100]" :value="max">Mostrar: {{ max }}</option> 
+                            <option v-for="max in [5, 15, 25, 50, 100]" :value="max">Mostrar: {{ max }}</option> 
                         </select>
                         <button class="btn btn-primary" v-on:click="fetchEmpreds(1)"><i class="fas fa-search"></i></button>
                     </div>

@@ -9,7 +9,7 @@
                     <div class="row">
                         <div class="form-group col-md-6">
                             <label for="Empreendimento">Empreendimento</label>
-                            <v-select v-model="fornecedor_selected" name="Empreendimento" id="Empreendimento" placeholder="Selecione..." :options="this.fornecedores">
+                            <v-select v-model="empreendimento_selected" name="Empreendimento" id="Empreendimento" placeholder="Selecione..." :options="this.empreendimentos">
                                 <span slot="no-options">Nenhum empreendimento encontrado.</span>
                             </v-select>
                         </div>
@@ -22,9 +22,9 @@
 
                 <hr>
 
-                <div v-if="!this.fornecedor_selected" class="alert alert-secondary text-center"><i class="fas fa-exclamation-circle"></i> Escolha um empreendimento</div>
+                <div v-if="!this.empreendimento_selected" class="alert alert-secondary text-center"><i class="fas fa-exclamation-circle"></i> Escolha um empreendimento</div>
 
-                <div v-if="this.fornecedor_selected && !this.vinculacao" class="alert alert-secondary text-center"><i class="fas fa-exclamation-circle"></i> Não há vinculações para PEP</div>
+                <div v-if="this.empreendimento_selected && !this.vinculacao" class="alert alert-secondary text-center"><i class="fas fa-exclamation-circle"></i> Não há vinculações para PEP</div>
 
                 <div class="row mt-3 no-gutters">
                     <table v-if="this.vinculacao" class="table table-hover table-responsive-sm table-bordered table-striped border-top-0">
@@ -43,7 +43,7 @@
                         </thead>
                         <tbody>
                             <tr>
-                                <th :title="fornecedor_selected.label"><router-link :to="{ name: 'GestaoPatromonios', params: { pep: fornecedor_selected.projeto }}" class="nav-link">{{ fornecedor_selected.projeto }}</router-link></th>
+                                <th :title="empreendimento_selected.label"><router-link :to="{ name: 'GestaoPatromonios', params: { pep: empreendimento_selected.projeto }}" class="nav-link">{{ empreendimento_selected.projeto }}</router-link></th>
                                 <td><a href="#">{{ vinculacao.administradora ? vinculacao.administradora.nome : 'N/informado' }}</a></td>
                                 <td><a href="#">{{ vinculacao.fornecedorsap ? vinculacao.fornecedorsap.nome : 'N/informado' }}</a></td>
                                 <td><a href="#">{{ vinculacao.fornecedoragua ? vinculacao.fornecedoragua.nome : 'N/informado' }}</a></td>
@@ -61,7 +61,7 @@
                         </tbody>
                     </table>
 
-                    <div v-if="this.fornecedor_selected" class="col text-right">
+                    <div v-if="this.empreendimento_selected" class="col text-right">
                         <button :disabled="this.vinculacao" class="btn btn btn-success" data-toggle="modal" data-target="#modalNovaVinculacao"><i class="fas fa-plus"></i> Adicionar</button>
                     </div>
                 </div>
@@ -93,8 +93,8 @@ export default {
         return {
             isFetching: false,
 
-            fornecedores: [],
-            fornecedor_selected: false,
+            empreendimentos: [],
+            empreendimento_selected: false,
 
             PEP: '',
 
@@ -102,7 +102,7 @@ export default {
         }
     },
     watch: {
-        fornecedor_selected(selected){
+        empreendimento_selected(selected){
             if(!selected) return
 
             this.vinculacao = null
@@ -114,14 +114,14 @@ export default {
     },
     methods: {
         fetch() {
-            get(this.fornecedor_selected.value)
+            get(this.empreendimento_selected.value)
                 .then(r => {
                     this.vinculacao = r.results
-                    this.vinculacao.projeto = this.fornecedor_selected.projeto
+                    this.vinculacao.projeto = this.empreendimento_selected.projeto
                 })
         },
         saveVinculacao(datas) {
-            datas.id_projeto = this.fornecedor_selected.value
+            datas.id_projeto = this.empreendimento_selected.value
 
             store(datas).then(r => {
                 // Buscando novamente os registro, melhor do que inserir manualmente 
@@ -171,13 +171,13 @@ export default {
         // Delete events
         Bus.$on('evDeletarVinculacao', this.deleteVinculacao)
 
-        // Obtendo a lista de fornecedores
+        // Obtendo a lista de empreendimentos
         getForList()
             .then(r => {
-                _.forEach(r.results, v => this.fornecedores.push({ label: v.empreendimento_nome, value: v.id, projeto: v.projeto }))
+                _.forEach(r.results, v => this.empreendimentos.push({ label: v.empreendimento_nome, value: v.id, projeto: v.projeto }))
 
                 if(this.$route.params.projeto)
-                   this.fornecedor_selected = _.find(this.fornecedores, (v) => v.projeto == this.$route.params.projeto)
+                   this.empreendimento_selected = _.find(this.empreendimentos, (v) => v.projeto == this.$route.params.projeto)
             })
     },
     beforeDestroy() {

@@ -1,7 +1,7 @@
 <template>
     <div>
         <div class="row">
-            <div class="content-gest mb-5 col-md-12 col-lg-12">
+            <div class="mb-5 col-md-12 col-lg-12">
                 <div class="card shadow border-0">
                     <div class="card-header border-0 bg-primary text-white">
                         <div class="row">
@@ -127,8 +127,7 @@
                     <div class="card-footer bg-primary text-white border-0 text-right">
                         <div class="btn-group" role="group">
                             <button type="button" class="btn btn-primary"><i class="fas fa-file-upload"></i> Anexar</button>
-                            <!-- <button type="button" class="btn btn-primary"><i class="fas fa-print"></i> Imprimir</button> -->
-                            <a href="#relatorio" class="btn btn-primary"><i class="fas fa-file-export"></i> Relatório</a>
+                            <router-link :to="{name: 'Relatorios'}" title="Relatórios" class="btn btn-primary"><i class="fas fa-file-export"></i> Relatórios</router-link>
                         </div>
                     </div>
                 </div>
