@@ -9,7 +9,7 @@
                     <div class="row">
                         <div class="form-group col-md-6">
                             <label for="Empreendimento">Empreendimento</label>
-                            <v-select v-model="empreendimento_selected" name="Empreendimento" id="Empreendimento" placeholder="Selecione..." :options="this.empreendimentos">
+                            <v-select v-model="empreendimento_selected" name="Empreendimento" id="Empreendimento" placeholder="Selecione..." :options="empreendimentos">
                                 <span slot="no-options">Nenhum empreendimento encontrado.</span>
                             </v-select>
                         </div>

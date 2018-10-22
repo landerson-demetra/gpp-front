@@ -37,9 +37,6 @@
                         </li> -->
                     </ul>
                 </div>
-                
-                <!-- Loader -->
-                <scale-loader class="mx-auto" :loading="isFetching" :color="'#26256A'" :size="'10px'"></scale-loader>
             </div>
         </nav>
     </div>
@@ -52,10 +49,6 @@ import { mapState } from 'vuex'
 
 export default {
     name: 'GppHeader',
-    data() { return { isFetching: false } },
-    components: { ScaleLoader },
-    computed: mapState({ profile: state => state.user.profile }),
-    mounted() {  Bus.$on('isFetching', is => this.isFetching = is) },
-    beforeDestroy() { Bus.$off() }
+    computed: mapState({ profile: state => state.user.profile })
 }
 </script>

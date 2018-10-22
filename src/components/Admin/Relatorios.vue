@@ -17,7 +17,7 @@
                                     <div class="input-group mb-3 col-md-12">
                                         <select v-model="relatorioSel" class="form-control">
                                             <option :value="null">Selecione o tipo de relatório</option>
-                                            <option :value="{name: 'Condomínio', value: 1}">Gerar relatório: Condomínios</option>
+                                            <option :value="{name: 'Condomínios', value: 1}">Gerar relatório: Condomínios</option>
                                             <option :value="{name: 'IPTUS', value: 2}">Gerar relatório: IPTUS</option>
                                             <option :value="{name: 'Fornecedores', value: 3}">Gerar relatório: Fornecedores</option>
                                             <option :value="{name: 'Resumo por empreendimento', value: 4}">Gerar relatório: Resumo por empreendimento</option>
@@ -33,21 +33,23 @@
                         <div class="row" :class="{'is-fetching': isFetching}" v-if="relatorioSel && relatorioSel.value == 1">
                             <div class="w-100">
                                 <div class="p-3 justify-content-start">
+                                    <div class="mb-3 col-md-12">
+                                        <v-select v-model="condominios.empreendimento_selected" name="Empreendimento" id="Empreendimento" placeholder="Selecione um empreendimento..." :options="condominios.empreendimentos">
+                                            <span slot="no-options">Nenhum empreendimento encontrado.</span>
+                                        </v-select>
+                                    </div>
                                     <div class="input-group mb-3 col-md-12">
-                                        <select v-model="condominios.empreendimento_selected" class="form-control">
-                                            <option>Selecione o empreendimento</option>
-                                            <option v-for="empre in condominios.empreendimentos" :value="empre">{{ empre.label }}</option>
-                                        </select>
                                         <input v-model="condominios.data_cadastro" v-mask="['##/##/####']" type="text" placeholder="Data de cadastro [DD/MM/YYYY].." class="form-control">
                                         <input v-model="condominios.vencimento_de_ate" v-mask="['##/##/####-##/##/####']" type="text" placeholder="Vencimento de-até [DD/MM/YYYY-DD/MM/YYYY].." class="form-control">
                                         <input v-model="condominios.nome_resp" type="text" placeholder="Nome do responsável..." class="form-control">
-                                    </div>
-                                    <div class="input-group mb-3 col-md-12">
                                         <select v-model="condominios.administradoraSel" class="form-control">
+                                            <option :value="null">Selecione a administradora</option>
                                             <option v-for="a in 10">Nome administradora {{ a }}</option>
                                         </select>
+                                    </div>
+                                    <div class="input-group mb-3 col-md-12">
                                         <select v-model="condominios.statusSel" class="form-control">
-                                            <option>Status</option>
+                                            <option :value="null">Qualquer status</option>
                                             <option v-for="status in condominios.status" :value="status.value">{{ status.label }}</option>
                                         </select>
                                         <select v-model="condominios.com_debitos" class="form-control">
@@ -106,7 +108,7 @@ export default {
                     {label: 'Pago', value: 2},
                     {label: 'Renegociado', value: 3}
                 ],
-                statusSel: 1,
+                statusSel: null,
 
                 com_debitos: false,
 
@@ -134,18 +136,22 @@ export default {
             console.log(this.mount())
         },
         mount() {
+            var mounted = {}
+
+            mounted.type = this.relatorioSel.value
+
             // Condomínios
             if(this.relatorioSel.value == 1) {
-                let mounted = {}
+                mounted.search = {}
 
-                mounted.empreendimento = this.condominios.empreendimento_selected.value
-                mounted.administradora = this.condominios.administradoraSel
-                mounted.vencimento_de_ate = this.condominios.vencimento_de_ate
-                mounted.responsavel = this.condominios.nome_resp
-                mounted.status = this.condominios.statusSel
-                mounted.com_debitos = this.condominios.com_debitos
-                mounted.data_cad = this.condominios.data_cadastro
-                mounted.data_ref = this.condominios.data_ref
+                mounted.search.empreendimento = (this.condominios.empreendimento_selected ? this.condominios.empreendimento_selected.value : null)
+                mounted.search.administradora = this.condominios.administradoraSel
+                mounted.search.vencimento_de_ate = this.condominios.vencimento_de_ate
+                mounted.search.responsavel = this.condominios.nome_resp
+                mounted.search.status = this.condominios.statusSel
+                mounted.search.com_debitos = this.condominios.com_debitos
+                mounted.search.data_cad = this.condominios.data_cadastro
+                mounted.search.data_ref = this.condominios.data_ref
 
                 return mounted
             }
