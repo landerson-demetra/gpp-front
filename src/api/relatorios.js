@@ -1,10 +1,17 @@
 import http from '../modules/http'
 
-const get = (datas) => {
+const store = (datas) => {
     return new Promise((resolve, reject) => {
-        http.post('relatorios/generate', datas)
+        http.post('relatorio', datas)
             .then(r => resolve(r.data)).catch(e => reject(e))
     })
 }
 
-export { get }
+const generate = (datas) => {
+    return new Promise((resolve, reject) => {
+        http.post('relatorio/generate', datas)
+            .then(r => resolve(r.data)).catch(e => reject(e))
+    })
+}
+
+export { generate, store }

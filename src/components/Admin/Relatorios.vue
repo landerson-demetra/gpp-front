@@ -18,9 +18,9 @@
                                         <select v-model="relatorioSel" class="form-control">
                                             <option :value="null">Selecione o tipo de relatório</option>
                                             <option :value="{name: 'Condomínios', value: 1}">Gerar relatório: Condomínios</option>
-                                            <option :value="{name: 'IPTUS', value: 2}">Gerar relatório: IPTUS</option>
+<!--                                             <option :value="{name: 'IPTUS', value: 2}">Gerar relatório: IPTUS</option>
                                             <option :value="{name: 'Fornecedores', value: 3}">Gerar relatório: Fornecedores</option>
-                                            <option :value="{name: 'Resumo por empreendimento', value: 4}">Gerar relatório: Resumo por empreendimento</option>
+                                            <option :value="{name: 'Resumo por empreendimento', value: 4}">Gerar relatório: Resumo por empreendimento</option> -->
                                         </select>
                                     </div>
                                 </div>
@@ -50,7 +50,7 @@
                                     <div class="input-group mb-3 col-md-12">
                                         <select v-model="condominios.statusSel" class="form-control">
                                             <option :value="null">Qualquer status</option>
-                                            <option v-for="status in condominios.status" :value="status.value">{{ status.label }}</option>
+                                            <option v-for="status in condominios.status" :value="status">{{ status }}</option>
                                         </select>
                                         <select v-model="condominios.com_debitos" class="form-control">
                                             <option :value="false">Todas unidades</option>
@@ -58,18 +58,38 @@
                                         </select>
                                         <input v-model="condominios.data_ref" v-mask="['##/##/####']" type="text" placeholder="Data de referência [DD/MM/YYYY]" class="form-control">
                                     </div>
+                                    <div class="input-group mb-3 col-md-12">
+                                        <div class="input-group-prepend"><span class="input-group-text">Email para notificação</span></div>
+                                        <input disabled="" v-model="notificationMail" type="text" class="form-control" placeholder="Digite um e-mail válido...">
+                                    </div>
                                     <div class="col-md-12 text-right">
-                                        <button v-on:click="mountAndMake" class="btn btn-success"><i class="fas fa-check"></i> Continuar</button>
+                                        <button v-on:click="mountAndMake" class="btn btn-success"><i class="fas fa-check"></i> Criar relatório</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <h4 v-if="generatedRel" class="px-3 my-3 text-muted">3.Relatório criado <i class="fas fa-check text-success"></i></h4>
+                        
+                        <div class="row" v-if="generatedRel">
+                            <div class="w-100">
+                                <div class="p-3">
+                                    <div class="jumbotron col-md-12">
+                                        <h1 class="display-4">Relatório gerado com sucesso</h1>
+                                        <p class="lead"></p>
+                                        <p class="lead">
+                                            <a :href="generated.link" :title="generated.file_name" class="btn btn-primary">Baixar relatório <i class="fa fa-download"></i></a>
+                                            <p class="text-muted"><b>Arquivo:</b> {{ generated.file_name }}</p>
+                                            <p class="text-muted"><b>Gerado em:</b> {{ generated.when }}</p>
+                                        </p>
+
+                                        <!-- <scale-loader :loading="true" color="#CCC"></scale-loader> -->
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="card-footer bg-primary text-white border-0 text-right">
-                        <div class="btn-group" role="group" aria-label="Basic example">
-                            <a href="#relatorio" class="btn btn-primary"><i class="fas fa-file-export"></i> Gerar relatório</a>
-                        </div>
-                    </div>
+                    <div class="card-footer bg-primary text-white border-0 text-right"></div>
                 </div>
             </div>
         </div>
@@ -78,16 +98,29 @@
 
 <script>
 import Bus from '../../bus'
+import http from '../../modules/http'
+import ScaleLoader from 'vue-spinner/src/ScaleLoader'
 import { mask } from 'vue-the-mask'
+import { generate, store } from '../../api/relatorios'
 import { getForList } from '../../api/empreendimentos'
 
 export default {
     name: 'Relatorio',
     directives: {mask},
+    components: { ScaleLoader },
     data() {
         return {
             isFetching: undefined,
             relatorioSel: null,
+            generatedRel: false,
+            notificationMail: '',
+
+            // Guardando os dados do relatório gerado
+            generated: {
+                file_name: '',
+                link: '',
+                when: ''
+            },
 
             // Armazenaremos os filtro e empreendimentos em seus respectivos objetos.
             condominios: {
@@ -103,11 +136,7 @@ export default {
                 administradoras: [],
                 administradoraSel: null,
 
-                status: [
-                    {label: 'Aberto', value: 1},
-                    {label: 'Pago', value: 2},
-                    {label: 'Renegociado', value: 3}
-                ],
+                status: ['Aberto','Pago','Renegociado'],
                 statusSel: null,
 
                 com_debitos: false,
@@ -133,7 +162,17 @@ export default {
     },
     methods: {
         mountAndMake() {
-            console.log(this.mount())
+            this.$notify({ group: 'normal',  type: 'success', text: 'Gerando o relatório... poderá levar uns minutos' })
+
+            generate(this.mount()).then(r => {
+                this.generatedRel = true
+
+                this.generated.file_name = r.results.file_name
+                this.generated.link = r.results.file_link
+                this.generated.when = r.results.gerado_em
+
+                this.$notify({ group: 'normal',  type: 'success', text: 'Relatório gerado com sucesso!' })
+            })
         },
         mount() {
             var mounted = {}

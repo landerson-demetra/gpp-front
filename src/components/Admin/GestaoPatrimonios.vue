@@ -570,10 +570,12 @@ export default {
             /* [ Dados da unidade ] */
             this.Contribuinte = this.unidade_datas.dadosunidade.length ? this.unidade_datas.dadosunidade[0].N_Contribuinte : 'N/Definido'
 
+            /* [ Vendido ] */
+            this.vendido = this.unidade_datas.vendido
+
             /* [ Status ] */
             if(this.unidade_datas.status) {
                 this.invadido = this.unidade_datas.status.invadido
-                this.vendido = this.unidade_datas.status.vendido
                 this.status = this.unidade_datas.status.status
             } else {
                 this.invadido = null

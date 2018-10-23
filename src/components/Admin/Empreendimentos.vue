@@ -130,7 +130,7 @@
 
             <hr>
 
-            <grid-loader class="mx-auto my-5" :loading="isFetching" :color="'#26256A'" :size="'10px'"></grid-loader>
+            <grid-loader class="mx-auto my-5" :loading="isFetching" color="#26256A" size="10px"></grid-loader>
 
             <!-- Busca -->
             <div class="row my-3 justify-content-end" v-if="!isFetching">
