@@ -17,28 +17,54 @@
                         <div v-else>
                             <form>
                                 <div class="row">
-                                    <div class="form-group col-lg-9">
+                                    <div class="form-group col-lg-8">
                                         <label for="name">Nome <span class="text-danger">*</span></label>
-                                        <input v-model="Nome" id="name" type="text" class="form-control" placeholder="Nome do fornecedor..." required="">
+                                        <input v-model="Nome"
+                                               v-validate="'required|alpha_spaces'"
+                                               data-vv-as="Nome"
+                                               name="nome"
+                                               :class="{'is-invalid': errors.has('nome')}"
+                                        id="name" type="text" class="form-control" placeholder="Nome do fornecedor...">
+                                        <div class="invalid-feedback">{{ errors.first('nome') }}</div>
                                     </div>
-                                    <div class="form-group col-lg-3">
+                                    <div class="form-group col-lg-4">
                                         <label for="numero_sap">Número SAP <span class="text-danger">*</span></label>
-                                        <input v-model="NumeroSAP" v-mask="['#########']" type="text" id="numero_sap" placeholder="Número SAP..." class="form-control" required="">
+                                        <input v-model="NumeroSAP"
+                                               v-mask="['#########']"
+                                               v-validate="'required|min:9'"
+                                               data-vv-as="Número SAP"
+                                               name="numero_sap"
+                                               :class="{'is-invalid': errors.has('numero_sap')}"
+                                        type="text" id="numero_sap" placeholder="Número SAP..." class="form-control">
+                                        <div class="invalid-feedback">{{ errors.first('numero_sap') }}</div>
                                     </div>
                                      <div class="form-group col-lg-12">
                                         <label for="Segmento">Segmento(s) <span class="text-danger">*</span></label>
                                         <v-select multiple taggable push-tags v-model="Segmentos" placeholder="Selecione um ou mais segmento(s)..." :close-on-select="false" :options="['Prefeitura', 'Administradora', 'Fornecedor SAP', 'Fornecedor Água', 'Fornecedor Luz']"></v-select>
                                     </div>
                                     <div class="form-group col-lg-6">
-                                        <label for="cpf_cnpj">CNPJ/CPF <span class="text-danger">*</span></label>
-                                        <input v-model="cpf_cnpj" id="cpf_cnpj" v-mask="['###.###.###-##', '##.###.###/####-##']" name="cnpj_cpf" type="text" placeholder="CNPJ/CPF do fornecedor..." class="form-control" required="">
+                                        <label for="cpf_cnpj">CPF/CNPJ <span class="text-danger">*</span></label>
+                                        <input v-model="cpf_cnpj"
+                                               v-mask="['###.###.###-##', '##.###.###/####-##']"
+                                               v-validate="'required|min:14'"
+                                               data-vv-as="CPF/CNPJ"
+                                               name="cnpj_cpf"
+                                               :class="{'is-invalid': errors.has('cnpj_cpf')}"
+                                        id="cpf_cnpj" type="text" placeholder="CPF/CNPJ do fornecedor..." class="form-control">
+                                        <div class="invalid-feedback">{{ errors.first('cnpj_cpf') }}</div>
                                     </div>
                                     <div class="form-group col-lg-6">
                                         <label for="site">Site</label>
-                                        <input v-model="Site" type="text" id="site" placeholder="Site..." class="form-control">
+                                        <input v-model="Site"
+                                               v-validate="'url'"
+                                               data-vv-as="Site"
+                                               name="site"
+                                               :class="{'is-invalid': errors.has('site')}"
+                                        type="text" id="site" placeholder="Site..." class="form-control">
+                                        <div class="invalid-feedback">{{ errors.first('site') }}</div>
                                     </div>
                                     <div class="form-group col-lg-12">
-                                        <label for="Responsavel">Responsável</label>
+                                        <label for="Responsavel">Nome do responsável</label>
                                         <input v-model="Responsavel" id="Responsavel" type="text" placeholder="Responsável..." class="form-control">
                                     </div>
 
@@ -75,11 +101,11 @@
                     <div class="modal-footer">
                         <div v-if="this.action !== 'Delete'">
                             <button type="button" class="btn btn-default" v-on:click="this.closeEvent" data-dismiss="modal">Fechar</button>
-                            <button v-on:click.prevent="emitOkEvent" type="button" class="btn btn-primary"><i class="fas fa-check"></i> Salvar</button>
+                            <button v-on:click.prevent="onSubmit" type="button" class="btn btn-primary"><i class="fas fa-check"></i> Salvar</button>
                         </div>
                         <div v-else>
                             <button type="button" class="btn btn-default" data-dismiss="modal">Não</button>
-                            <button v-if="this.action == 'Delete'" v-on:click="this.emitOkEvent" type="button" class="btn btn-danger"><i class="fas fa-trash"></i> Sim, tenho.</button>
+                            <button v-if="this.action == 'Delete'" v-on:click="this.onSubmit" type="button" class="btn btn-danger"><i class="fas fa-trash"></i> Sim, tenho.</button>
                         </div>
                     </div>
                 </div>
@@ -118,10 +144,19 @@ export default {
         }
     },
     methods: {
-        emitOkEvent(){
-            Bus.$emit('ev' + this.name, (this.action !== 'Delete' ? this.getFields : true))
+        onSubmit(){
+            // Não teremos validação na action 'Delete'.
+            if(this.action == 'Delete')
+                return Bus.$emit('ev' + this.name, true)
 
-            this.reset()
+            // Verifica por erros de validação.
+            this.$validator.validate().then(result => {
+                if(result) {
+                    Bus.$emit('ev' + this.name, this.getFields)
+                } else {
+                    this.$notify({ group: 'normal', type: 'warn', text: 'Corrija os campos informados.' })
+                }
+            })
         },
         closeEvent(){
             if(this.action == 'New')
@@ -208,6 +243,12 @@ export default {
                 end_cidade: this.Cidade,
             }
         }
+    },
+    mounted() {
+        Bus.$on('must-reset', this.reset())
+    },
+    beforeDestroy() {
+        Bus.$off()
     }
 }
 </script>

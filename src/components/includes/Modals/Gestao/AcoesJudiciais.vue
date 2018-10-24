@@ -60,7 +60,6 @@ export default {
     watch: {
         PEP() {
             if(!this.PEP || this.PEP.length !== 20) return
-
             this.fetchAcoes()
         }
     },

@@ -11,16 +11,17 @@
         </div>
 
         <!-- Footer -->
-        <footer></footer>
+        <!-- <GppFooter></GppFooter> -->
     </div>
 </template>
 
 <script>
 import GppHeader from './includes/GppHeader'
+import GppFooter from './includes/GppFooter'
 
 export default {
     name: 'Painel',
-    components: { GppHeader }
+    components: { GppHeader, GppFooter }
 }
 </script>
 

@@ -147,11 +147,11 @@
 
             <!-- [ Condomínios modals ] -->
                 <!-- Novo -->
-                <CUDCondominios action="New" name="NovoCondominio" title="Cadastrar Condomínio"></CUDCondominios>
+                <CUDCondominios action="New" name="NovoCondominio" title="Cadastrar Parcela"></CUDCondominios>
                 <!-- Editar -->
-                <CUDCondominios action="Edit" name="EditarCondominio" title="Editar Condomínio" :datas="dadoActive"></CUDCondominios>
+                <CUDCondominios action="Edit" name="EditarCondominio" title="Editar Parcela" :datas="dadoActive"></CUDCondominios>
                 <!-- Deletar -->
-                <CUDCondominios action="Delete" name="DeletarCondominio" title="Deletar Condomínio" :datas="dadoActive"></CUDCondominios>
+                <CUDCondominios action="Delete" name="DeletarCondominio" title="Deletar Parcela" :datas="dadoActive"></CUDCondominios>
             <!-- [ /Condominios modals ] -->
 
             <!-- [ IPTUs modals ] -->
@@ -281,13 +281,13 @@ export default {
                     { title: 'Periodo', field: 'periodo' },
                     { title: 'Vencimento', field: 'vencimento'},
                     { title: 'Valor', field: 'valor'},
-                    { title: 'Valor Pago', field: 'valor_pago'},
-                    { title: 'Data Pgto', field: 'data_pgto'},
                     { title: 'Multa', field: 'multa'},
                     { title: 'Juros', field: 'juros'},
                     { title: 'Correção', field: 'correcao'},
                     { title: 'Fonte', field: 'fonte'},
                     { title: 'Total', field: 'total'},
+                    { title: 'Valor Pago', field: 'valor_pago'},
+                    { title: 'Data Pgto', field: 'data_pgto'},
                     { title: 'Ação', fixed: 'right', tdComp: ActionButtons }
                 ].map(col => (col.colStyle = { width: '150px' }, col)),
                 data: [],
@@ -331,13 +331,13 @@ export default {
                     { title: 'Periodo', field: 'periodo' },
                     { title: 'Vencimento', field: 'vencimento'},
                     { title: 'Valor', field: 'valor'},
-                    { title: 'Valor Pago', field: 'valor_pago'},
-                    { title: 'Data Pgto', field: 'data_pagamento'},
                     { title: 'Multa', field: 'multa' },
                     { title: 'Juros', field: 'juros' },
                     { title: 'Correção', field: 'correcao_monetaria' },
                     { title: 'Total', field: 'total' },
                     { title: 'Fonte', field: 'fonte'},
+                    { title: 'Valor Pago', field: 'valor_pago'},
+                    { title: 'Data Pgto', field: 'data_pagamento'},
                     { title: 'Ação', fixed: 'right', tdComp: ActionButtons }
                 ].map(col => (col.colStyle = { width: '150px' }, col)),
                 data: [],
@@ -356,13 +356,13 @@ export default {
                     { title: 'Periodo', field: 'periodo' },
                     { title: 'Vencimento', field: 'vencimento'},
                     { title: 'Valor', field: 'valor'},
-                    { title: 'Valor Pago', field: 'valor_pago'},
-                    { title: 'Data Pgto', field: 'data_pagamento'},
                     { title: 'Multa', field: 'multa' },
                     { title: 'Juros', field: 'juros' },
                     { title: 'Correção', field: 'correcao_monetaria' },
                     { title: 'Total', field: 'total' },
                     { title: 'Fonte', field: 'fonte'},
+                    { title: 'Valor Pago', field: 'valor_pago'},
+                    { title: 'Data Pgto', field: 'data_pagamento'},
                     { title: 'Ação', fixed: 'right', tdComp: ActionButtons }
                 ].map(col => (col.colStyle = { width: '150px' }, col)),
                 data: [],
@@ -474,8 +474,6 @@ export default {
                 } else {
                     this.$notify({ group: 'normal', type: 'warn', text: 'Nenhum dado encontrado para PEP <b>' + this.PEP + '</b>' })
                 }
-            }).catch((e) => {
-                console.log('err:', e)
             })
         },
         fetchUnidadeDatas() {
@@ -705,36 +703,31 @@ export default {
             datas.PEP = this.PEP
 
             storeCond(datas).then(r => {
-                let v = r.results
+                let v = r.results, F = this.$options.filters
+
                 this.condominios.total++
                 this.condominios.data.push({
-                    status: v.status,
+                    id: v.id,
+                    status: (v.status ? v.status : 'N/Informado'),
                     periodo: v.periodo,
                     doc_sap: v.doc_sap ? v.doc_sap : 'N/Informado',
                     vencimento: v.vencimento,
-                    valor: this.$options.filters.currency(v.valor),
-                    valor_pago: v.valor_pago > 0 ? this.$options.filters.currency(v.valor_pago) : 'N/Pago',
-                    data_pgto: (v.data_pagamento ? v.data_pagamento : 'N/Pago'),
+                    valor: F.currency(v.valor),
+                    valor_pago: v.valor_pago > 0 ? F.currency(v.valor_pago) : 'N/Pago',
                     multa: '(' + v.multa + '%) ' + F.currency(v.valor_multa),
                     juros: '(' + v.juros + '%) ' + F.currency(v.valor_juros),
-                    correcao:'(' + v.correcao + '%) ' + F.currency(v.valor_correcao),
-                    fonte: v.fonte,
+                    correcao: '(' + v.correcao + '%) ' + F.currency(v.valor_correcao),
+                    fonte: (v.fonte == 'R' ? 'Relatório' : 'Projeção'),
                     total: F.currency(v.total),
+                    data_pgto: (v.data_pagamento ? v.data_pagamento : 'N/Pago'),
                     raw: v
                 })
-
-                this.condominios.data[index].multa = '(' + v.multa + '%) ' + F.currency(v.valor_multa),
-                this.condominios.data[index].juros = '(' + v.juros + '%) ' + F.currency(v.valor_juros),
-                this.condominios.data[index].correcao = '(' + v.correcao + '%) ' + F.currency(v.valor_correcao),
 
                 // Notificando o usuário
                 this.$notify({group:'normal', type:'success', text:'Condomínio criado com sucesso'})
 
                 // Fechando a modal
                 $('.modal').modal('hide')
-            }).catch(e => {
-                if(e.response.status < 423) return
-                this.$notify({group:'normal', type:'error', title:'Ops :/', text:'Ocorreu um erro inesperado'})
             })
         },
         updateCond(datas){
@@ -744,9 +737,9 @@ export default {
                     F = this.$options.filters
 
                 // Atualizando o condomínio na lista
-                this.condominios.data[index].status = v.status || 'N/Informado'
+                this.condominios.data[index].status = (v.status ? v.status : 'N/Informado')
                 this.condominios.data[index].periodo = v.periodo
-                this.condominios.data[index].doc_sap = v.doc_sap ? v.doc_sap : 'N/Informado'
+                this.condominios.data[index].doc_sap = (v.doc_sap ? v.doc_sap : 'N/Informado')
                 this.condominios.data[index].vencimento = v.vencimento
                 this.condominios.data[index].valor = F.currency(v.valor)
                 this.condominios.data[index].valor_pago = v.valor_pago > 0 ? F.currency(v.valor_pago) : 'N/Pago'
@@ -763,8 +756,6 @@ export default {
 
                 // Fechando a modal
                 $('.modal').modal('hide')
-            }).catch(e => {
-                console.log(e)
             })
         },
         deleteCond(){
@@ -778,8 +769,6 @@ export default {
 
                 // Fechando a modal
                 $('.modal').modal('hide')
-            }).catch(e => {
-                console.log(e)
             })
         },
         /*=====  End of Condominios - Events  ======*/
@@ -791,27 +780,42 @@ export default {
             datas.PEP = this.PEP
 
             storeIptu(datas).then(r => {
-                let v = r.results
-                v.raw = v
-                this.iptus.data.push(r.results)
+                let v = r.results, F = this.$options.filters
+
+                this.iptus.total++
+                this.iptus.data.push({
+                    id: v.id,
+                    status:  v.status || 'N/Informado',
+                    doc_sap: v.doc_sap || 'N/Informado',
+                    periodo: v.periodo,
+                    parcela: v.parcela,
+                    vencimento: v.vencimento,
+                    valor_principal: F.currency(v.valor_principal),
+                    multa: '(' + v.multa + '%) ' + F.currency(v.valor_multa),
+                    juros: '(' + v.juros + '%) ' + F.currency(v.valor_juros),
+                    correcao_monetaria: '(' + v.correcao_monetaria + '%) ' + F.currency(v.valor_correcao),
+                    total: F.currency(v.total),
+                    divida_ativa: v.divida_ativa,
+                    fonte: (v.fonte == 'R' ? 'Relatório' : 'Projeção'),
+                    raw: v
+                })
 
                 // Notificando o usuário
                 this.$notify({group:'normal', type:'success', text:'IPTU cadastrado com sucesso'})
 
                 // Fechando a modal
                 $('.modal').modal('hide')
-            }).catch(e => {
-                console.log(e)
             })
         },
         updateIptu(datas) {
             editIptu(datas, this.dadoActive.id).then(r => {
                 let v = r.results,
-                    index = this.iptus.data.map(e => e.id).indexOf(this.dadoActive.id)
+                    index = this.iptus.data.map(e => e.id).indexOf(this.dadoActive.id),
+                    F = this.$options.filters
 
                 // Atualizando o Iptu na lista
-                this.iptus.data[index].status = v.status || 'N/Informado'
-                this.iptus.data[index].doc_sap = v.doc_sap || 'N/Informado'
+                this.iptus.data[index].status = (v.status ? v.status : 'N/Informado')
+                this.iptus.data[index].doc_sap = (v.doc_sap ? v.doc_sap : 'N/Informado')
                 this.iptus.data[index].periodo = v.periodo
                 this.iptus.data[index].parcela = v.parcela
                 this.iptus.data[index].vencimento = v.vencimento
@@ -828,8 +832,6 @@ export default {
 
                 // Fechando a modal
                 $('.modal').modal('hide')
-            }).catch(e => {
-                console.log(e)
             })
         },
         deleteIptu() {
@@ -843,8 +845,6 @@ export default {
 
                 // Fechando a modal
                 $('.modal').modal('hide')
-            }).catch(e => {
-                console.log(e)
             })
         },
         /*=====  End of IPTUS - Events  ======*/
@@ -856,28 +856,31 @@ export default {
             datas.PEP = this.PEP
 
             storeAgua(datas).then(r => {
-                let v = r.results,
-                    F = this.$options.filters
+                let v = r.results, F = this.$options.filters
 
-                v.raw = v
-
-                // Results format
-                v.valor_pago = v.valor_pago || 'N/Pago'
-                v.data_pagamento = v.data_pagamento || 'N/Pago'
-                v.fonte = (v.fonte == 'R' ? 'Relatório' : 'Projeção')
-                v.multa = '(' + v.multa + '%) ' + F.currency(v.valor_multa)
-                v.juros = '(' + v.juros + '%) ' + F.currency(v.valor_juros)
-                v.correcao_monetaria ='(' + v.correcao_monetaria + '%) ' + F.currency(v.valor_correcao)
-
-                this.aguas.data.push(v)
+                this.aguas.total++
+                this.aguas.data.push({
+                    id: v.id,
+                    status: (v.status ? v.status : 'N/Informado'),
+                    doc_sap: v.doc_sap ? v.doc_sap : 'N/Informado',
+                    periodo: v.periodo,
+                    vencimento: v.vencimento,
+                    valor: F.currency(v.valor),
+                    valor_pago: F.currency(v.valor_pago),
+                    multa: '(' + v.multa + '%) ' + F.currency(v.valor_multa),
+                    juros: '(' + v.juros + '%) ' + F.currency(v.valor_juros),
+                    correcao_monetaria: '(' + v.correcao_monetaria + '%) ' + F.currency(v.valor_correcao),
+                    fonte: (v.fonte == 'R' ? 'Relatório' : 'Projeção'),
+                    total: F.currency(v.total),
+                    data_pagamento: (v.data_pagamento ? v.data_pagamento : 'N/Pago'),
+                    raw: v
+                })
 
                 // Notificando o usuário
                 this.$notify({group:'normal', type:'success', text:'Água cadastrada com sucesso'})
 
                 // Fechando a modal
                 $('.modal').modal('hide')
-            }).catch(e => {
-                console.log(e)
             })
         },
         updateAgua(datas) {
@@ -906,8 +909,6 @@ export default {
 
                 // Fechando a modal
                 $('.modal').modal('hide')
-            }).catch(e => {
-                console.log(e)
             })
         },
         deleteAgua() {
@@ -921,8 +922,6 @@ export default {
 
                 // Fechando a modal
                 $('.modal').modal('hide')
-            }).catch(e => {
-                console.log(e)
             })
         },
         /*=====  End of Água - Events  ======*/
@@ -934,28 +933,31 @@ export default {
             datas.PEP = this.PEP
 
             storeLuz(datas).then(r => {
-                let v = r.results,
-                    F = this.$options.filters
+                let v = r.results, F = this.$options.filters
 
-                v.raw = v
-
-                // Results format
-                v.valor_pago = v.valor_pago || 'N/Pago'
-                v.data_pagamento = v.data_pagamento || 'N/Pago'
-                v.fonte = (v.fonte == 'R' ? 'Relatório' : 'Projeção')
-                v.multa = '(' + v.multa + '%) ' + F.currency(v.valor_multa)
-                v.juros = '(' + v.juros + '%) ' + F.currency(v.valor_juros)
-                v.correcao_monetaria ='(' + v.correcao_monetaria + '%) ' + F.currency(v.valor_correcao)
-
-                this.luzes.data.push(v)
+                this.luzes.total++
+                this.luzes.data.push({
+                    id: v.id,
+                    status: (v.status ? v.status : 'N/Informado'),
+                    periodo: v.periodo,
+                    doc_sap: v.doc_sap ? v.doc_sap : 'N/Informado',
+                    vencimento: v.vencimento,
+                    valor: F.currency(v.valor),
+                    valor_pago: v.valor_pago > 0 ? F.currency(v.valor_pago) : 'N/Pago',
+                    multa: '(' + v.multa + '%) ' + F.currency(v.valor_multa),
+                    juros: '(' + v.juros + '%) ' + F.currency(v.valor_juros),
+                    correcao_monetaria: '(' + v.correcao_monetaria + '%) ' + F.currency(v.valor_correcao),
+                    fonte: (v.fonte == 'R' ? 'Relatório' : 'Projeção'),
+                    total: F.currency(v.total),
+                    data_pagamento: (v.data_pagamento ? v.data_pagamento : 'N/Pago'),
+                    raw: v
+                })
 
                 // Notificando o usuário
                 this.$notify({group:'normal', type:'success', text:'Luz cadastrada com sucesso'})
 
                 // Fechando a modal
                 $('.modal').modal('hide')
-            }).catch(e => {
-                console.log(e)
             })
         },
         updateLuz(datas) {
@@ -984,8 +986,6 @@ export default {
 
                 // Fechando a modal
                 $('.modal').modal('hide')
-            }).catch(e => {
-                console.log(e)
             })
         },
         deleteLuz() {
@@ -999,8 +999,6 @@ export default {
 
                 // Fechando a modal
                 $('.modal').modal('hide')
-            }).catch(e => {
-                console.log(e)
             })
         }
         /*=====  End of Luz - Events  ======*/

@@ -56,6 +56,10 @@
                                 </div>
                             </form>
                         </div>
+
+                        <div v-if="this.action == 'New'">
+                            <p class="text-muted"><i class="fa fa-info-circle text-danger"></i> Os campos usuário e senha referem-se aos dados para acessar o sistema do condomínio.</p>
+                        </div>
                     </div>
                     <div class="modal-footer">
                         <div v-if="this.action !== 'Delete'">

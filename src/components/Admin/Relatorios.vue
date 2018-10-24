@@ -30,7 +30,7 @@
                         <h4 v-if="relatorioSel" class="px-3 my-3 text-muted">2.Selecione os filtros para gerar um relatório referente a {{ relatorioSel.name }} <i class="fas fa-filter text-primary"></i></h4>
 
                         <!-- Filtros para condominios -->
-                        <div class="row" :class="{'is-fetching': isFetching}" v-if="relatorioSel && relatorioSel.value == 1">
+                        <section class="row" :class="{'is-fetching': isFetching}" v-if="relatorioSel && relatorioSel.value == 1">
                             <div class="w-100">
                                 <div class="p-3 justify-content-start">
                                     <div class="mb-3 col-md-12">
@@ -67,27 +67,29 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        </section>
 
                         <h4 v-if="generatedRel" class="px-3 my-3 text-muted">3.Relatório criado <i class="fas fa-check text-success"></i></h4>
-                        
-                        <div class="row" v-if="generatedRel">
-                            <div class="w-100">
-                                <div class="p-3">
-                                    <div class="jumbotron col-md-12">
-                                        <h1 class="display-4">Relatório gerado com sucesso</h1>
-                                        <p class="lead"></p>
-                                        <p class="lead">
-                                            <a :href="generated.link" :title="generated.file_name" class="btn btn-primary">Baixar relatório <i class="fa fa-download"></i></a>
-                                            <p class="text-muted"><b>Arquivo:</b> {{ generated.file_name }}</p>
-                                            <p class="text-muted"><b>Gerado em:</b> {{ generated.when }}</p>
-                                        </p>
 
-                                        <!-- <scale-loader :loading="true" color="#CCC"></scale-loader> -->
+                        <section id="generated_rel">
+                            <div class="row" v-if="generatedRel">
+                                <div class="w-100">
+                                    <div class="p-3">
+                                        <div class="jumbotron col-md-12">
+                                            <h1 class="display-4">Relatório gerado com sucesso</h1>
+                                            <p class="lead"></p>
+                                            <p class="lead">
+                                                <a :href="generated.link" :title="generated.file_name" class="btn btn-primary">Baixar relatório <i class="fa fa-download"></i></a>
+                                                <p class="text-muted"><b>Arquivo:</b> {{ generated.file_name }}</p>
+                                                <p class="text-muted"><b>Gerado em:</b> {{ generated.when }}</p>
+                                            </p>
+
+                                            <!-- <scale-loader :loading="true" color="#CCC"></scale-loader> -->
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        </section>
                     </div>
                     <div class="card-footer bg-primary text-white border-0 text-right"></div>
                 </div>
@@ -146,6 +148,11 @@ export default {
         }
     },
     watch: {
+        generatedRel() {
+            try{
+                $('html,body').clearQueue().animate({scrollTop: $('#generated_rel').offset().top}, 500)
+            }catch(e){ console.log(e) }
+        },
         relatorioSel(v) {
             if(!v.value == 1 || this.condominios.listLoaded) return
 
@@ -162,16 +169,29 @@ export default {
     },
     methods: {
         mountAndMake() {
-            this.$notify({ group: 'normal',  type: 'success', text: 'Gerando o relatório... poderá levar uns minutos' })
+            this.$notify({ group: 'normal',  type: 'success', text: 'Gerando o relatório, isso pode levar uns minutos...', duration: -1 })
+
+            this.generatedRel = false
 
             generate(this.mount()).then(r => {
                 this.generatedRel = true
 
                 this.generated.file_name = r.results.file_name
                 this.generated.link = r.results.file_link
-                this.generated.when = r.results.gerado_em
+                this.generated.when = r.results.when
 
+                // Limpando notificações antigas e exibindo as novas
+                this.$notify({ group: 'normal', clean: true })
                 this.$notify({ group: 'normal',  type: 'success', text: 'Relatório gerado com sucesso!' })
+            }).catch(e => {
+                // Limpando notificações antigas e exibindo as novas
+                this.$notify({ group: 'normal', clean: true })
+
+                if(e.response.status == 404) {
+                    this.$notify({ group: 'normal', type: 'warn', text: 'Nenhum dado encontrado, confira os filtros.' })
+                } else  {
+                    this.$notify({ group: 'normal', type: 'error', text: 'Ocorreu um erro inesperado ao tentar gerar o relatório :/' })
+                }
             })
         },
         mount() {
@@ -191,9 +211,9 @@ export default {
                 mounted.search.com_debitos = this.condominios.com_debitos
                 mounted.search.data_cad = this.condominios.data_cadastro
                 mounted.search.data_ref = this.condominios.data_ref
-
-                return mounted
             }
+
+            return mounted
         }
     },
     mounted() {

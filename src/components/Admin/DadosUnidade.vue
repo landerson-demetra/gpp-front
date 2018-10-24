@@ -5,34 +5,12 @@
                 <h3 class="mt-0">Dados da Unidade <small class="opacity-small" v-if="isFetching">[ Aguarde... ]</small><small class="opacity-small" v-if="pep_exists && !isFetching">[ {{ PEP }} ]</small></h3>
             </div>
             <div class="card-body">
-                <form action="">
-                    <div class="row">
-                        <div class="form-group col-md-12">
-                            <label for="PEP">PEP</label>
-                            <input v-model="PEP" id="PEP" type="text" class="form-control" placeholder="R.XXXX.99.99.99.9999">
-                        </div>
+                <div class="row">
+                    <div class="form-group col-md-12">
+                        <label for="PEP">PEP</label>
+                        <input v-model="PEP" v-mask="['X.XXXX.##.##.##.####']" v-on:input="PEP = $event.target.value.toUpperCase()" id="PEP" type="text" class="form-control" placeholder="R.XXXX.99.99.99.9999">
                     </div>
-<!--                     <div class="row">
-                        <div class="form-group col-md-4">
-                            <label for="Empreendimento">Empreendimento</label>
-                            <v-select v-model="Empreendimento" name="Empreendimento" placeholder="Empreendimento" :options="this.Empreendimentos">
-                                <span slot="no-options">Nenhum empreendimento encontrado.</span>
-                            </v-select>
-                        </div>
-                        <div class="form-group col-md-4">
-                            <label for="Bloco">Bloco</label>
-                            <select :disabled="bloco_blocked" v-model="Bloco" name="bloco" id="Bloco" class="form-control">
-                                <option value="" selected>Selecione</option> 
-                            </select>
-                        </div>
-                        <div class="form-group col-md-4">
-                            <label for="Unidade">Unidade</label>
-                            <select :disabled="unidade_blocked" v-model="Unidade" name="bloco" id="Unidade" class="form-control">
-                                <option value="" selected>Selecione</option> 
-                            </select>
-                        </div>
-                    </div> -->
-                </form>
+                </div>
 
                 <hr>
 
@@ -88,6 +66,7 @@
 </template>
 
 <script>
+import { mask } from 'vue-the-mask'
 import Bus from '../../bus'
 
 import { reMountPEP, parsePEP } from '../../modules/pep'
@@ -101,6 +80,7 @@ import ClipLoader from 'vue-spinner/src/ClipLoader'
 export default {
     name: 'DadosUnidade',
     components: { DadosUnidadeModal, ClipLoader },
+    directives: {mask},
     data(){
         return {
             isFetching: false,

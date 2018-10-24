@@ -179,15 +179,15 @@ export default {
             this.DataPGTO = this.datas.data_pagamento
         },
         reset(){
-            this.Status = ''
+            this.Status = 'Aberto'
             this.DocSAP = ''
             this.Periodo = ''
             this.Vencimento = ''
             this.Valor = ''
             this.ValorPago = ''
-            this.Multa = ''
-            this.Juros = ''
-            this.Correcao = ''
+            this.Multa = 2
+            this.Juros = 1
+            this.Correcao = 0
             this.Fonte = ''
             this.DataPGTO = ''
         }
@@ -210,7 +210,7 @@ export default {
                 multa: parseInt(this.Multa),
                 juros: parseInt(this.Juros),
                 correcao: parseInt(this.Correcao),
-                fonte: this.Fonte.value,
+                fonte: this.Fonte ? this.Fonte.value : null,
                 data_pagamento: this.DataPGTO
             }
         }
