@@ -22,7 +22,6 @@
                                     </div>
                                     <div class="form-group col-lg-4">
                                         <label for="spe_cnpj">SPE CNPJ</label>
-                                        <!-- <input id="spe_cnpj" class="form-control" v-model="SPE_CNPJ" type="text"> -->
                                         <the-mask id="spe_cnpj" class="form-control" :mask="['##.###.###/####-##']" v-model="SPE_CNPJ" type="text" :masked="false" placeholder="Razão social SPE"></the-mask>
                                     </div>
                                     <div class="form-group col-lg-4">

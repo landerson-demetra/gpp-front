@@ -151,11 +151,10 @@ export default {
 
             // Verifica por erros de validação.
             this.$validator.validate().then(result => {
-                if(result) {
+                if(result)
                     Bus.$emit('ev' + this.name, this.getFields)
-                } else {
+                else
                     this.$notify({ group: 'normal', type: 'warn', text: 'Corrija os campos informados.' })
-                }
             })
         },
         closeEvent(){
@@ -245,7 +244,7 @@ export default {
         }
     },
     mounted() {
-        Bus.$on('must-reset', this.reset())
+        Bus.$on('resetForms', () => this.reset())
     },
     beforeDestroy() {
         Bus.$off()

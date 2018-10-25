@@ -1,7 +1,7 @@
 <template>
     <div>
-        <div class="modal fade" :id="'modal' + this.name" tabindex="-1" role="dialog">
-            <div class="modal-dialog shadow" :class="{'modal-lg': this.action !== 'Delete'}" role="document">
+        <div class="modal fade" :id="'modal' + name" tabindex="-1" role="dialog">
+            <div class="modal-dialog shadow" :class="{'modal-lg': action !== 'Delete'}" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h5 class="modal-title" :id="'modal' + this.name + 'Label'">{{ this.title }}</h5>
@@ -10,7 +10,7 @@
                         </button>
                     </div>
                     <div class="modal-body">
-                        <div v-if="this.action == 'Delete'">
+                        <div v-if="action == 'Delete'">
                             <p>Você tem certeza que deseja deletar esse condomínio?</p>
                         </div>
                         <div v-else>
@@ -98,13 +98,13 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <div v-if="this.action !== 'Delete'">
-                            <button type="button" class="btn btn-default" v-on:click="this.closeEvent" data-dismiss="modal">Fechar</button>
+                        <div v-if="action !== 'Delete'">
+                            <button type="button" class="btn btn-default" v-on:click="onClose" data-dismiss="modal">Fechar</button>
                             <button v-on:click.prevent="onSubmit" type="button" class="btn btn-primary"><i class="fas fa-check"></i> Salvar</button>
                         </div>
                         <div v-else>
                             <button type="button" class="btn btn-default" data-dismiss="modal">Não</button>
-                            <button v-if="this.action == 'Delete'" v-on:click="this.onSubmit" type="button" class="btn btn-danger"><i class="fas fa-trash"></i> Sim, tenho.</button>
+                            <button v-if="action == 'Delete'" v-on:click="onSubmit" type="button" class="btn btn-danger"><i class="fas fa-trash"></i> Sim, tenho.</button>
                         </div>
                     </div>
                 </div>
@@ -151,19 +151,14 @@ export default {
 
             // Verifica por erros de validação.
             this.$validator.validate().then(result => {
-                if(result) {
+                if(result)
                     Bus.$emit('ev' + this.name, this.getFields)
-
-                    // Reseta os campos após enviar o evento
-                    if(this.action == 'New') this.reset()
-                } else {
+                else
                     this.$notify({ group: 'normal', type: 'warn', text: 'Corrija os campos informados.' })
-                }
-            })  
+            })
         },
-        closeEvent(){
-            if(this.action == 'New')
-                this.reset()
+        onClose(){
+            if(this.action == 'New') this.reset()
         },
         fill(){
             this.Status = this.datas.status
@@ -214,6 +209,12 @@ export default {
                 data_pagamento: this.DataPGTO
             }
         }
+    },
+    mounted() {
+        Bus.$on('resetForms', () => this.reset())
+    },
+    beforeDestroy() {
+        Bus.$off()
     }
 }
 </script>

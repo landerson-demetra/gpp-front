@@ -17,8 +17,10 @@
                             <form>
                                 <div class="row">
                                     <div class="form-group col-lg-3">
-                                        <label for="status">Status <span class="text-danger">*</span></label>
-                                        <v-select v-model="Status" id="status" :options="Statuses"></v-select>
+                                        <label for="status">Status</label>
+                                        <select class="form-control" v-model="Status">
+                                            <option v-for="vStatus in Statuses" :value="vStatus">{{ vStatus }}</option>
+                                        </select>
                                     </div>
                                     <div class="form-group col-lg-4">
                                         <label for="doc_sap">NºDocumento SAP</label>
@@ -26,52 +28,85 @@
                                     </div>
                                     <div class="form-group col-lg-3">
                                         <label for="parcela">Nº da Parcela <span class="text-danger">*</span></label>
-                                        <the-mask v-model="Parcela" :mask="['#','##','###']" type="text" id="parcela" placeholder="Nº" class="form-control" />
+                                        <the-mask v-model="Parcela"
+                                                  :mask="['#','##','###']"
+                                                  v-validate="'required|numeric'"
+                                                  data-vv-as="Nº da Parcela"
+                                                  name="parcela"
+                                                  :class="{'is-invalid': errors.has('parcela')}"
+                                        type="text" id="parcela" placeholder="Nº" class="form-control" />
+                                        <div class="invalid-feedback">{{ errors.first('parcela') }}</div>
                                     </div>
                                     <div class="form-group col-lg-3">
                                         <label for="periodo">Periodo <span class="text-danger">*</span></label>
-                                        <the-mask v-model="Periodo" :mask="['##/####']" :masked="true" type="text" id="periodo" placeholder="__/____" class="form-control" />
+                                        <the-mask v-model="Periodo"
+                                                  :mask="['##/##']"
+                                                  :masked="true"
+                                                  v-validate="'required|date_format:MM/YY'"
+                                                  data-vv-as="Periodo"
+                                                  name="periodo"
+                                                  :class="{'is-invalid': errors.has('periodo')}"
+                                        type="text" id="periodo" placeholder="__/____" class="form-control" />
+                                        <div class="invalid-feedback">{{ errors.first('periodo') }}</div>
                                     </div>
                                     <div class="form-group col-lg-3">
                                         <label for="vencimento">Vencimento <span class="text-danger">*</span></label>
-                                        <the-mask v-model="Vencimento" :mask="['##/##/####']" :masked="true" type="text" id="vencimento" placeholder="__/__/____" class="form-control" />
+                                        <the-mask v-model="Vencimento"
+                                                  :mask="['##/##/####']"
+                                                  :masked="true"
+                                                  v-validate="'required|date_format:DD/MM/YYYY'"
+                                                  data-vv-as="Vencimento"
+                                                  name="vencimento"
+                                                  :class="{'is-invalid': errors.has('vencimento')}"
+                                        type="text" id="vencimento" placeholder="__/__/____" class="form-control" />
+                                        <div class="invalid-feedback">{{ errors.first('vencimento') }}</div>
                                     </div>
                                     <div class="form-group col-lg-3">
                                         <label for="valor">Valor <span class="text-danger">*</span></label>
-                                        <money v-model="Valor" type="text" id="valor" placeholder="Valor..." class="form-control"></money>
+                                        <money v-model="Valor"
+                                               v-validate="'required|min_value:1'"
+                                               data-vv-as="Valor"
+                                               name="valor"
+                                               :class="{'is-invalid': errors.has('valor')}"
+                                        type="text" id="valor" placeholder="Valor..." class="form-control"></money>
+                                        <div class="invalid-feedback">{{ errors.first('valor') }}</div>
                                     </div>
                                     <div class="form-group col-lg-3">
-                                        <label for="multa">Multa (%) <span class="text-danger">*</span></label>
+                                        <label for="multa">Multa (%)</label>
                                         <the-mask v-model="Multa" :mask="['#%','##%','###%']" type="text" id="multa" placeholder="Multa da parcela..." class="form-control" />
                                     </div>
                                     <div class="form-group col-lg-3">
-                                        <label for="juros">Juros (%) <span class="text-danger">*</span></label>
+                                        <label for="juros">Juros (%)</label>
                                         <the-mask v-model="Juros" :mask="['#%','##%','###%']" type="text" id="juros" placeholder="Juros da parcela..." class="form-control" />
                                     </div>
                                     <div class="form-group col-lg-3">
-                                        <label for="correcao">Correção (%) <span class="text-danger">*</span></label>
+                                        <label for="correcao">Correção (%)</label>
                                         <the-mask v-model="Correcao" :mask="['#%','##%','###%']" type="text" id="correcao" placeholder="Correção monetária da parcela..." class="form-control" />
                                     </div>
                                     <div class="form-group col-lg-3">
-                                        <label for="divida_ativa">Dívida Ativa <span class="text-danger">*</span></label>
-                                        <v-select v-model="DividaAtiva" id="divida_ativa" :options="Dividas"></v-select>
+                                        <label for="divida_ativa">Dívida Ativa</label>
+                                        <select class="form-control" v-model="DividaAtiva">
+                                            <option v-for="vDivida in Dividas" :value="vDivida">{{ vDivida }}</option>
+                                        </select>
                                     </div>
                                     <div class="form-group col-lg-3">
-                                        <label for="fonte">Fonte de dados <span class="text-danger">*</span></label>
-                                        <v-select v-model="Fonte" id="fonte" :options="Fontes"></v-select>
+                                        <label for="fonte">Fonte de dados</label>
+                                        <select class="form-control" v-model="Fonte">
+                                            <option v-for="vFonte in Fontes" :value="vFonte">{{ vFonte }}</option>
+                                        </select>
                                     </div>
                                 </div>
                             </form>
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <div v-if="this.action !== 'Delete'">
-                            <button type="button" class="btn btn-default" v-on:click="this.closeEvent" data-dismiss="modal">Fechar</button>
-                            <button v-on:click.prevent="emitOkEvent" type="button" class="btn btn-primary"><i class="fas fa-check"></i> Salvar</button>
+                        <div v-if="action !== 'Delete'">
+                            <button type="button" class="btn btn-default" v-on:click="onClose" data-dismiss="modal">Fechar</button>
+                            <button v-on:click.prevent="onSubmit" type="button" class="btn btn-primary"><i class="fas fa-check"></i> Salvar</button>
                         </div>
                         <div v-else>
                             <button type="button" class="btn btn-default" data-dismiss="modal">Não</button>
-                            <button v-if="this.action == 'Delete'" v-on:click="this.emitOkEvent" type="button" class="btn btn-danger"><i class="fas fa-trash"></i> Sim, tenho.</button>
+                            <button v-if="action == 'Delete'" v-on:click="onSubmit" type="button" class="btn btn-danger"><i class="fas fa-trash"></i> Sim, tenho.</button>
                         </div>
                     </div>
                 </div>
@@ -90,7 +125,7 @@ export default {
     directives: {mask},
     data() {
         return {
-            Status: '',
+            Status: 'Aberto',
             DocSAP: '',
             Parcela: '',
             Periodo: '',
@@ -99,37 +134,34 @@ export default {
             Juros: 1,
             Multa: 2,
             Correcao: 0,
-            DividaAtiva: {label: 'Não', value: 'N'},
-            Fonte: '',
+            DividaAtiva: 'Não',
+            Fonte: 'Projeção',
             //
-            Dividas: [
-                {label: 'Sim', value: 'S'},
-                {label: 'Não', value: 'N'}
-            ],
-            Statuses: [
-                {label: 'N/Definido', value: null},
-                {label: 'Aberto', value: 'A'},
-                {label: 'Renegociado', value: 'R'}
-            ],
-            Fontes: [
-                {label: 'Relatório', value: 'R'},
-                {label: 'Projeção', value: 'P'}
-            ]
+            Dividas: ['Sim', 'Não'],
+            Statuses: ['Aberto', 'Renegociado', 'Pago'],
+            Fontes: ['Relatório', 'Projeção']
         }
     },
     methods: {
-        emitOkEvent(){
-            Bus.$emit('ev' + this.name, (this.action !== 'Delete' ? this.getFields : true))
+        onSubmit(){
+            // Não teremos validação na action 'Delete'.
+            if(this.action == 'Delete')
+                return Bus.$emit('ev' + this.name, true)
 
-            if(this.action == 'New')
-                this.reset()
+            // Verifica por erros de validação.
+            this.$validator.validate().then(result => {
+                if(result)
+                    Bus.$emit('ev' + this.name, this.getFields)
+                else
+                    this.$notify({ group: 'normal', type: 'warn', text: 'Corrija os campos informados.' })
+            })
         },
-        closeEvent(){
+        onClose(){
             if(this.action == 'New')
                 this.reset()
         },
         fill(){
-            this.Status = _.find(this.Statuses, f => f.value == this.datas.status)
+            this.Status = this.datas.status
             this.DocSAP = this.datas.doc_sap
             this.Parcela = this.datas.parcela
             this.Periodo = this.datas.periodo
@@ -138,8 +170,8 @@ export default {
             this.Juros = this.datas.juros
             this.Multa = this.datas.multa
             this.Correcao = this.datas.correcao_monetaria
-            this.DividaAtiva = _.find(this.Dividas, f => f.value == this.datas.divida_ativa)
-            this.Fonte = _.find(this.Fontes, f => f.value == this.datas.fonte)
+            this.DividaAtiva =  this.datas.divida_ativa
+            this.Fonte = this.datas.fonte
         },
         reset(){
             this.Status = ''
@@ -164,7 +196,7 @@ export default {
     computed: {
         getFields() {
             return {
-                status: this.Status.value,
+                status: this.Status,
                 doc_sap: this.DocSAP,
                 periodo: this.Periodo,
                 parcela: this.Parcela,
@@ -173,13 +205,16 @@ export default {
                 multa: this.Multa,
                 juros: this.Juros,
                 correcao_monetaria: this.Correcao,
-                divida_ativa: this.DividaAtiva.value,
-                fonte: this.Fonte.value
+                divida_ativa: this.DividaAtiva,
+                fonte: this.Fonte
             }
         }
     },
+    mounted() {
+        Bus.$on('resetForms', () => this.reset())
+    },
     beforeDestroy() {
-        this.reset()
+        Bus.$off()
     }
 }
 </script>

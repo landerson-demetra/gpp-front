@@ -728,6 +728,9 @@ export default {
 
                 // Fechando a modal
                 $('.modal').modal('hide')
+
+                // Caso não haja erros de validação, devemos resetar os formulários
+                if(r.code !== 409) Bus.$emit('resetForms')
             })
         },
         updateCond(datas){
@@ -805,6 +808,9 @@ export default {
 
                 // Fechando a modal
                 $('.modal').modal('hide')
+
+                // Caso não haja erros de validação, devemos resetar os formulários
+                if(r.code !== 409) Bus.$emit('resetForms')
             })
         },
         updateIptu(datas) {
@@ -832,6 +838,9 @@ export default {
 
                 // Fechando a modal
                 $('.modal').modal('hide')
+
+                // Caso não haja erros de validação, devemos resetar os formulários
+                if(r.code !== 409) Bus.$emit('resetForms')
             })
         },
         deleteIptu() {
@@ -881,6 +890,9 @@ export default {
 
                 // Fechando a modal
                 $('.modal').modal('hide')
+
+                // Caso não haja erros de validação, devemos resetar os formulários
+                if(r.code !== 409) Bus.$emit('resetForms')
             })
         },
         updateAgua(datas) {
@@ -958,6 +970,9 @@ export default {
 
                 // Fechando a modal
                 $('.modal').modal('hide')
+
+                // Caso não haja erros de validação, devemos resetar os formulários
+                if(r.code !== 409) Bus.$emit('resetForms')
             })
         },
         updateLuz(datas) {
@@ -973,9 +988,9 @@ export default {
                 this.luzes.data[index].vencimento = v.vencimento
                 this.luzes.data[index].valor = F.currency(v.valor)
                 this.luzes.data[index].valor_pago = v.valor_pago > 0 ? F.currency(v.valor_pago) : 'N/Pago'
-                this.aguas.data[index].multa = '(' + v.multa + '%) ' + F.currency(v.valor_multa)
-                this.aguas.data[index].juros = '(' + v.juros + '%) ' + F.currency(v.valor_juros)
-                this.aguas.data[index].correcao = '(' + v.correcao + '%) ' + F.currency(v.valor_correcao)
+                this.luzes.data[index].multa = '(' + v.multa + '%) ' + F.currency(v.valor_multa)
+                this.luzes.data[index].juros = '(' + v.juros + '%) ' + F.currency(v.valor_juros)
+                this.luzes.data[index].correcao = '(' + v.correcao + '%) ' + F.currency(v.valor_correcao)
                 this.luzes.data[index].fonte = (v.fonte == 'R' ? 'Relatório' : 'Projeção')
                 this.luzes.data[index].total = F.currency(v.total)
                 this.luzes.data[index].data_pagamento = (v.data_pagamento ? v.data_pagamento : 'N/Pago')

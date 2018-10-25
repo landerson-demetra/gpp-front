@@ -178,7 +178,7 @@ export default {
                 $('.modal').modal('hide')
 
                 // Caso não haja erros de validação, devemos resetar os formulários
-                if(r.code !== 409) Bus.$emit('must-reset')
+                if(r.code !== 409) Bus.$emit('resetForms')
             }).catch(e => {
                 if(e.response.status < 423) return
                 this.$notify({group:'normal', type:'error', title:'Ops :/', text:'Ocorreu um erro inesperado'})
