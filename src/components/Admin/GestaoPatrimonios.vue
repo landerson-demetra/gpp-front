@@ -554,8 +554,8 @@ export default {
                 return
 
             // - Não há contratos
-            // if(!this.unidade_datas.contratos.length)
-            //     this.$notify({ group: 'normal', type: 'info', text: 'Não há contratos para PEP' })
+            if(!this.unidade_datas.contratos.length)
+                this.$notify({ group: 'normal', type: 'info', text: 'Não há contratos para PEP' })
 
             // - Não há condominios
             if(!this.unidade_datas.condominios.length)
@@ -609,7 +609,7 @@ export default {
                     doc_sap: v.doc_sap ? v.doc_sap : 'N/Informado',
                     vencimento: v.vencimento,
                     valor: F.currency(v.valor),
-                    valor_pago: v.valor_pago > 0 ? F.currency(v.valor_pago) : 'N/Pago',
+                    valor_pago: (v.valor_pago > 0 ? F.currency(v.valor_pago) : 'N/Pago'),
                     multa: '(' + v.multa + '%) ' + F.currency(v.valor_multa),
                     juros: '(' + v.juros + '%) ' + F.currency(v.valor_juros),
                     correcao: '(' + v.correcao + '%) ' + F.currency(v.valor_correcao),
@@ -653,7 +653,7 @@ export default {
                 formated.push({
                     id: v.id,
                     status: (v.status ? v.status : 'N/Informado'),
-                    doc_sap: v.doc_sap ? v.doc_sap : 'N/Informado',
+                    doc_sap: (v.doc_sap ? v.doc_sap : 'N/Informado'),
                     periodo: v.periodo,
                     vencimento: v.vencimento,
                     valor: F.currency(v.valor),
@@ -678,10 +678,10 @@ export default {
                     id: v.id,
                     status: (v.status ? v.status : 'N/Informado'),
                     periodo: v.periodo,
-                    doc_sap: v.doc_sap ? v.doc_sap : 'N/Informado',
+                    doc_sap: (v.doc_sap ? v.doc_sap : 'N/Informado'),
                     vencimento: v.vencimento,
                     valor: F.currency(v.valor),
-                    valor_pago: v.valor_pago > 0 ? F.currency(v.valor_pago) : 'N/Pago',
+                    valor_pago: (v.valor_pago > 0 ? F.currency(v.valor_pago) : 'N/Pago'),
                     multa: '(' + v.multa + '%) ' + F.currency(v.valor_multa),
                     juros: '(' + v.juros + '%) ' + F.currency(v.valor_juros),
                     correcao_monetaria: '(' + v.correcao_monetaria + '%) ' + F.currency(v.valor_correcao),
@@ -713,7 +713,7 @@ export default {
                     doc_sap: v.doc_sap ? v.doc_sap : 'N/Informado',
                     vencimento: v.vencimento,
                     valor: F.currency(v.valor),
-                    valor_pago: v.valor_pago > 0 ? F.currency(v.valor_pago) : 'N/Pago',
+                    valor_pago: (v.valor_pago > 0 ? F.currency(v.valor_pago) : 'N/Pago'),
                     multa: '(' + v.multa + '%) ' + F.currency(v.valor_multa),
                     juros: '(' + v.juros + '%) ' + F.currency(v.valor_juros),
                     correcao: '(' + v.correcao + '%) ' + F.currency(v.valor_correcao),
@@ -766,6 +766,7 @@ export default {
                 // Removendo o condomínio da lista
                 let index = this.condominios.data.map(e => e.id).indexOf(this.dadoActive.id)
                 this.condominios.data.splice(index, 1)
+                this.condominios.total--
 
                 // Notificando o usuário
                 this.$notify({group:'normal', type:'success', text:'Condomínio deletado com sucesso'})
@@ -825,7 +826,7 @@ export default {
                 this.iptus.data[index].periodo = v.periodo
                 this.iptus.data[index].parcela = v.parcela
                 this.iptus.data[index].vencimento = v.vencimento
-                this.iptus.data[index].valor_principal = this.$options.filters.currency(v.valor_principal)
+                this.iptus.data[index].valor_principal = F.currency(v.valor_principal)
                 this.iptus.data[index].multa = '(' + v.multa + '%) ' + F.currency(v.valor_multa)
                 this.iptus.data[index].juros = '(' + v.juros + '%) ' + F.currency(v.valor_juros)
                 this.iptus.data[index].correcao_monetaria = '(' + v.correcao_monetaria + '%) ' + F.currency(v.valor_correcao)
@@ -848,6 +849,7 @@ export default {
                 // Removendo o iptu da lista
                 let index = this.iptus.data.map(e => e.id).indexOf(this.dadoActive.id)
                 this.iptus.data.splice(index, 1)
+                this.iptus.total--
 
                 // Notificando o usuário
                 this.$notify({group:'normal', type:'success', text:'Iptu deletado com sucesso'})
@@ -871,7 +873,7 @@ export default {
                 this.aguas.data.push({
                     id: v.id,
                     status: (v.status ? v.status : 'N/Informado'),
-                    doc_sap: v.doc_sap ? v.doc_sap : 'N/Informado',
+                    doc_sap: (v.doc_sap ? v.doc_sap : 'N/Informado'),
                     periodo: v.periodo,
                     vencimento: v.vencimento,
                     valor: F.currency(v.valor),
@@ -907,7 +909,7 @@ export default {
                 this.aguas.data[index].periodo = v.periodo
                 this.aguas.data[index].vencimento = v.vencimento
                 this.aguas.data[index].valor = F.currency(v.valor)
-                this.aguas.data[index].valor_pago = v.valor_pago > 0 ? F.currency(v.valor_pago) : 'N/Pago'
+                this.aguas.data[index].valor_pago = (v.valor_pago > 0 ? F.currency(v.valor_pago) : 'N/Pago')
                 this.aguas.data[index].multa = '(' + v.multa + '%) ' + F.currency(v.valor_multa)
                 this.aguas.data[index].juros = '(' + v.juros + '%) ' + F.currency(v.valor_juros)
                 this.aguas.data[index].correcao = '(' + v.correcao + '%) ' + F.currency(v.valor_correcao)
@@ -928,6 +930,7 @@ export default {
                 // Removendo a água da lista
                 let index = this.aguas.data.map(e => e.id).indexOf(this.dadoActive.id)
                 this.aguas.data.splice(index, 1)
+                this.aguas.total--
 
                 // Notificando o usuário
                 this.$notify({ group:'normal', type:'success', text:'Água deletada com sucesso' })
@@ -952,10 +955,10 @@ export default {
                     id: v.id,
                     status: (v.status ? v.status : 'N/Informado'),
                     periodo: v.periodo,
-                    doc_sap: v.doc_sap ? v.doc_sap : 'N/Informado',
+                    doc_sap: (v.doc_sap ? v.doc_sap : 'N/Informado'),
                     vencimento: v.vencimento,
                     valor: F.currency(v.valor),
-                    valor_pago: v.valor_pago > 0 ? F.currency(v.valor_pago) : 'N/Pago',
+                    valor_pago: (v.valor_pago > 0 ? F.currency(v.valor_pago) : 'N/Pago'),
                     multa: '(' + v.multa + '%) ' + F.currency(v.valor_multa),
                     juros: '(' + v.juros + '%) ' + F.currency(v.valor_juros),
                     correcao_monetaria: '(' + v.correcao_monetaria + '%) ' + F.currency(v.valor_correcao),
@@ -983,11 +986,11 @@ export default {
 
                 // Atualizando a luz na lista
                 this.luzes.data[index].status = (v.status ? v.status : 'N/Informado')
-                this.luzes.data[index].doc_sap = v.doc_sap ? v.doc_sap : 'N/Informado'
+                this.luzes.data[index].doc_sap = (v.doc_sap ? v.doc_sap : 'N/Informado')
                 this.luzes.data[index].periodo = v.periodo
                 this.luzes.data[index].vencimento = v.vencimento
                 this.luzes.data[index].valor = F.currency(v.valor)
-                this.luzes.data[index].valor_pago = v.valor_pago > 0 ? F.currency(v.valor_pago) : 'N/Pago'
+                this.luzes.data[index].valor_pago = (v.valor_pago > 0 ? F.currency(v.valor_pago) : 'N/Pago')
                 this.luzes.data[index].multa = '(' + v.multa + '%) ' + F.currency(v.valor_multa)
                 this.luzes.data[index].juros = '(' + v.juros + '%) ' + F.currency(v.valor_juros)
                 this.luzes.data[index].correcao = '(' + v.correcao + '%) ' + F.currency(v.valor_correcao)
@@ -1008,6 +1011,7 @@ export default {
                 // Removendo a luz da lista
                 let index = this.luzes.data.map(e => e.id).indexOf(this.dadoActive.id)
                 this.luzes.data.splice(index, 1)
+                this.luzes.total--
 
                 // Notificando o usuário
                 this.$notify({ group:'normal', type:'success', text:'Água deletada com sucesso' })

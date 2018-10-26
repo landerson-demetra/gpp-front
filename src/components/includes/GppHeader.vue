@@ -19,7 +19,7 @@
                             <router-link :to="{ name: 'painel' }" class="nav-link">Home <span class="sr-only">(current)</span></router-link>
                         </li>
                         <li class="nav-item">
-                            <router-link :to="{ name: 'GestaoPatromonios' }" class="nav-link">Gestão de Patrimônios</router-link>
+                            <router-link :to="{ name: 'GestaoPatromonios' }" class="nav-link"><b>Gestão</b></router-link>
                         </li>
                         <li class="nav-item dropdown">
                             <a href="#" class="nav-link dropdown-toggle" id="navbarDropdownCadastro" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Cadastros</a>
@@ -31,6 +31,9 @@
                         </li>
                         <li class="nav-item">
                             <router-link :to="{ name: 'Empreendimentos' }" class="nav-link">Empreendimentos</router-link>
+                        </li>
+                        <li class="nav-item">
+                            <router-link :to="{ name: 'Relatorios' }" class="nav-link">Relatórios</router-link>
                         </li>
                         <!-- <li class="nav-item">
                             <router-link :to="{ name: 'Permissoes' }" class="nav-link">Permissões</router-link>

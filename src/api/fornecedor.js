@@ -18,6 +18,13 @@ const getForList = (params) => {
     })
 }
 
+const getForSeg = (segmento) => {
+    return new Promise((resolve, reject) => {
+        http.get('fornecedor/forseg', {params: { segmento: segmento }})
+            .then(r => resolve(r.data)).catch(e => reject(e))
+    })
+}
+
 const store = (datas) => {
     return new Promise((resolve, reject) => {
         http.post('fornecedor', datas)
@@ -40,4 +47,4 @@ const deletedata = (id) => {
     })
 }
 
-export { get, getForList, store, update, deletedata };
+export { get, getForList, getForSeg, store, update, deletedata };
