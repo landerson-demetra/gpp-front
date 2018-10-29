@@ -55,7 +55,7 @@
                                 </table>
                             </div>
                             <div class="tab-pane fade" id="pills-fornecedor-sap" role="tabpanel" aria-labelledby="pills-fornecedor-sap-tab">
-                                <div v-if="!datas.fornecedorsap" class="alert alert-warning">Nada encontrado.</div>
+                                <div v-if="!datas.fornecedorsap" class="alert alert-warning">Nenhum Fornecedor SAP vinculado.</div>
                                 <table v-else class="table table-bordered">
                                     <thead>
                                         <tr>
@@ -74,7 +74,7 @@
                                 </table>
                             </div>
                             <div class="tab-pane fade" id="pills-fornecedor-agua" role="tabpanel" aria-labelledby="pills-fornecedor-agua-tab">
-                                <div v-if="!datas.fornecedoragua" class="alert alert-warning">Nada encontrado.</div>
+                                <div v-if="!datas.fornecedoragua" class="alert alert-warning">Nenhum Fornecedor Água vinculado.</div>
                                 <table v-else class="table table-bordered">
                                     <thead>
                                         <tr>
@@ -93,7 +93,7 @@
                                 </table>
                             </div>
                             <div class="tab-pane fade" id="pills-fornecedor-luz" role="tabpanel" aria-labelledby="pills-fornecedor-luz-tab">
-                                <div v-if="!datas.fornecedorluz" class="alert alert-warning">Nada encontrado.</div>
+                                <div v-if="!datas.fornecedorluz" class="alert alert-warning">Nenhum Fornecedor Luz vinculado.</div>
                                 <table v-else class="table table-bordered">
                                     <thead>
                                         <tr>
@@ -112,7 +112,7 @@
                                 </table>
                             </div>
                             <div class="tab-pane fade" id="pills-fornecedor-prefeitura" role="tabpanel" aria-labelledby="pills-prefeitur-tab">
-                                <div v-if="!datas.fornecedorluz" class="alert alert-warning">Nada encontrado.</div>
+                                <div v-if="!datas.prefeitura" class="alert alert-warning">Nenhuma Prefeitura vinculada.</div>
                                 <table v-else class="table table-bordered">
                                     <thead>
                                         <tr>
@@ -123,15 +123,15 @@
                                     </thead>
                                     <tbody>
                                         <tr>
-                                            <td>{{ this.datas.fornecedorluz.numero_sap }}</td>
-                                            <td>{{ this.datas.fornecedorluz.nome }}</td>
-                                            <td>{{ this.datas.fornecedorluz.cnpj_cpf }}</td>
+                                            <td>{{ this.datas.prefeitura.numero_sap }}</td>
+                                            <td>{{ this.datas.prefeitura.nome }}</td>
+                                            <td>{{ this.datas.prefeitura.cnpj_cpf }}</td>
                                         </tr>
                                     </tbody>
                                 </table>
                             </div>
                             <div class="tab-pane fade" id="pills-responsavel" role="tabpanel" aria-labelledby="pills-responsavel-tab">
-                                <div v-if="!datas.responsavel" class="alert alert-warning">Nada encontrado.</div>
+                                <div v-if="!datas.responsavel" class="alert alert-warning">Nenhum reponsável vinculado.</div>
                                 <table v-else class="table table-bordered">
                                     <thead>
                                         <tr>

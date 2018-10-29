@@ -65,7 +65,7 @@ export default {
         this.authenticating = true
 
         this.$store.dispatch(AUTH_REQUEST, this.makeAuth).then(() => {
-            this.$router.push({ name: 'painel' })
+            this.$router.push({ name: 'GestaoPatromonios' })
         }).catch(() => {
             this.authenticating = false
             this.errors_l.push('E-mail ou senha incorreto(s)')

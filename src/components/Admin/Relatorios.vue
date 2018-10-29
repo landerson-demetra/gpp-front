@@ -19,6 +19,7 @@
                                             <option :value="{value: null}">Selecione o tipo de relatório</option>
                                             <option :value="{name: 'Condomínios', value: 1}">Gerar relatório: Condomínios</option>
                                             <option :value="{name: 'IPTUs', value: 2}">Gerar relatório: IPTUs</option>
+                                            <option :value="{name: 'Fornecedores', value: 3}">Gerar relatório: Fornecedores</option>
 <!--                                             <option :value="{name: 'Fornecedores', value: 3}">Gerar relatório: Fornecedores</option>
                                             <option :value="{name: 'Resumo por empreendimento', value: 4}">Gerar relatório: Resumo por empreendimento</option> -->
                                         </select>
@@ -98,6 +99,22 @@
                                         </select>
                                         <input v-model="iptus.numero_contribuinte" type="text" placeholder="Número do contribuinte..." class="form-control">
                                         <input disabled="" v-model="iptus.data_ref" v-mask="['##/##/####']" type="text" placeholder="Data de referência [DD/MM/YYYY]" class="form-control">
+                                    </div>
+                                    <div class="col-md-12 text-right">
+                                        <button v-on:click="mountAndMake" class="btn btn-success"><i class="fas fa-check"></i> Gerar relatório</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </section>
+
+                        <!-- Filtos para fornecedores -->
+                        <section class="row" :class="{'is-fetching': isFetching}" v-if="relatorioSel.value == 3">
+                            <div class="w-100">
+                                <div class="p-3 justify-content-start">
+                                    <div class="input-group mb-3 col-md-12">
+                                        <input v-model="fornecedores.nome" type="text" placeholder="Nome do Forncededor..." class="form-control">
+                                        <input v-model="fornecedores.responsavel" type="text" placeholder="Responsável.." class="form-control">
+                                        <input v-model="fornecedores.numerosap" type="text" placeholder="Número SAP..." class="form-control">
                                     </div>
                                     <div class="col-md-12 text-right">
                                         <button v-on:click="mountAndMake" class="btn btn-success"><i class="fas fa-check"></i> Gerar relatório</button>
@@ -204,6 +221,12 @@ function getDefaultData() {
             com_debitos: false,
 
             data_ref: null
+        },
+
+        fornecedores: {
+            nome: null,
+            responsavel: null,
+            numerosap: null,
         }
     }
 }
@@ -283,10 +306,10 @@ export default {
             var mounted = {}
 
             mounted.type = this.relatorioSel.value
+            mounted.search = {}
 
             // Condomínios
             if(this.relatorioSel.value == 1) {
-                mounted.search = {}
                 mounted.search.empreendimento = (this.condominios.empreendimento_selected ? this.condominios.empreendimento_selected.value : null)
                 mounted.search.administradora = this.condominios.administradoraSel
                 mounted.search.vencimento_de_ate = this.condominios.vencimento_de_ate
@@ -299,7 +322,6 @@ export default {
 
             // IPTUs
             if(this.relatorioSel.value == 2) {
-                mounted.search = {}
                 mounted.search.empreendimento = (this.iptus.empreendimento_selected ? this.iptus.empreendimento_selected.value : null)
                 mounted.search.prefeitura = this.iptus.administradoraSel
                 mounted.search.vencimento_de_ate = this.iptus.vencimento_de_ate
@@ -308,6 +330,13 @@ export default {
                 mounted.search.com_debitos = this.iptus.com_debitos
                 mounted.search.data_cad = this.iptus.data_cadastro
                 mounted.search.data_ref = this.iptus.data_ref
+            }
+
+            // Fornecedores
+            if(this.relatorioSel.value == 3) {
+                mounted.search.nome = this.fornecedores.nome
+                mounted.search.responsavel = this.fornecedores.responsavel
+                mounted.search.numerosap = this.fornecedores.numerosap
             }
 
             return mounted

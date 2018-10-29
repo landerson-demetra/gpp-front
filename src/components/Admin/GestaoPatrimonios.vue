@@ -91,16 +91,48 @@
                         </ul>
                         <div class="tab-content" id="myTabContent">
                             <div class="tab-pane fade show active" id="condominios" role="tabpanel" aria-labelledby="home-tab">
-                                <datatable :HeaderSettings="false" :Pagination="false" v-bind="$data.condominios" />
-                                <div v-if="this.pepIs == 'unidade'" class="row">
+                                <div class="row" v-if="pepIs == 'unidade' && $data.condominios.data.length > 0">
+                                    <div class="col-md-12">
+                                        <div class="border-left border-right no-gutters">
+                                            <div class="col-md-4 offset-md-8 align-self-end">
+                                                <div class="input-group">
+                                                    <input v-model="relatorios.condominios.data_ref" type="text" class="form-control" disabled="" placeholder="Data de referência: 29/10/2018">
+                                                    <div class="input-group-append">
+                                                        <button v-on:click="mountAndMakeRel(1)" class="btn btn-outline-primary" type="button"><i class="fa fa-download"></i></button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!--  -->
+
+                                <datatable class="border border-top-0" :HeaderSettings="false" :Pagination="false" v-bind="$data.condominios" />
+                                <div v-if="pepIs == 'unidade'" class="row">
                                     <div class="col mt-4 no-gutters text-right">
                                         <button class="btn btn-success" data-toggle="modal" data-target="#modalNovoCondominio"><i class="fas fa-plus"></i> Adicionar</button>
                                     </div>
                                 </div>
                             </div>
                             <div class="tab-pane fade" id="iptus" role="tabpanel" aria-labelledby="iptus-tab">
+                                <div class="row" v-if="pepIs == 'unidade' && $data.iptus.data.length > 0">
+                                    <div class="col-md-12">
+                                        <div class="border-left border-right no-gutters">
+                                            <div class="col-md-4 offset-md-8 align-self-end">
+                                                <div class="input-group">
+                                                    <input v-model="relatorios.iptus.data_ref" type="text" class="form-control" disabled="" placeholder="Data de referência: 29/10/2018">
+                                                    <div class="input-group-append">
+                                                        <button v-on:click="mountAndMakeRel(2)" class="btn btn-outline-primary" type="button"><i class="fa fa-download"></i></button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!--  -->
+
                                 <datatable :HeaderSettings="false" :Pagination="false" v-bind="$data.iptus" />
-                                <div v-if="this.pepIs == 'unidade'" class="row">
+                                <div v-if="pepIs == 'unidade'" class="row">
                                     <div class="col mt-4 no-gutters text-right">
                                         <button class="btn btn-success" data-toggle="modal" data-target="#modalNovoIptu"><i class="fas fa-plus"></i> Adicionar</button>
                                     </div>
@@ -108,7 +140,7 @@
                             </div>
                             <div class="tab-pane fade" id="agua" role="tabpanel" aria-labelledby="agua-tab">
                                 <datatable :HeaderSettings="false" :Pagination="false" v-bind="$data.aguas" />
-                                <div v-if="this.pepIs == 'unidade'" class="row">
+                                <div v-if="pepIs == 'unidade'" class="row">
                                     <div class="col mt-4 no-gutters text-right">
                                         <button class="btn btn-success" data-toggle="modal" data-target="#modalNovaAgua"><i class="fas fa-plus"></i> Adicionar</button>
                                     </div>
@@ -116,7 +148,7 @@
                             </div>
                             <div class="tab-pane fade" id="luz" role="tabpanel" aria-labelledby="luz-tab">
                                 <datatable :HeaderSettings="false" :Pagination="false" v-bind="$data.luzes" />
-                                <div v-if="this.pepIs == 'unidade'" class="row">
+                                <div v-if="pepIs == 'unidade'" class="row">
                                     <div class="col mt-4 no-gutters text-right">
                                         <button class="btn btn-success" data-toggle="modal" data-target="#modalNovaLuz"><i class="fas fa-plus"></i> Adicionar</button>
                                     </div>
@@ -198,6 +230,7 @@ import { store as storeCond, update as editCond, deletedata as delCond } from '.
 import { store as storeIptu, update as editIptu, deletedata as delIptu } from '../../api/iptus'
 import { store as storeAgua, update as editAgua, deletedata as delAgua } from '../../api/agua'
 import { store as storeLuz, update as editLuz, deletedata as delLuz } from '../../api/luz'
+import { generate } from '../../api/relatorios'
 
 // Components
 import GestaoResumo from '../includes/Modals/Gestao/Resumo'
@@ -370,6 +403,15 @@ export default {
                 query: {},
                 xprops: { evName: 'Luz' }
             },
+
+            relatorios: {
+                condominios: {
+                    data_ref: null,
+                },
+                iptus: {
+                    data_ref: null,
+                }
+            }
         }
     },
     watch: {
@@ -1019,8 +1061,28 @@ export default {
                 // Fechando a modal
                 $('.modal').modal('hide')
             })
-        }
+        },
         /*=====  End of Luz - Events  ======*/
+
+        /*==================================
+        =            Relatórios            =
+        ==================================*/
+        mountAndMakeRel(type) {
+            let mounted = {}
+            mounted.search = {}
+
+            mounted.type = type
+            mounted.search.empreendimento = this.empreendimento_selected.id
+            mounted.search.unidade = this.unidade_datas.id_unidade
+            mounted.search.data_ref = this.relatorios.condominios.data_ref
+
+            // Gera o relatório e inicia o download automaticamente
+            generate(mounted).then(r => window.location.href = r.results.file_link)
+        }
+        
+        
+        /*=====  End of Relatórios  ======*/
+        
 
     },
     mounted(){

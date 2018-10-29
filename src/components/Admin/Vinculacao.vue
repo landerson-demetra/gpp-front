@@ -14,7 +14,7 @@
                             </v-select>
                         </div>
                         <div class="form-group col-md-6">
-                            <label for="PEP">Projeto/Company Code</label>
+                            <label for="PEP">Projeto</label>
                             <input disabled="" v-model="PEP" type="text" class="form-control" placeholder="R.XXXX.99.99">
                         </div>
                     </div>
@@ -24,7 +24,7 @@
 
                 <div v-if="!empreendimento_selected" class="alert alert-secondary text-center"><i class="fas fa-exclamation-circle"></i> Escolha um empreendimento</div>
 
-                <div v-if="empreendimento_selected && !vinculacao" class="alert alert-secondary text-center"><i class="fas fa-exclamation-circle"></i> Não há vinculações para PEP</div>
+                <div v-if="empreendimento_selected && !vinculacao" class="alert alert-secondary text-center"><i class="fas fa-exclamation-circle"></i> Não há vinculações para o projeto</div>
 
                 <div class="row mt-3 no-gutters">
                     <table v-if="vinculacao" class="table table-hover table-responsive-sm table-bordered table-striped border-top-0">

@@ -15,11 +15,11 @@
 
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <ul class="navbar-nav mr-auto">
-                        <li class="nav-item active">
+                        <!-- <li class="nav-item active">
                             <router-link :to="{ name: 'painel' }" class="nav-link">Home <span class="sr-only">(current)</span></router-link>
-                        </li>
-                        <li class="nav-item">
-                            <router-link :to="{ name: 'GestaoPatromonios' }" class="nav-link"><b>Gestão</b></router-link>
+                        </li> -->
+                        <li class="nav-item active">
+                            <router-link :to="{ name: 'GestaoPatromonios' }" class="nav-link"><b>Gestão</b> <span class="sr-only">(current)</span></router-link>
                         </li>
                         <li class="nav-item dropdown">
                             <a href="#" class="nav-link dropdown-toggle" id="navbarDropdownCadastro" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Cadastros</a>
