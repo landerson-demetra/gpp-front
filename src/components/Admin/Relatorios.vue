@@ -133,7 +133,8 @@
                                             <h1 class="display-4">Relatório gerado com sucesso</h1>
                                             <p class="lead"></p>
                                             <p class="lead">
-                                                <a :href="generated.link" :title="generated.file_name" class="btn btn-primary"><i class="fa fa-download"></i> Baixar relatório</a>
+                                                <p class="lead">Download não iniciou? <a :href="generated.link" :title="generated.file_name">Clique aqui...</a></p>
+                                                <hr class="my-4">
                                                 <p>
                                                     <a v-on:click="resetDatas" href="#" title="Clique parar gerar outro relatório" class="btn btn-primary"><i class="fa fa-file-excel"></i> Gerar outro relatório</a>
                                                 </p>
@@ -291,6 +292,9 @@ export default {
                 // Limpando notificações antigas e exibindo as novas
                 this.$notify({ group: 'normal', clean: true })
                 this.$notify({ group: 'normal',  type: 'success', text: 'Relatório gerado com sucesso!' })
+
+                // Forçando o download do arquivo nos navegadores modernos
+                window.location = this.generated.link
             }).catch(e => {
                 // Limpando notificações antigas e exibindo as novas
                 this.$notify({ group: 'normal', clean: true })

@@ -326,7 +326,7 @@ export default {
             let datas = this.fornecedor_selected_datas
 
             if(!datas.end_logradouro || !datas.end_bairro || !datas.end_cidade || !datas.end_estado)
-                return 'N/Informado'
+                return 'Não informado'
 
             return  datas.end_logradouro + ' - ' + 
                     datas.end_numero + ', ' +
