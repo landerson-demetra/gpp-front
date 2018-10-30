@@ -270,7 +270,7 @@ export default {
                     getFornList('Prefeitura').then(r => {
                         this.iptus.listLoaded = true
 
-                        _.forEach(r.results, v => this.iptus.administradoras.push(v.nome))
+                        _.forEach(r.results, v => this.iptus.prefeituras.push(v.nome))
                     })
                 )
             }
