@@ -177,7 +177,7 @@
                                 <tr v-for="unidade in unidades.datasShow">
                                     <th>{{ unidade.bloco_nome }}</th>
                                     <th>{{ unidade.unidade_cod }}</th>
-                                    <th>{{ unidade.status_contrato || '(AZ) Não encontrado' }}</th>
+                                    <th>{{ unidade.status_contrato || 'LIVRE' }}</th>
                                     <th>
                                         <router-link :to="{name: 'GestaoPatromonios', params: {pep: unidade.PEP}}" title="Gerenciar Patrimônios" class="btn btn-primary">Gerir</router-link>
                                         <!-- <button class="btn btn-secondary"><i class="fas fa-edit"></i></button>
@@ -466,6 +466,7 @@ export default {
 
                 // Carrega os status
                 getStatus().then((data) => {
+                    this.status.push({ STATUS: 'LIVRE' })
                     this.status  = data.results
                 })
             })
@@ -517,8 +518,8 @@ export default {
             }
         },
         _setPaginateUnids() {
-            let datas = (this.unidades.datasSearch.length ? this.unidades.datasSearch : this.unidades.datas)
-            let total = datas.length
+            let datas = (this.unidades.datasSearch.length ? this.unidades.datasSearch : this.unidades.datas),
+                total = datas.length
 
             this.unidades.paginator = {
                 per_page: this.unidades.paginator.per_page,

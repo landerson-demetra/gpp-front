@@ -279,7 +279,7 @@ export default {
             unidade_selected: '',
             unidade_blocked: false,
 
-            isFetching: undefined,
+            isFetching: false,
 
             // Events helpers
             dadoActive: [],
@@ -303,7 +303,6 @@ export default {
                 total: 0,
                 query: {}
             },
-
             condominios: {
                 fixHeaderAndSetBodyMaxHeight: 300,
                 tblStyle: 'table-layout: fixed',
@@ -317,8 +316,8 @@ export default {
                     { title: 'Multa', field: 'multa'},
                     { title: 'Juros', field: 'juros'},
                     { title: 'Correção', field: 'correcao'},
-                    { title: 'Fonte', field: 'fonte'},
                     { title: 'Total', field: 'total'},
+                    { title: 'Fonte', field: 'fonte'},
                     { title: 'Valor Pago', field: 'valor_pago'},
                     { title: 'Data Pgto', field: 'data_pgto'},
                     { title: 'Ação', fixed: 'right', tdComp: ActionButtons }
@@ -328,7 +327,6 @@ export default {
                 query: {},
                 xprops: { evName: 'Condominio' }
             },
-
             iptus: {
                 fixHeaderAndSetBodyMaxHeight: 300,
                 tblStyle: 'table-layout: fixed',
@@ -353,7 +351,6 @@ export default {
                 query: {},
                 xprops: { evName: 'Iptu' }
             },
-
             aguas: {
                 fixHeaderAndSetBodyMaxHeight: 300,
                 tblStyle: 'table-layout: fixed',
@@ -378,7 +375,6 @@ export default {
                 query: {},
                 xprops: { evName: 'Agua' }
             },
-
             luzes: {
                 fixHeaderAndSetBodyMaxHeight: 300,
                 tblStyle: 'table-layout: fixed',

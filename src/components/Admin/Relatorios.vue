@@ -53,9 +53,9 @@
                                             <option :value="null">Qualquer status</option>
                                             <option v-for="status in condominios.status" :value="status">{{ status }}</option>
                                         </select>
-                                        <select disabled="" v-model="condominios.com_debitos" class="form-control">
-                                            <option :value="false">Todas unidades</option>
-                                            <option :value="true">Somente com débito(s)</option>
+                                        <select v-model="condominios.com_debitos" class="form-control">
+                                            <option :value="0">Todas unidades</option>
+                                            <option :value="1">Somente com débito(s)</option>
                                         </select>
                                         <input disabled="" v-model="condominios.data_ref" v-mask="['##/##/####']" type="text" placeholder="Data de referência [DD/MM/YYYY]" class="form-control">
                                     </div>
@@ -93,9 +93,9 @@
                                             <option :value="null">Qualquer status</option>
                                             <option v-for="status in iptus.status" :value="status">{{ status }}</option>
                                         </select>
-                                        <select disabled="" v-model="iptus.com_debitos" class="form-control">
-                                            <option :value="false">Todas unidades</option>
-                                            <option :value="true">Somente com débito(s)</option>
+                                        <select v-model="iptus.com_debitos" class="form-control">
+                                            <option :value="0">Todas unidades</option>
+                                            <option :value="1">Somente com débito(s)</option>
                                         </select>
                                         <input v-model="iptus.numero_contribuinte" type="text" placeholder="Número do contribuinte..." class="form-control">
                                         <input disabled="" v-model="iptus.data_ref" v-mask="['##/##/####']" type="text" placeholder="Data de referência [DD/MM/YYYY]" class="form-control">
@@ -198,7 +198,7 @@ function getDefaultData() {
             status: ['Aberto','Pago','Renegociado'],
             statusSel: null,
 
-            com_debitos: false,
+            com_debitos: 0,
 
             data_ref: null
         },
@@ -219,7 +219,7 @@ function getDefaultData() {
             status: ['Aberto','Pago','Renegociado'],
             statusSel: null,
 
-            com_debitos: false,
+            com_debitos: 0,
 
             data_ref: null
         },

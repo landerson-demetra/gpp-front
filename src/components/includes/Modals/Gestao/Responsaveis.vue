@@ -42,6 +42,7 @@
                                         <tr>
                                             <th scope="col">Número SAP</th>
                                             <th scope="col">Nome</th>
+                                            <th scope="col">Responsável PDG</th>
                                             <th scope="col">CPF/CNPJ</th>
                                         </tr>
                                     </thead>
@@ -49,6 +50,7 @@
                                         <tr>
                                             <td>{{ this.datas.administradora.numero_sap }}</td>
                                             <td>{{ this.datas.administradora.nome }}</td>
+                                            <td>{{ this.datas.administradora.responsavel }}</td>
                                             <td>{{ this.datas.administradora.cnpj_cpf }}</td>
                                         </tr>
                                     </tbody>
@@ -61,6 +63,7 @@
                                         <tr>
                                             <th scope="col">Número SAP</th>
                                             <th scope="col">Nome</th>
+                                            <th scope="col">Responsável PDG</th>
                                             <th scope="col">CPF/CNPJ</th>
                                         </tr>
                                     </thead>
@@ -68,6 +71,7 @@
                                         <tr>
                                             <td>{{ this.datas.fornecedorsap.numero_sap }}</td>
                                             <td>{{ this.datas.fornecedorsap.nome }}</td>
+                                            <td>{{ this.datas.fornecedorsap.responsavel }}</td>
                                             <td>{{ this.datas.fornecedorsap.cnpj_cpf }}</td>
                                         </tr>
                                     </tbody>
@@ -80,6 +84,7 @@
                                         <tr>
                                             <th scope="col">Número SAP</th>
                                             <th scope="col">Nome</th>
+                                            <th scope="col">Responsável PDG</th>
                                             <th scope="col">CPF/CNPJ</th>
                                         </tr>
                                     </thead>
@@ -87,6 +92,7 @@
                                         <tr>
                                             <td>{{ this.datas.fornecedoragua.numero_sap }}</td>
                                             <td>{{ this.datas.fornecedoragua.nome }}</td>
+                                            <td>{{ this.datas.fornecedoragua.responsavel }}</td>
                                             <td>{{ this.datas.fornecedoragua.cnpj_cpf }}</td>
                                         </tr>
                                     </tbody>
@@ -99,6 +105,7 @@
                                         <tr>
                                             <th scope="col">Número SAP</th>
                                             <th scope="col">Nome</th>
+                                            <th scope="col">Responsável PDG</th>
                                             <th scope="col">CPF/CNPJ</th>
                                         </tr>
                                     </thead>
@@ -106,6 +113,7 @@
                                         <tr>
                                             <td>{{ this.datas.fornecedorluz.numero_sap }}</td>
                                             <td>{{ this.datas.fornecedorluz.nome }}</td>
+                                            <td>{{ this.datas.fornecedorluz.responsavel }}</td>
                                             <td>{{ this.datas.fornecedorluz.cnpj_cpf }}</td>
                                         </tr>
                                     </tbody>
@@ -118,6 +126,7 @@
                                         <tr>
                                             <th scope="col">Número SAP</th>
                                             <th scope="col">Nome</th>
+                                            <th scope="col">Responsável PDG</th>
                                             <th scope="col">CPF/CNPJ</th>
                                         </tr>
                                     </thead>
@@ -125,6 +134,7 @@
                                         <tr>
                                             <td>{{ this.datas.prefeitura.numero_sap }}</td>
                                             <td>{{ this.datas.prefeitura.nome }}</td>
+                                            <td>{{ this.datas.prefeitura.responsavel }}</td>
                                             <td>{{ this.datas.prefeitura.cnpj_cpf }}</td>
                                         </tr>
                                     </tbody>
