@@ -9,29 +9,31 @@
                         </div>
                     </div>
                     <div class="card-body">
-                        <h4 class="px-3 my-3 text-muted">1.Selecione o tipo de relatório a ser gerado <i  class="fas fa-file-excel text-success"></i></h4>
+                        <div v-if="!generatedRel">
+                            <h4 class="px-3 my-3 text-muted">1.Selecione o tipo de relatório a ser gerado <i  class="fas fa-file-excel text-success"></i></h4>
 
-                        <div class="row">
-                            <div class="w-100">
-                                <div class="p-3 justify-content-start">
-                                    <div class="input-group mb-3 col-md-12">
-                                        <select v-model="relatorioSel" class="form-control">
-                                            <option :value="{value: null}">Selecione o tipo de relatório</option>
-                                            <option :value="{name: 'Condomínios', value: 1}">Gerar relatório: Condomínios</option>
-                                            <option :value="{name: 'IPTUs', value: 2}">Gerar relatório: IPTUs</option>
-                                            <option :value="{name: 'Fornecedores', value: 3}">Gerar relatório: Fornecedores</option>
-<!--                                             <option :value="{name: 'Fornecedores', value: 3}">Gerar relatório: Fornecedores</option>
-                                            <option :value="{name: 'Resumo por empreendimento', value: 4}">Gerar relatório: Resumo por empreendimento</option> -->
-                                        </select>
+                            <div class="row">
+                                <div class="w-100">
+                                    <div class="p-3 justify-content-start">
+                                        <div class="input-group mb-3 col-md-12">
+                                            <select v-model="relatorioSel" class="form-control">
+                                                <option :value="{value: null}">Selecione o tipo de relatório</option>
+                                                <option :value="{name: 'Condomínios', value: 1}">Gerar relatório: Condomínios</option>
+                                                <option :value="{name: 'IPTUs', value: 2}">Gerar relatório: IPTUs</option>
+                                                <option :value="{name: 'Fornecedores', value: 3}">Gerar relatório: Fornecedores</option>
+                            <!--                                             <option :value="{name: 'Fornecedores', value: 3}">Gerar relatório: Fornecedores</option>
+                                                <option :value="{name: 'Resumo por empreendimento', value: 4}">Gerar relatório: Resumo por empreendimento</option> -->
+                                            </select>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
+
+                            <h4 v-if="relatorioSel.value" class="px-3 my-3 text-muted">2.Selecione os filtros para gerar um relatório referente a {{ relatorioSel.name }} <i class="fas fa-filter text-primary"></i></h4>
                         </div>
 
-                        <h4 v-if="relatorioSel.value" class="px-3 my-3 text-muted">2.Selecione os filtros para gerar um relatório referente a {{ relatorioSel.name }} <i class="fas fa-filter text-primary"></i></h4>
-
                         <!-- Filtros para condominios -->
-                        <section class="row" :class="{'is-fetching': isFetching}" v-if="relatorioSel.value == 1">
+                        <section class="row" :class="{'is-fetching': isFetching}" v-if="!generatedRel && relatorioSel.value == 1">
                             <div class="w-100">
                                 <div class="p-3 justify-content-start">
                                     <div class="mb-3 col-md-12">
@@ -57,7 +59,7 @@
                                             <option :value="0">Todas unidades</option>
                                             <option :value="1">Somente com débito(s)</option>
                                         </select>
-                                        <input disabled="" v-model="condominios.data_ref" v-mask="['##/##/####']" type="text" placeholder="Data de referência [DD/MM/YYYY]" class="form-control">
+                                        <input v-model="condominios.data_ref" v-mask="['##/##/####']" type="text" placeholder="Data de referência [DD/MM/YYYY]" class="form-control">
                                     </div>
                                     <!-- <div class="input-group mb-3 col-md-12">
                                         <div class="input-group-prepend"><span class="input-group-text">Email para notificação</span></div>
@@ -71,7 +73,7 @@
                         </section>
 
                         <!-- Filtros para IPTUs -->
-                        <section class="row" :class="{'is-fetching': isFetching}" v-if="relatorioSel.value == 2">
+                        <section class="row" :class="{'is-fetching': isFetching}" v-if="!generatedRel && relatorioSel.value == 2">
                             <div class="w-100">
                                 <div class="p-3 justify-content-start">
                                     <div class="mb-3 col-md-12">
@@ -98,7 +100,7 @@
                                             <option :value="1">Somente com débito(s)</option>
                                         </select>
                                         <input v-model="iptus.numero_contribuinte" type="text" placeholder="Número do contribuinte..." class="form-control">
-                                        <input disabled="" v-model="iptus.data_ref" v-mask="['##/##/####']" type="text" placeholder="Data de referência [DD/MM/YYYY]" class="form-control">
+                                        <input v-model="iptus.data_ref" v-mask="['##/##/####']" type="text" placeholder="Data de referência [DD/MM/YYYY]" class="form-control">
                                     </div>
                                     <div class="col-md-12 text-right">
                                         <button v-on:click="mountAndMake" class="btn btn-success"><i class="fas fa-check"></i> Gerar relatório</button>
@@ -108,7 +110,7 @@
                         </section>
 
                         <!-- Filtos para fornecedores -->
-                        <section class="row" :class="{'is-fetching': isFetching}" v-if="relatorioSel.value == 3">
+                        <section class="row" :class="{'is-fetching': isFetching}" v-if="!generatedRel && relatorioSel.value == 3">
                             <div class="w-100">
                                 <div class="p-3 justify-content-start">
                                     <div class="input-group mb-3 col-md-12">

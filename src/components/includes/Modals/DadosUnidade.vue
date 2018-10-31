@@ -14,7 +14,7 @@
                             <p>Você tem certeza que deseja deletar o dado da unidade referente a PEP <b>{{ this.datas.PEP_Unidade }}</b>?</p>
                         </div>
                         <div v-else>
-                            <form v-on:submit.prevent="onSubmit">
+                            <form>
                                 <div class="row" v-if="this.action == 'Edit'">
                                     <div class="form-group col-md-5">
                                         <label for="PEP_Unidade">PEP</label>

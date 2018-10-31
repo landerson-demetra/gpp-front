@@ -96,7 +96,7 @@
                                         <div class="border-left border-right no-gutters">
                                             <div class="col-md-4 offset-md-8 align-self-end">
                                                 <div class="input-group">
-                                                    <input v-model="relatorios.condominios.data_ref" type="text" class="form-control" disabled="" placeholder="Data de referência: 29/10/2018">
+                                                    <input v-model="relatorios.condominios.data_ref" v-mask="['##/##/####']" type="text" class="form-control" :placeholder="'Data de referência: ' + this.getDate">
                                                     <div class="input-group-append">
                                                         <button v-on:click="mountAndMakeRel(1)" class="btn btn-outline-primary" type="button"><i class="fa fa-download"></i></button>
                                                     </div>
@@ -120,7 +120,7 @@
                                         <div class="border-left border-right no-gutters">
                                             <div class="col-md-4 offset-md-8 align-self-end">
                                                 <div class="input-group">
-                                                    <input v-model="relatorios.iptus.data_ref" type="text" class="form-control" disabled="" placeholder="Data de referência: 29/10/2018">
+                                                    <input v-model="relatorios.iptus.data_ref" type="text" class="form-control" v-mask="['##/##/####']" :placeholder="'Data de referência: ' + this.getDate">
                                                     <div class="input-group-append">
                                                         <button v-on:click="mountAndMakeRel(2)" class="btn btn-outline-primary" type="button"><i class="fa fa-download"></i></button>
                                                     </div>
@@ -131,7 +131,7 @@
                                 </div>
                                 <!--  -->
 
-                                <datatable :HeaderSettings="false" :Pagination="false" v-bind="$data.iptus" />
+                                <datatable class="border border-top-0" :HeaderSettings="false" :Pagination="false" v-bind="$data.iptus" />
                                 <div v-if="pepIs == 'unidade'" class="row">
                                     <div class="col mt-4 no-gutters text-right">
                                         <button class="btn btn-success" data-toggle="modal" data-target="#modalNovoIptu"><i class="fas fa-plus"></i> Adicionar</button>
@@ -1070,16 +1070,24 @@ export default {
             mounted.type = type
             mounted.search.empreendimento = this.empreendimento_selected.id
             mounted.search.unidade = this.unidade_datas.id_unidade
-            mounted.search.data_ref = this.relatorios.condominios.data_ref
+            mounted.search.data_ref = (type == 1 ? this.relatorios.condominios.data_ref : this.relatorios.iptus.data_ref)
 
             // Gera o relatório e inicia o download automaticamente
             generate(mounted).then(r => window.location.href = r.results.file_link)
         }
-        
-        
         /*=====  End of Relatórios  ======*/
-        
+    },
+    computed: {
+        getDate() {
+            let date = new Date(),
+                day  = date.getDate().toString(),
+                dayF = (day.length == 1) ? 0 + day : day,
+                month  = (date.getMonth() + 1).toString(),
+                monthF = (month.length == 1) ?  0 + month : month,
+                yearF = date.getFullYear()
 
+            return dayF + '/' + monthF + '/' + yearF
+        }
     },
     mounted(){
         if(this.PEP) this.$initPep(this.PEP)
