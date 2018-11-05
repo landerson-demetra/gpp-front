@@ -78,7 +78,7 @@ new Vue({
               group: 'normal',
               type: 'warn',
               text: Array.isArray(v) ? v.join("\n") : v,
-              duration: 3500
+              duration: 2000
             })
         })
     })

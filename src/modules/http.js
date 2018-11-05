@@ -26,9 +26,8 @@ http.interceptors.request.use((config) => {
 http.interceptors.response.use((response) => {
     pRequests--
     //
-    if(pRequests == 0) {
-        Bus.$emit('isFetching', false)
-    }
+    if(pRequests == 0) Bus.$emit('isFetching', false)
+
     return response
 }, (err) => {
     pRequests--
@@ -39,10 +38,9 @@ http.interceptors.response.use((response) => {
         if(err.response.status === 401 && err.config && !err.config.__isRetryRequest)
             store.dispatch(AUTH_LOGOUT)
         if(err.response.status == 422)
-            Bus.$emit('response-errors', { messages: err.response.data.messages.errors, code: 422 })
+            Bus.$emit('response-errors', { messages: err.response.data.messages.errors, code: err.response.status })
         if(err.response.status == 409)
-            Bus.$emit('response-errors', { messages: err.response.data.messages, code: 409 })
-
+            Bus.$emit('response-errors', { messages: err.response.data.messages, code: err.response.status })
         throw err
     })
 })

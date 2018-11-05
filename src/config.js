@@ -1,18 +1,12 @@
-export default {
+let config = {
     // Route
     route_mode: 'hash',
-
-    // Http
-    base_url: window.location.protocol + '//' + window.location.hostname + '/api/v1/',
 
     // Auth
     oauth_route: 'oauth/token',
     token_name: 'gpp__token',
     client_id: 2,
     client_secret: 'UUWJnnG6T6quLwnX6alQb2dmwK4bUwz4JQGYNse2',
-
-    // Cep
-    cep_url: 'http://republicavirtual.com.br/web_cep.php?cep={cep}&formato=json',
 
     // Errors
     errors: {
@@ -39,3 +33,14 @@ export default {
         masked: false
     }
 }
+
+
+if(window.location.hostname !== 'localhost') {
+    config.base_url = 'http://10.200.100.106:8082/api/v1/'
+    config.cep_url = 'http://10.200.100.106:8082/api/v1/cep?cep={cep}'
+} else {
+    config.base_url = window.location.protocol + '//' + window.location.hostname + '/api/v1/'
+    config.cep_url = window.location.protocol + '//' + window.location.hostname + '/api/v1/cep?cep={cep}'
+}
+
+export default config
