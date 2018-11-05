@@ -7,7 +7,7 @@
         </div>
         <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-lg">
             <div class="container">
-                <router-link :to="{ name: 'painel' }" title="Home" class="navbar-brand"><img width="100" class="img-fluid" src="../../assets/logo.png" alt="PDG"></router-link>
+                <router-link :to="{ name: 'GestaoPatromonios' }" title="Gestão" class="navbar-brand"><img width="100" class="img-fluid" src="../../assets/logo.png" alt="PDG"></router-link>
 
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
