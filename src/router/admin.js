@@ -6,6 +6,7 @@ import GestaoPatrimonios from '@/components/Admin/GestaoPatrimonios'
 import Empreendimentos from '@/components/Admin/Empreendimentos'
 import Relatorios from '@/components/Admin/Relatorios'
 import Permissoes from '@/components/Admin/Permissoes'
+import Importacoes from '@/components/Admin/Importacoes'
 
 export default [
     {
@@ -42,5 +43,10 @@ export default [
         path: 'permissoes',
         component: Permissoes,
         name: 'Permissoes'
+    },
+    {
+        path: 'importacoes',
+        component: Importacoes,
+        name: 'Importacoes'
     }
 ]

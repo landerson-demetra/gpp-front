@@ -35,6 +35,12 @@
                         <li class="nav-item">
                             <router-link :to="{ name: 'Relatorios' }" class="nav-link">Relatórios</router-link>
                         </li>
+                        <li class="nav-item dropdown">
+                            <a href="#" class="nav-link dropdown-toggle" id="navbarDropdownCadastro" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Importações</a>
+                            <div class="dropdown-menu" aria-labelledby="navbarDropdownCadastro">
+                                <router-link :to="{ name: 'Importacoes' }" class="dropdown-item">Ações Jurídicas</router-link>
+                            </div>
+                        </li>
                         <!-- <li class="nav-item">
                             <router-link :to="{ name: 'Permissoes' }" class="nav-link">Permissões</router-link>
                         </li> -->

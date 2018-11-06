@@ -21,8 +21,6 @@
                                                 <option :value="{name: 'Condomínios', value: 1}">Gerar relatório: Condomínios</option>
                                                 <option :value="{name: 'IPTUs', value: 2}">Gerar relatório: IPTUs</option>
                                                 <option :value="{name: 'Fornecedores', value: 3}">Gerar relatório: Fornecedores</option>
-                            <!--                                             <option :value="{name: 'Fornecedores', value: 3}">Gerar relatório: Fornecedores</option>
-                                                <option :value="{name: 'Resumo por empreendimento', value: 4}">Gerar relatório: Resumo por empreendimento</option> -->
                                             </select>
                                         </div>
                                     </div>
