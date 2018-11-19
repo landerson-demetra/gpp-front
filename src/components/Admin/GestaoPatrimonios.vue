@@ -158,6 +158,7 @@
                     </div>
                     <div class="card-footer bg-primary text-white border-0 text-right">
                         <div class="btn-group" role="group">
+                            <button type="button" data-toggle="modal" data-target="#modalComentarios" class="btn btn-primary"><i class="fas fa-comments"></i> Comentários [3]</button>
                             <button disabled="" type="button" class="btn btn-primary"><i class="fas fa-file-upload"></i> Anexar</button>
                             <router-link :to="{name: 'Relatorios'}" title="Relatórios" class="btn btn-primary"><i class="fas fa-file-export"></i> Relatórios</router-link>
                         </div>
@@ -213,6 +214,10 @@
                 <!-- Deletar -->
                 <CUDLuzes action="Delete" name="DeletarLuz" title="Deletar Luz" :datas="dadoActive"></CUDLuzes>
             <!-- [ /Luzes modals ] -->
+
+            <!-- [ Comentários ] -->
+                <Comentarios :PEP="PEP"></Comentarios>
+            <!-- [ /Comentários ] -->
         </div>
     </div>
 </template>
@@ -241,6 +246,7 @@ import CUDCondominios from '../includes/Modals/Gestao/CUD_Condominios'
 import CUDIptus from '../includes/Modals/Gestao/CUD_Iptus'
 import CUDAguas from '../includes/Modals/Gestao/CUD_Aguas'
 import CUDLuzes from '../includes/Modals/Gestao/CUD_Luzes'
+import Comentarios from '../includes/Modals/Gestao/Comentarios'
 
 export default {
     name: 'GestaoPatrimonios',
@@ -252,7 +258,8 @@ export default {
         CUDCondominios,
         CUDIptus,
         CUDAguas,
-        CUDLuzes
+        CUDLuzes,
+        Comentarios
     },
     data() {
         return {
