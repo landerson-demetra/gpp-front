@@ -109,7 +109,9 @@ export default {
 
             exists(this.PEP).then(() => {
                 self.pep_exists = true
-                get(self.PEP).then(r => self.dados_unidade = r.results)
+                get(self.PEP)
+                    .then(r => self.dados_unidade = r.results)
+                    .catch(e => self.dados_unidade = [])
             })
         },
         saveDado(datas){
@@ -173,6 +175,7 @@ export default {
         }
     },
     mounted(){
+        console.log('blz')
         var self = this
 
         Bus.$on('isFetching', is => this.isFetching = is)

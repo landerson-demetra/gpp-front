@@ -11,14 +11,6 @@
                     </div>
                     <div class="modal-body">
                         <div class="row">
-                            <div class="col-md-12 mb-3">
-                                <form action="">
-                                    <textarea v-model="comment" class="form-control" placeholder="Comentários a respeito da unidade..."></textarea>
-                                    <div class="text-right">
-                                        <button v-on:click="onSaveComment" type="submit" class="mt-2 btn btn-primary">Salvar comentário</button>
-                                    </div>
-                                </form>
-                            </div>
                             <div v-if="!comments.length" class="col-md-12">
                                 <div class="alert alert-info" role="alert">
                                     <i class="fa fa-info-circle"></i> Não há comentários ainda
@@ -27,19 +19,26 @@
                                     </button>
                                 </div>
                             </div>
-                            <div v-for="comment in comments" class="col-md-12 mb-2">
-                                <div class="card">
-                                    <div class="card-body">
-                                        <h5 class="my-0 card-title">{{ comment.user.name }}</h5>
-                                        <small class="text-muted">{{ comment.created_at }}</small>
-                                        <hr>
-                                        <p class="card-text">{{ comment.comment }}</p>
+                            <div class="col-md-12 max-comments border-bottom">
+                                <div v-for="comment in comments" class="mb-2">
+                                    <div class="card">
+                                        <div class="card-body">
+                                            <h5 class="my-0 card-title">{{ comment.user.name }}</h5>
+                                            <small class="text-muted">{{ comment.created_at }}</small>
+                                            <hr>
+                                            <p class="card-text" v-html="comment.comment"></p>
+                                        </div>
                                     </div>
                                 </div>
+                            </div>
+                            <div class="col-md-12 py-3">
+                                <vue-editor id="editor" v-model="comment" :editorToolbar="toolbar"></vue-editor>
+                                <!-- <textarea v-model="comment"  class="form-control" placeholder="Comentários a respeito da unidade..."></textarea> -->
                             </div>
                         </div>
                     </div>
                     <div class="modal-footer">
+                        <button v-on:click="onSaveComment" type="submit" class="mt-2 btn btn-primary">Salvar comentário</button>
                         <button v-on:click="onClose" type="button" class="btn btn-default" data-dismiss="modal">Fechar</button>
                     </div>
                 </div>
@@ -47,16 +46,29 @@
         </div>
     </div>
 </template>
+
 <script>
+import Bus from '../../../../bus'
+
+import { VueEditor } from 'vue2-editor'
 import { get, store } from '../../../../api/comentarios'
 
 export default {
     name: 'Comentarios',
     props: ['PEP'],
+    components: {
+        VueEditor
+    },
     data() {
         return {
             comment: null,
-            comments: []
+            comments: [],
+            toolbar: [
+                [{ header: [1, 2, 3, false] }],
+                ['bold', 'italic', 'underline'],
+                [{list: 'ordered'},{list: 'bullet'}],
+                ['code-block', 'blockquote', 'color']
+            ]
         }
     },
     watch: {
@@ -74,18 +86,18 @@ export default {
             }).then(r => {
                 this.comment = ''
                 this.comments.unshift(r.results)
+
+                this.$notify({ group: 'normal', type: 'success', text: 'Comentário salvo com sucesso' })
             })
         },
-        onClose() {
-
-        },
+        onClose() {},
         fetch() {
             // Comentários
             get(this.PEP).then(r => {
                 this.comments = r.results
 
                 if(this.comments.length)
-                    this.$notify({ group:'normal', text:'Há comentários nesta unidade' })
+                    this.$notify({ group:'keep', text:'Há comentários nesta unidade' })
             })
         }
     },
@@ -100,3 +112,10 @@ export default {
     }
 }
 </script>
+
+<style lang="scss">
+.max-comments{
+    max-height: 430px;
+    overflow-y: scroll;
+}
+</style>

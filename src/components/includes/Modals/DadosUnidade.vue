@@ -11,7 +11,7 @@
                     </div>
                     <div class="modal-body">
                         <div v-if="this.action == 'Delete'">
-                            <p>Você tem certeza que deseja deletar o dado da unidade referente a PEP <b>{{ this.datas.PEP_Unidade }}</b>?</p>
+                            <p>Você tem certeza que deseja deletar o dado da unidade referente a PEP <b>{{ this.datas.PEP }}</b>?</p>
                         </div>
                         <div v-else>
                             <form>
