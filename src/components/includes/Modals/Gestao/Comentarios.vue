@@ -67,7 +67,7 @@ export default {
                 [{ header: [1, 2, 3, false] }],
                 ['bold', 'italic', 'underline'],
                 [{list: 'ordered'},{list: 'bullet'}],
-                ['code-block', 'blockquote', 'color']
+                ['code-block', 'blockquote']
             ]
         }
     },
@@ -84,10 +84,16 @@ export default {
                 comment: this.comment,
                 PEP: this.PEP
             }).then(r => {
-                this.comment = ''
+                this.comment = null
                 this.comments.unshift(r.results)
 
+                // Incrementando
+                Bus.$emit('countComments', this.comments.length + 1)
+
                 this.$notify({ group: 'normal', type: 'success', text: 'Comentário salvo com sucesso' })
+
+                //
+                $('.modal').modal('hide')
             })
         },
         onClose() {},
@@ -96,8 +102,12 @@ export default {
             get(this.PEP).then(r => {
                 this.comments = r.results
 
-                if(this.comments.length)
+                let count = this.comments.length
+
+                if(count) {
+                    Bus.$emit('countComments', count)
                     this.$notify({ group:'keep', text:'Há comentários nesta unidade' })
+                }
             })
         }
     },

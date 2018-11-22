@@ -158,7 +158,7 @@
                     </div>
                     <div class="card-footer bg-primary text-white border-0 text-right">
                         <div class="btn-group" role="group">
-                            <button type="button" data-toggle="modal" data-target="#modalComentarios" class="btn btn-primary"><i class="fas fa-comments"></i> Comentários [3]</button>
+                            <button type="button" data-toggle="modal" data-target="#modalComentarios" class="btn btn-primary"><i class="fas fa-comments"></i> Comentários [{{ comments }}]</button>
                             <button disabled="" type="button" class="btn btn-primary"><i class="fas fa-file-upload"></i> Anexar</button>
                             <router-link :to="{name: 'Relatorios'}" title="Relatórios" class="btn btn-primary"><i class="fas fa-file-export"></i> Relatórios</router-link>
                         </div>
@@ -414,7 +414,9 @@ export default {
                 iptus: {
                     data_ref: null,
                 }
-            }
+            },
+
+            comments: 0
         }
     },
     watch: {
@@ -1124,6 +1126,9 @@ export default {
         Bus.$on('evDeletarIptu', this.deleteIptu)
         Bus.$on('evDeletarAgua', this.deleteAgua)
         Bus.$on('evDeletarLuz', this.deleteLuz)
+
+        // Comments events
+        Bus.$on('countComments', (num) => this.comments = num)
     },
     beforeDestroy(){
         Bus.$off()
