@@ -119,6 +119,9 @@ export default {
     mounted() {
         if(this.pepValid)
             this.fetch()
+    },
+    beforeDestroy() {
+        Bus.$off()
     }
 }
 </script>
