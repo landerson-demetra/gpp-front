@@ -660,7 +660,7 @@ export default {
                     multa: '(' + v.multa + '%) ' + F.currency(v.valor_multa),
                     juros: '(' + v.juros + '%) ' + F.currency(v.valor_juros),
                     correcao: '(' + v.correcao + '%) ' + F.currency(v.valor_correcao),
-                    fonte: (v.fonte == 'R' ? 'Relatório' : 'Projeção'),
+                    fonte: v.fonte,
                     total: F.currency(v.total),
                     data_pgto: (v.data_pagamento ? v.data_pagamento : 'N/Pago'),
                     raw: v
@@ -686,7 +686,7 @@ export default {
                     correcao_monetaria: '(' + v.correcao_monetaria + '%) ' + F.currency(v.valor_correcao),
                     total: F.currency(v.total),
                     divida_ativa: v.divida_ativa,
-                    fonte: (v.fonte == 'R' ? 'Relatório' : 'Projeção'),
+                    fonte: v.fonte,
                     raw: v
                 })
             })
@@ -708,7 +708,7 @@ export default {
                     multa: '(' + v.multa + '%) ' + F.currency(v.valor_multa),
                     juros: '(' + v.juros + '%) ' + F.currency(v.valor_juros),
                     correcao_monetaria: '(' + v.correcao_monetaria + '%) ' + F.currency(v.valor_correcao),
-                    fonte: (v.fonte == 'R' ? 'Relatório' : 'Projeção'),
+                    fonte: v.fonte,
                     total: F.currency(v.total),
                     data_pagamento: (v.data_pagamento ? v.data_pagamento : 'N/Pago'),
                     raw: v
@@ -732,7 +732,7 @@ export default {
                     multa: '(' + v.multa + '%) ' + F.currency(v.valor_multa),
                     juros: '(' + v.juros + '%) ' + F.currency(v.valor_juros),
                     correcao_monetaria: '(' + v.correcao_monetaria + '%) ' + F.currency(v.valor_correcao),
-                    fonte: (v.fonte == 'R' ? 'Relatório' : 'Projeção'),
+                    fonte: v.fonte,
                     total: F.currency(v.total),
                     data_pagamento: (v.data_pagamento ? v.data_pagamento : 'N/Pago'),
                     raw: v
@@ -764,7 +764,7 @@ export default {
                     multa: '(' + v.multa + '%) ' + F.currency(v.valor_multa),
                     juros: '(' + v.juros + '%) ' + F.currency(v.valor_juros),
                     correcao: '(' + v.correcao + '%) ' + F.currency(v.valor_correcao),
-                    fonte: (v.fonte == 'R' ? 'Relatório' : 'Projeção'),
+                    fonte: v.fonte,
                     total: F.currency(v.total),
                     data_pgto: (v.data_pagamento ? v.data_pagamento : 'N/Pago'),
                     raw: v
@@ -796,7 +796,7 @@ export default {
                 this.condominios.data[index].multa = '(' + v.multa + '%) ' + F.currency(v.valor_multa),
                 this.condominios.data[index].juros = '(' + v.juros + '%) ' + F.currency(v.valor_juros),
                 this.condominios.data[index].correcao = '(' + v.correcao + '%) ' + F.currency(v.valor_correcao),
-                this.condominios.data[index].fonte = (v.fonte == 'R' ? 'Relatório' : 'Projeção')
+                this.condominios.data[index].fonte = v.fonte
                 this.condominios.data[index].total = F.currency(v.total)
                 this.condominios.data[index].data_pgto = (v.data_pagamento ? v.data_pagamento : 'N/Pago')
                 this.condominios.data[index].raw = v
@@ -847,7 +847,7 @@ export default {
                     correcao_monetaria: '(' + v.correcao_monetaria + '%) ' + F.currency(v.valor_correcao),
                     total: F.currency(v.total),
                     divida_ativa: v.divida_ativa,
-                    fonte: (v.fonte == 'R' ? 'Relatório' : 'Projeção'),
+                    fonte: v.fonte,
                     raw: v
                 })
 
@@ -928,7 +928,7 @@ export default {
                     multa: '(' + v.multa + '%) ' + F.currency(v.valor_multa),
                     juros: '(' + v.juros + '%) ' + F.currency(v.valor_juros),
                     correcao_monetaria: '(' + v.correcao_monetaria + '%) ' + F.currency(v.valor_correcao),
-                    fonte: (v.fonte == 'R' ? 'Relatório' : 'Projeção'),
+                    fonte: v.fonte,
                     total: F.currency(v.total),
                     data_pagamento: (v.data_pagamento ? v.data_pagamento : 'N/Pago'),
                     raw: v
@@ -960,7 +960,7 @@ export default {
                 this.aguas.data[index].multa = '(' + v.multa + '%) ' + F.currency(v.valor_multa)
                 this.aguas.data[index].juros = '(' + v.juros + '%) ' + F.currency(v.valor_juros)
                 this.aguas.data[index].correcao = '(' + v.correcao + '%) ' + F.currency(v.valor_correcao)
-                this.aguas.data[index].fonte = (v.fonte == 'R' ? 'Relatório' : 'Projeção')
+                this.aguas.data[index].fonte = v.fonte
                 this.aguas.data[index].total = F.currency(v.total)
                 this.aguas.data[index].data_pagamento = (v.data_pagamento ? v.data_pagamento : 'N/Pago')
                 this.aguas.data[index].raw = v
@@ -1009,7 +1009,7 @@ export default {
                     multa: '(' + v.multa + '%) ' + F.currency(v.valor_multa),
                     juros: '(' + v.juros + '%) ' + F.currency(v.valor_juros),
                     correcao_monetaria: '(' + v.correcao_monetaria + '%) ' + F.currency(v.valor_correcao),
-                    fonte: (v.fonte == 'R' ? 'Relatório' : 'Projeção'),
+                    fonte: v.fonte,
                     total: F.currency(v.total),
                     data_pagamento: (v.data_pagamento ? v.data_pagamento : 'N/Pago'),
                     raw: v
@@ -1041,7 +1041,7 @@ export default {
                 this.luzes.data[index].multa = '(' + v.multa + '%) ' + F.currency(v.valor_multa)
                 this.luzes.data[index].juros = '(' + v.juros + '%) ' + F.currency(v.valor_juros)
                 this.luzes.data[index].correcao = '(' + v.correcao + '%) ' + F.currency(v.valor_correcao)
-                this.luzes.data[index].fonte = (v.fonte == 'R' ? 'Relatório' : 'Projeção')
+                this.luzes.data[index].fonte = v.fonte
                 this.luzes.data[index].total = F.currency(v.total)
                 this.luzes.data[index].data_pagamento = (v.data_pagamento ? v.data_pagamento : 'N/Pago')
                 this.luzes.data[index].raw = v

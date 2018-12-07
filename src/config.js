@@ -6,7 +6,7 @@ let config = {
     oauth_route: 'oauth/token',
     token_name: 'gpp__token',
     client_id: 2,
-    client_secret: 'UUWJnnG6T6quLwnX6alQb2dmwK4bUwz4JQGYNse2',
+    client_secret: 'SsOVsqFR9n94pqYWVpg42zDwusZIx01Qw3aYWqxs',
 
     // Errors
     errors: {
