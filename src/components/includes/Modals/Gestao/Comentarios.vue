@@ -88,7 +88,7 @@ export default {
                 this.comments.unshift(r.results)
 
                 // Incrementando
-                Bus.$emit('countComments', this.comments.length + 1)
+                Bus.$emit('countComments', this.comments.length)
 
                 this.$notify({ group: 'normal', type: 'success', text: 'Comentário salvo com sucesso' })
 
