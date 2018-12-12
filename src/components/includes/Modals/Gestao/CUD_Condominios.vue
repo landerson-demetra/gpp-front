@@ -23,7 +23,7 @@
                                     <div class="form-group col-lg-4">
                                         <label for="doc_sap">NºDocumento SAP</label>
                                         <input v-model="DocSAP"
-                                               v-validate="'min:8|numeric'"
+                                               v-validate="'min:9|numeric'"
                                                data-vv-as="NºDocumento SAP"
                                                name="doc_sap"
                                                :class="{'is-invalid': errors.has('doc_sap')}"
@@ -80,7 +80,9 @@
                                     </div>
                                     <div class="form-group col-lg-6">
                                         <label for="fonte">Fonte de dados <span class="text-danger">*</span></label>
-                                        <v-select v-model="Fonte" :options="Fontes" id="fonte" placeholder="Selecione uma fonte..."></v-select>
+                                        <select class="form-control" v-model="Fonte">
+                                            <option v-for="vFonte in Fontes" :value="vFonte">{{ vFonte }}</option>
+                                        </select>
                                     </div>
                                     <div class="form-group col-lg-6">
                                         <label for="data_pagamento">Data de pagamento</label>
@@ -137,10 +139,7 @@ export default {
             DataPGTO: '',
             //
             Statuses: ['Aberto', 'Renegociado', 'Pago'],
-            Fontes: [
-                {label: 'Relatório', value: 'R'},
-                {label: 'Projeção', value: 'P'}
-            ]
+            Fontes: ['Relatório', 'Projeção']
         }
     },
     methods: {
@@ -170,7 +169,7 @@ export default {
             this.Multa = this.datas.multa
             this.Juros = this.datas.juros
             this.Correcao = this.datas.correcao
-            this.Fonte = _.find(this.Fontes, f => f.value == this.datas.fonte)
+            this.Fonte = this.datas.fonte
             this.DataPGTO = this.datas.data_pagamento
         },
         reset(){

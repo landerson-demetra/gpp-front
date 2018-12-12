@@ -158,7 +158,7 @@
                     </div>
                     <div class="card-footer bg-primary text-white border-0 text-right">
                         <div class="btn-group" role="group">
-                            <button type="button" data-toggle="modal" data-target="#modalComentarios" class="btn btn-primary"><i class="fas fa-comments"></i> Comentários [{{ comments }}]</button>
+                            <button type="button" data-toggle="modal" data-target="#modalComentarios" class="btn btn-primary"><i class="fas fa-comments"></i> Comentários [ {{ comments }} ]</button>
                             <button disabled="" type="button" class="btn btn-primary"><i class="fas fa-file-upload"></i> Anexar</button>
                             <router-link :to="{name: 'Relatorios'}" title="Relatórios" class="btn btn-primary"><i class="fas fa-file-export"></i> Relatórios</router-link>
                         </div>
