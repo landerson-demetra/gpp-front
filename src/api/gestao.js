@@ -14,4 +14,11 @@ const fetchUnidades = (datas) => {
     })
 }
 
-export { fetchGestao, fetchUnidades }
+const resumo = (PEP) => {
+    return new Promise((resolve, reject) => {
+        http.post('gestao/resumo', {PEP: PEP})
+            .then(r => resolve(r.data)).catch(e => reject(e))
+    })
+}
+
+export { fetchGestao, fetchUnidades, resumo }
