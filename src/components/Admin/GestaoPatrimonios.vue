@@ -9,7 +9,7 @@
                             <div class="col-md-5 text-right d-none d-lg-block bg-black">
                                 <button :disabled="!pepIs" class="btn btn-primary border-0 border-dark" data-toggle="modal" data-target="#modalResponsaveis"><i class="fas fa-users"></i> Responsáveis</button>
                                 <button :disabled="pepIs !== 'unidade'" data-toggle="modal" data-target="#modalAcoesJudiciais" class="btn btn-primary border-0 border-dark">Ações Judiciais</button>
-                                <button :disabled="pepIs !== 'unidade'" data-toggle="modal" data-target="#modalResumo" class="btn btn-primary border-0 border-dark"><i class="fas fa-money-check-alt"></i> Resumo</button>
+                                <button data-toggle="modal" data-target="#modalResumo" class="btn btn-primary border-0 border-dark"><i class="fas fa-money-check-alt"></i> Resumo</button><!-- :disabled="pepIs !== 'unidade'" -->
                             </div>
                         </div>
                     </div>
@@ -175,7 +175,7 @@
             <!-- [ /Ações Judiciais ] -->
 
             <!-- [ Resumo ] -->
-                <GestaoResumo :datas="unidade_datas" :PEP="PEP"></GestaoResumo>
+                <GestaoResumo :PEP="PEP"></GestaoResumo>
             <!-- [ /Resumo ] -->
 
             <!-- [ Condomínios modals ] -->

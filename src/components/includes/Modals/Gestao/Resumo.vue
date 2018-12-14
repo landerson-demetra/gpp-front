@@ -10,75 +10,51 @@
                         </button>
                     </div>
                     <div class="modal-body">
-                        <table class="table table-striped">
-                            <tbody>
-                                <tr><td><b>Aberto</b></td></tr>
-                                <tr>
-                                    <td>
+                        <div class="row" v-if="this.datas">
+                            <div v-for="(count, name) in datas.counts" class="col-md-6 mb-3">
+                                <div class="card">
+                                    <div class="card-header border-0 bg-primary text-white">
+                                        <h5>{{ name }}</h5>
+                                    </div>
+                                    <div class="card-body">
                                         <ul>
-                                            <li>Total: R$ 89.330.722,07</li>
-                                            <li>Multa: - R$ 1.707.805,63</li>
-                                            <li>Juros: - R$ 15.848.214,18</li>
-                                            <li>Correção: - R$ 0,00</li>
+                                            <li>Total: R$ {{ count.total | currency }}</li>
+                                            <li>Multa: R$ {{ count.multa | currency }}</li>
+                                            <li>Juros: R$ {{ count.juros | currency }}</li>
+                                            <li>Correção: R$ {{ count.correcao | currency }}</li>
                                         </ul>
-                                    </td>
-                                </tr>
-                                <tr><td><b>Renegociado</b></td></tr>
-                                <tr>
-                                    <td>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="card">
+                                    <div class="card-header border-0 bg-primary text-white">
+                                        <h5>Pago</h5>
+                                    </div>
+                                    <div class="card-body">
                                         <ul>
-                                            <li>Total: R$ 409,67</li>
-                                            <li>Multa: R$ 8,03</li>
-                                            <li>Juros: R$ 26,39</li>
-                                            <li>Correção: R$ 25,25</li>
+                                            <li>R$ {{ datas.pago | currency }}</li>
                                         </ul>
-                                    </td>
-                                </tr>
-                                <tr><td><b>Pago</b></td></tr>
-                                <tr>
-                                    <td>R$ 0,00</td>
-                                </tr>
-                                <tr><td><b>Divida ativa</b></td></tr>
-                                <tr>
-                                    <td>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="card">
+                                    <div class="card-header border-0 bg-primary text-white">
+                                        <h5>Outros</h5>
+                                    </div>
+                                    <div class="card-body">
                                         <ul>
-                                            <li>Total: R$ 0,00</li>
-                                            <li>Multa: R$ 0,00</li>
-                                            <li>Juros: R$ 0,00</li>
-                                            <li>Correção: R$ 0,00</li>
+                                            <li><b>Ações:</b> {{ datas.acoes | currency }}</li>
+                                            <li><b>Invadido:</b> {{ datas.invadidos | currency }}</li>
+                                            <li><b>Unidades:</b> {{ datas.unidades | currency }}</li>
+                                            <li><b>Blocos:</b> {{ datas.blocos | currency }}</li>
+                                            <li><b>Emprendimentos:</b> {{ datas.empreendimentos | currency }}</li>
                                         </ul>
-                                    </td>
-                                </tr>
-                                <tr><td><b>Divida ativa paga</b></td></tr>
-                                <tr>
-                                    <td>R$ 0,00</td>
-                                </tr>
-                                <tr><td><b>Divida ativa</b></td></tr>
-                                <tr>
-                                    <td>0</td>
-                                </tr>
-                                <tr><td><b>Invadido</b></td></tr>
-                                <tr>
-                                    <td>0</td>
-                                </tr>
-                                <tr><td><b>Ações</b></td></tr>
-                                <tr>
-                                    <td>0</td>
-                                </tr>
-                                <tr><td><b>Unidades</b></td></tr>
-                                <tr>
-                                    <td>5409</td>
-                                </tr>
-                                <tr><td><b>Blocos</b></td></tr>
-                                <tr>
-                                    <td>2144</td>
-                                </tr>
-                                <tr><td><b>Empreendimentos</b></td></tr>
-                                <tr>
-                                    <td>798</td>
-                                </tr>
-                            </tbody>
-                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button>
@@ -90,11 +66,23 @@
 </template>
 
 <script>
+import { resumo } from '../../../../api/gestao'
+
 export default {
     name: 'GestaoResumo',
-    props: ['datas', 'PEP'],
+    props: ['PEP'],
+    datas() {
+        return {
+            datas: false
+        }
+    },
+    methods: {
+        onlyEmpred() {
+            console.log(123)
+        }
+    },
     mounted() {
-        
+        //resumo().then(r => this.datas = r.results)
     }
 }
 </script>
