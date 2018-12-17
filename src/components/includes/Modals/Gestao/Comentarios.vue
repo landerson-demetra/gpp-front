@@ -38,7 +38,7 @@
                         </div>
                     </div>
                     <div class="modal-footer">
-                        <button v-on:click="onSaveComment" type="submit" class="mt-2 btn btn-primary">Salvar comentário</button>
+                        <button v-on:click="onSaveComment" type="submit" class="btn btn-primary">Salvar comentário</button>
                         <button v-on:click="onClose" type="button" class="btn btn-default" data-dismiss="modal">Fechar</button>
                     </div>
                 </div>

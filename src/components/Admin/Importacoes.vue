@@ -8,9 +8,7 @@
                             <h3 class="col-md-7 mt-0">Importações</h3>
                         </div>
                     </div>
-                    <div class="card-body">
-                        
-                    </div>
+                    <div class="card-body">Em construção...</div>
                     <div class="card-footer bg-primary text-white border-0 text-right"></div>
                 </div>
             </div>
