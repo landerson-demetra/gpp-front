@@ -48,7 +48,6 @@ Vue.component('v-select', vSelect)
 /* [ Numeral ] */
 var numeral = require('numeral')
 
-
 /* [ Filtros ] */
 Vue.filter('numeral', (number, format) => {
   return numeral(number).format('0,0')

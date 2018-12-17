@@ -80,7 +80,6 @@ export default {
     watch: {
         PEP() {
             this.newPEP = this.PEP.substring(0, 12)
-
             resumo(this.newPEP).then(r => this.datas = r.results)
         }
     },
