@@ -4,13 +4,13 @@
             <div class="modal-dialog modal-lg shadow" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="modalResumoLabel">Resumo <small class="opacity-small">[ {{ this.PEP }} ]</small></h5>
+                        <h5 class="modal-title" id="modalResumoLabel">Resumo <small class="opacity-small">[ {{ this.newPEP ? this.newPEP : 'Todos empreendimentos' }} ]</small></h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
                     </div>
                     <div class="modal-body">
-                        <div class="row" v-if="this.datas">
+                        <div class="row" v-if="datas">
                             <div v-for="(count, name) in datas.counts" class="col-md-6 mb-3">
                                 <div class="card">
                                     <div class="card-header border-0 bg-primary text-white">
@@ -45,11 +45,11 @@
                                     </div>
                                     <div class="card-body">
                                         <ul>
-                                            <li><b>Ações:</b> {{ datas.acoes | currency }}</li>
-                                            <li><b>Invadido:</b> {{ datas.invadidos | currency }}</li>
-                                            <li><b>Unidades:</b> {{ datas.unidades | currency }}</li>
-                                            <li><b>Blocos:</b> {{ datas.blocos | currency }}</li>
-                                            <li><b>Emprendimentos:</b> {{ datas.empreendimentos | currency }}</li>
+                                            <li><b>Ações:</b> {{ datas.acoes | numeral }}</li>
+                                            <li><b>Invadido:</b> {{ datas.invadidos | numeral }}</li>
+                                            <li><b>Unidades:</b> {{ datas.unidades | numeral }}</li>
+                                            <li><b>Blocos:</b> {{ datas.blocos | numeral  }}</li>
+                                            <li><b>Emprendimentos:</b> {{ datas.empreendimentos | numeral }}</li>
                                         </ul>
                                     </div>
                                 </div>
@@ -71,18 +71,26 @@ import { resumo } from '../../../../api/gestao'
 export default {
     name: 'GestaoResumo',
     props: ['PEP'],
-    datas() {
+    data() {
         return {
+            newPEP: '',
             datas: false
         }
     },
-    methods: {
-        onlyEmpred() {
-            console.log(123)
+    watch: {
+        PEP() {
+            this.newPEP = this.PEP.substring(0, 12)
+
+            resumo(this.newPEP).then(r => this.datas = r.results)
         }
     },
     mounted() {
-        //resumo().then(r => this.datas = r.results)
+        if(this.PEP) {
+            this.newPEP = this.PEP.substring(0, 12)
+            resumo(this.newPEP).then(r => this.datas = r.results)
+        } else {
+            resumo().then(r => this.datas = r.results)
+        }
     }
 }
 </script>

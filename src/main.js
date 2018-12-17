@@ -45,7 +45,15 @@ Vue.use(VeeValidate)
 /* [ Register components ] */
 Vue.component('v-select', vSelect)
 
+/* [ Numeral ] */
+var numeral = require('numeral')
+
+
 /* [ Filtros ] */
+Vue.filter('numeral', (number, format) => {
+  return numeral(number).format('0,0')
+})
+
 Vue.filter('cpfcnpj', (str) => {
   str = str.replace(/\D/g, '')
 
