@@ -1,5 +1,3 @@
-import Vue from 'vue' 
-import Vuex from 'vuex'
 import Bus from './bus'
 import store from './store'
 import router from './router/index'
