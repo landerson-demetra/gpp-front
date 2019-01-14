@@ -204,7 +204,7 @@ export default {
                 multa: parseInt(this.Multa),
                 juros: parseInt(this.Juros),
                 correcao: parseInt(this.Correcao),
-                fonte: this.Fonte ? this.Fonte.value : null,
+                fonte: this.Fonte ? this.Fonte : null,
                 data_pagamento: this.DataPGTO
             }
         }
