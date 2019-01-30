@@ -245,6 +245,9 @@ export default {
     },
     mounted() {
         Bus.$on('resetForms', () => this.reset())
+
+        if(this.action == 'Edit')
+            $('#modalEditarFornecedor').on('hidden.bs.modal', () => this.fill())
     },
     beforeDestroy() {
         Bus.$off()

@@ -39,6 +39,8 @@
                             <a href="#" class="nav-link dropdown-toggle" id="navbarDropdownCadastro" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Importações</a>
                             <div class="dropdown-menu" aria-labelledby="navbarDropdownCadastro">
                                 <router-link :to="{ name: 'Importacoes' }" class="dropdown-item">Ações Jurídicas</router-link>
+                                <router-link :to="{ name: 'Importacoes' }" class="dropdown-item">Número do contribuinte</router-link>
+                                <router-link :to="{ name: 'Importacoes' }" class="dropdown-item">Parcelas</router-link>
                             </div>
                         </li>
                         <!-- <li class="nav-item">

@@ -9,7 +9,7 @@
                 <div class="row login">
                     <div class="card col-md-4 col-12 offset-md-4 align-self-center">
                         <div class="card-body">
-                            <img class="img-fluid mx-auto d-block mb-3" src="https://upload.wikimedia.org/wikipedia/commons/1/18/Pdg.jpg" alt="PDG">
+                            <img class="img-fluid mx-auto d-block mb-3" src="/Pdg.jpg" alt="PDG">
                             <form v-on:submit="checkForm" action="" method="POST">
                                 <div class="form-group">
                                     <input v-model="email" type="email" class="form-control" aria-describedby="emailHelp" placeholder="Digite seu email" autofocus>
