@@ -66,6 +66,7 @@
 </template>
 
 <script>
+import Bus from '../../../../bus'
 import { resumo } from '../../../../api/gestao'
 
 export default {
@@ -83,13 +84,21 @@ export default {
             resumo(this.newPEP).then(r => this.datas = r.results)
         }
     },
-    mounted() {
-        if(this.PEP) {
-            this.newPEP = this.PEP.substring(0, 12)
-            resumo(this.newPEP).then(r => this.datas = r.results)
-        } else {
-            resumo().then(r => this.datas = r.results)
+    methods: {
+        onLoad() {
+            if(this.PEP) {
+                this.newPEP = this.PEP.substring(0, 12)
+                resumo(this.newPEP).then(r => this.datas = r.results)
+            } else {
+                resumo().then(r => this.datas = r.results)
+            }
         }
+    },
+    mounted() {
+        this.onLoad()
+
+        // Events
+        Bus.$on('resetForms', () => this.onLoad)
     }
 }
 </script>

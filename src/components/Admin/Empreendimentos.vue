@@ -36,9 +36,9 @@
                                         <label></label>
                                     </div>
                                 </th>
+                                <th>Empreendimento</th>
                                 <th>Projeto</th>
                                 <th>SPE - Razão Social</th>
-                                <th>Empreendimento</th>
                                 <th></th>
                             </tr>
                         </thead>
@@ -51,9 +51,12 @@
                                         <label></label>
                                     </div>
                                 </th>
+                                <th class="align-middle">
+                                    <span title="Empreendimento vinculado"><i class="fas fa-check-circle text-success" v-if="data.vinculado"></i></span>
+                                    {{ data.empreendimento_nome }}
+                                </th>
                                 <th class="align-middle">{{ data.projeto }}</th>
                                 <th class="align-middle">[{{ data.spe }}] {{ data.spe_razao_social }}</th>
-                                <th class="align-middle">{{ data.empreendimento_nome }}</th>
                                 <th>
                                     <div class="action-buttons text-center align-middle">
                                         <button class="btn btn-primary" v-on:click="viewUnidades(data.id)"><i class="fas fa-building"></i></button>
@@ -460,7 +463,7 @@ export default {
                 per_page: this.empreendimentos.paginator.per_page
             }).then((data) => {
                 let resp = data.results
-                this.empreendimentos.datas = resp.data || []
+                this.empreendimentos.datas = resp.data ? resp.data : []
 
                 this._setPaginateEmpreds(resp)
 

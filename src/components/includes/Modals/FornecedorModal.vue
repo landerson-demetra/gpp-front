@@ -40,7 +40,7 @@
                                     </div>
                                      <div class="form-group col-lg-12">
                                         <label for="Segmento">Segmento(s) <span class="text-danger">*</span></label>
-                                        <v-select multiple taggable push-tags v-model="Segmentos" placeholder="Selecione um ou mais segmento(s)..." :close-on-select="false" :options="['Prefeitura', 'Administradora', 'Fornecedor SAP', 'Fornecedor Água', 'Fornecedor Luz']"></v-select>
+                                        <v-select multiple taggable push-tags v-model="Segmentos" placeholder="Selecione um ou mais segmento(s)..." :close-on-select="false" :options="['Prefeitura', 'Administradora', 'Fornecedor SAP – Cotas Condominiais', 'Fornecedor Água', 'Fornecedor Luz']"></v-select>
                                     </div>
                                     <div class="form-group col-lg-6">
                                         <label for="cpf_cnpj">CPF/CNPJ <span class="text-danger">*</span></label>
@@ -94,6 +94,10 @@
                                         <label for="Cidade">Cidade</label>
                                         <input v-model="Cidade" type="text" placeholder="Cidade..." class="form-control">
                                     </div>
+                                    <div class="form-group col-lg-12">
+                                        <label for="Complemento">Complemento</label>
+                                        <input v-model="Complemento" type="text" placeholder="Complemento..." class="form-control">
+                                    </div>
                                 </div>
                             </form>
                         </div>
@@ -139,8 +143,9 @@ export default {
             Bairro: '',
             Estado: '',
             Cidade: '',
+            Complemento: '',
 
-            Responsavel: '',
+            Responsavel: ''
         }
     },
     methods: {
@@ -201,6 +206,7 @@ export default {
             this.Bairro = this.datas.end_bairro
             this.Estado = this.datas.end_estado
             this.Cidade = this.datas.end_cidade
+            this.Complemento = this.datas.end_complemento
         },
         reset(){
             this.Nome = ''
@@ -217,6 +223,7 @@ export default {
             this.Bairro = ''
             this.Estado = ''
             this.Cidade = ''
+            this.Complemento = ''
         }
     },
     watch: {
@@ -240,6 +247,7 @@ export default {
                 end_bairro: this.Bairro,
                 end_estado: this.Estado,
                 end_cidade: this.Cidade,
+                end_complemento: this.Complemento
             }
         }
     },

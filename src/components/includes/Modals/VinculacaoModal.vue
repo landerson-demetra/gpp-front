@@ -35,7 +35,7 @@
                                         </v-select>
                                     </div>
                                     <div class="form-group col-md-6">
-                                        <label for="Fornecedor">Fornecedor SAP</label>
+                                        <label for="Fornecedor">Fornecedor SAP – Cotas Condominiais</label>
                                         <v-select v-model="FornecedorSap" id="ADM" placeholder="Selecione..." :options="fornecedores_sap">
                                             <span slot="no-options">Nenhum fornecedor SAP encontrado.</span>
                                         </v-select>

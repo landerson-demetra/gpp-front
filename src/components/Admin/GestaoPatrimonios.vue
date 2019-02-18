@@ -423,6 +423,9 @@ export default {
         PEP(pep) {
             this.$initPep(pep)
             this.$router.push({ params: {pep: pep} })
+
+            // Send event
+            Bus.$emit('reload-datas')
         },
         empreendimento_selected(empreendimento) {
             if(!empreendimento){

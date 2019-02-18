@@ -19,7 +19,7 @@
                                 <a class="nav-link active" id="pills-administradoras-tab" data-toggle="pill" href="#pills-administradoras" role="tab" aria-controls="pills-administradoras" aria-selected="true">Administradora</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" id="pills-fornecedor-sap-tab" data-toggle="pill" href="#pills-fornecedor-sap" role="tab" aria-controls="pills-fornecedor-sap" aria-selected="false">Fornecedor SAP</a>
+                                <a class="nav-link" id="pills-fornecedor-sap-tab" data-toggle="pill" href="#pills-fornecedor-sap" role="tab" aria-controls="pills-fornecedor-sap" aria-selected="false">Fornecedor SAP – Cotas Condominiais</a>
                             </li>
                             <li class="nav-item">
                                 <a class="nav-link" id="pills-fornecedor-agua-tab" data-toggle="pill" href="#pills-fornecedor-agua" role="tab" aria-controls="pills-fornecedor-agua" aria-selected="false">Fornecedor Água</a>
