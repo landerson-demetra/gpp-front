@@ -27,7 +27,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="col-md-6">
+<!--                             <div class="col-md-6">
                                 <div class="card">
                                     <div class="card-header border-0 bg-primary text-white">
                                         <h5>Pago</h5>
@@ -38,7 +38,7 @@
                                         </ul>
                                     </div>
                                 </div>
-                            </div>
+                            </div> -->
                             <div class="col-md-6">
                                 <div class="card">
                                     <div class="card-header border-0 bg-primary text-white">
