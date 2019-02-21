@@ -70,17 +70,21 @@
 
                                     <div class="col-12"><h5>Endereço</h5><hr></div>
 
+                                    <div class="form-group col-lg-12">
+                                       <label for="Logradouro">Logradouro</label>
+                                       <input v-model="Logradouro" type="text" placeholder="Logradouro..." class="form-control">
+                                    </div>
                                     <div class="form-group col-lg-4">
                                        <label for="CEP">CEP</label>
                                        <input v-model="CEP" v-on:input="CEPchange" :class="{'is-invalid': CEPHasError}" v-mask="['#####-###']" type="text" placeholder="CEP..." class="form-control">
                                     </div>
                                     <div class="form-group col-lg-4">
-                                       <label for="Logradouro">Logradouro</label>
-                                       <input v-model="Logradouro" type="text" placeholder="Logradouro..." class="form-control">
-                                    </div>
-                                    <div class="form-group col-lg-4">
                                        <label for="Numero">Número</label>
                                        <input v-model="Numero" ref="numero" v-mask="['#####']" type="text" placeholder="Número..." class="form-control">
+                                    </div>
+                                 <div class="form-group col-lg-4">
+                                        <label for="Complemento">Complemento</label>
+                                        <input v-model="Complemento" type="text" placeholder="Complemento..." class="form-control">
                                     </div>
                                     <div class="form-group col-lg-4">
                                         <label for="Estado">Bairro</label>
@@ -93,10 +97,6 @@
                                     <div class="form-group col-lg-4">
                                         <label for="Cidade">Cidade</label>
                                         <input v-model="Cidade" type="text" placeholder="Cidade..." class="form-control">
-                                    </div>
-                                    <div class="form-group col-lg-12">
-                                        <label for="Complemento">Complemento</label>
-                                        <input v-model="Complemento" type="text" placeholder="Complemento..." class="form-control">
                                     </div>
                                 </div>
                             </form>

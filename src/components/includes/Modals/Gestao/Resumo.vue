@@ -10,7 +10,8 @@
                         </button>
                     </div>
                     <div class="modal-body">
-                        <div class="row" v-if="datas">
+                        <grid-loader class="mx-auto my-5" :loading="isFetching" color="#26256A" size="10px"></grid-loader>
+                        <div class="row" v-if="!isFetching && datas">
                             <div v-for="(count, name) in datas.counts" class="col-md-6 mb-3">
                                 <div class="card">
                                     <div class="card-header border-0 bg-primary text-white">
@@ -18,7 +19,7 @@
                                     </div>
                                     <div class="card-body">
                                         <ul>
-                                            <li>Total: R$ {{ count.total | currency }}</li>
+                                            <li>Valor principal: R$ {{ count.total | currency }}</li>
                                             <li>Multa: R$ {{ count.multa | currency }}</li>
                                             <li>Juros: R$ {{ count.juros | currency }}</li>
                                             <li>Correção: R$ {{ count.correcao | currency }}</li>
@@ -68,14 +69,17 @@
 <script>
 import Bus from '../../../../bus'
 import { resumo } from '../../../../api/gestao'
+import GridLoader from 'vue-spinner/src/GridLoader'
 
 export default {
     name: 'GestaoResumo',
+    components: { GridLoader },
     props: ['PEP'],
     data() {
         return {
             newPEP: '',
-            datas: false
+            datas: false,
+            isFetching: false
         }
     },
     watch: {
@@ -95,10 +99,14 @@ export default {
         }
     },
     mounted() {
-        this.onLoad()
-
         // Events
+        Bus.$on('isFetching', is => this.isFetching = is)
         Bus.$on('resetForms', () => this.onLoad)
+
+        var self = this
+
+        // Modal events
+        $('#modalResumo').on('shown.bs.modal', () => this.onLoad()).on('hidden.bs.modal', () => this.datas = false)
     }
 }
 </script>

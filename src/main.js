@@ -80,7 +80,7 @@ new Vue({
     Bus.$on('response-errors', (event) => {
         this.$notify({ group: 'normal', clean: true })
 
-        _.forEach(event.messages, v => {
+        _.forEach(event.messages, (v) => {
             this.$notify({
               group: 'normal',
               type: 'warn',
