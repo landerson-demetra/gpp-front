@@ -19,7 +19,7 @@
                                     </div>
                                     <div class="card-body">
                                         <ul>
-                                            <li>Valor principal: R$ {{ count.total | currency }}</li>
+                                            <li>Valor {{ name == 'Pago' ? 'pago' : 'principal' }}: R$ {{ count.total | currency }}</li>
                                             <li>Multa: R$ {{ count.multa | currency }}</li>
                                             <li>Juros: R$ {{ count.juros | currency }}</li>
                                             <li>Correção: R$ {{ count.correcao | currency }}</li>
@@ -42,7 +42,7 @@
                             <div class="col-md-6">
                                 <div class="card">
                                     <div class="card-header border-0 bg-primary text-white">
-                                        <h5>Outros</h5>
+                                        <h5><small>+</small>Informações</h5>
                                     </div>
                                     <div class="card-body">
                                         <ul>

@@ -11,6 +11,10 @@
 /* [V-Notifications] */
 @import "v-notifications";
 
+.dropdown-toggle::after{
+    display: none !important;
+}
+
 .is-fetching{
     opacity: .5;
     pointer-events: none;

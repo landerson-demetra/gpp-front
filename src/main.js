@@ -40,7 +40,7 @@ Vue.use(Notifications)
 Vue.use(VueCurrencyFilter, Vue.prototype.$config.currency)
 Vue.use(VueMoney, Vue.prototype.$config.vMoney)
 Vue.use(VueTheMask)
-Vue.use(VeeValidate)
+Vue.use(VeeValidate, { locale:'pt_BR' })
 
 /* [ Register components ] */
 Vue.component('v-select', vSelect)

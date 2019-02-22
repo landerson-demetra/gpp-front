@@ -64,7 +64,15 @@
                                     </div>
                                     <div class="form-group col-lg-4">
                                         <label for="valor_pago">Valor Pago</label>
-                                        <money v-model="ValorPago" type="text" id="valor_pago" placeholder="Valor pago da parcela..." class="form-control"></money>
+                                        <money
+                                            v-model="ValorPago"
+                                            v-validate="{min_value: Status !== 'Pago' ? null : 1}"
+                                            data-vv-as="Valor Pago"
+                                            name="valor_pago"
+                                            :class="{'is-invalid': errors.has('valor_pago')}"
+                                            :disabled="Status !== 'Pago'"
+                                        type="text" id="valor_pago" placeholder="Valor pago da parcela..." class="form-control"></money>
+                                        <div class="invalid-feedback">{{ errors.first('valor') }}</div>
                                     </div>
                                     <div class="form-group col-lg-4">
                                         <label for="multa">Multa (%) <span class="text-danger">*</span></label>
@@ -81,6 +89,7 @@
                                     <div class="form-group col-lg-6">
                                         <label for="fonte">Fonte de dados <span class="text-danger">*</span></label>
                                         <select class="form-control" v-model="Fonte">
+                                            <option value="">Selecione...</option>
                                             <option v-for="vFonte in Fontes" :value="vFonte">{{ vFonte }}</option>
                                         </select>
                                     </div>
@@ -88,10 +97,11 @@
                                         <label for="data_pagamento">Data de pagamento</label>
                                         <input v-model="DataPGTO"
                                                v-mask="['##/##/####']"
-                                               v-validate="'date_format:DD/MM/YYYY'"
+                                               v-validate="Status == 'Pago' ? 'required|date_format:DD/MM/YYYY' : null"
                                                data-vv-as="Data de pagamento"
                                                name="data_pagamento"
                                                :class="{'is-invalid': errors.has('data_pagamento')}"
+                                               :disabled="Status !== 'Pago'"
                                         type="text" id="data_pagamento" placeholder="Data de pagamento..." class="form-control">
                                         <div class="invalid-feedback">{{ errors.first('data_pagamento') }}</div>
                                     </div>
