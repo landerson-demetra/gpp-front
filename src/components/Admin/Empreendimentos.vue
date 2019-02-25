@@ -6,11 +6,11 @@
 
         <div class="row" :class="{'is-fetching': isFetching}" >
             <div class="col-12">
-                <div class="row bg-white shadow-sm p-3 my-3 justify-content-start">
-                    <div class="input-group mb-3 col-md-12">
+                <div class="row bg-white shadow-sm p-2 my-3 justify-content-start">
+                    <div class="input-group col-md-12">
+                        <input v-on:input="S_Empre = $event.target.value.toUpperCase()" v-on:keyup.enter="fetchEmpreds(1)" v-model="S_Empre" type="text" class="form-control" placeholder="Empreendimento...">
                         <input v-on:input="S_SPE = $event.target.value.toUpperCase()" v-on:keyup.enter="fetchEmpreds(1)" v-model="S_SPE" v-mask="['XXXX']" type="text" class="form-control" placeholder="SPE (XXXX)...">
                         <input v-on:input="S_Razao = $event.target.value.toUpperCase()" v-on:keyup.enter="fetchEmpreds(1)" v-model="S_Razao" type="text" class="form-control" placeholder="SPE Razão Social...">
-                        <input v-on:input="S_Empre = $event.target.value.toUpperCase()" v-on:keyup.enter="fetchEmpreds(1)" v-model="S_Empre" type="text" class="form-control" placeholder="Empreendimento...">
                         <select v-on:change="fetchEmpreds(1)" v-model="S_Order" class="form-control">
                             <option :value="null">Ordem: Mais antigos</option> 
                             <option value="id,desc">Ordem: Mais novos</option> 
@@ -144,6 +144,7 @@
                     </select>
                     <select v-model="status_selected" class="form-control">
                         <option :value="null">Todos os status</option>
+                        <option value="LIVRE">LIVRE</option>
                         <option v-for="stat in status" :value="stat.STATUS">{{ stat.STATUS }}</option>
                     </select>
                     <select v-model="unidades.paginator.per_page" class="form-control">
@@ -180,7 +181,7 @@
                                 <tr v-for="unidade in unidades.datasShow">
                                     <th>{{ unidade.bloco_nome }}</th>
                                     <th>{{ unidade.unidade_cod }}</th>
-                                    <th>{{ unidade.status_contrato || 'LIVRE' }}</th>
+                                    <th>{{ unidade.status_contrato }}</th>
                                     <th>
                                         <router-link :to="{name: 'GestaoPatromonios', params: {pep: unidade.PEP}}" title="Gerenciar Patrimônios" class="btn btn-primary">Gerir</router-link>
                                         <!-- <button class="btn btn-secondary"><i class="fas fa-edit"></i></button>
@@ -473,7 +474,6 @@ export default {
 
                 // Carrega os status
                 getStatus().then((data) => {
-                    this.status.push({ STATUS: 'LIVRE' })
                     this.status  = data.results
                 })
             })
