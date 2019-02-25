@@ -151,7 +151,7 @@
                     </select>
                 </div>
                 <div class="input-group mb-3 col-md-6">
-                    <input v-model="unidades.searchTxt" type="text" class="form-control" placeholder="Busque por uma unidade (Bloco/Unidade) min.2">
+                    <input v-model="unidades.searchTxt" type="text" class="form-control" placeholder="Busque por uma unidade (num...)">
                     <div class="input-group-append">
                         <button class="btn btn-outline-primary" type="button"><i class="fas fa-search"></i></button>
                     </div>
@@ -346,8 +346,12 @@ export default {
             this.unidades.datasSearch = _.filter(this.unidades.datas, (a) => {
                 let searchlower = self.unidades.searchTxt.toLowerCase()
 
-                return a.bloco_nome.toLowerCase().includes(searchlower) ||
-                       a.unidade_cod.toString().toLowerCase().includes(searchlower)
+                // Caso tiver bloco selecionado, procura a unidade dentro do bloco.
+                // Caso contrário, apenas retorna as unidades
+                if(self.bloco_selected !== null)
+                    return a.bloco_nome == self.bloco_selected && a.unidade_cod.toString().toLowerCase().includes(searchlower)
+                else
+                    return a.unidade_cod.toString().toLowerCase().includes(searchlower)
             })
 
             if(this.unidades.datasSearch.length){

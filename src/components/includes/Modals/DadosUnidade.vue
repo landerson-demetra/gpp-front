@@ -50,7 +50,7 @@
                                                data-vv-as="Senha"
                                                :class="{'is-invalid': errors.has('senha')}"
                                                name="senha"
-                                               type="password" placeholder="Senha..." class="form-control">
+                                               type="text" placeholder="Senha..." class="form-control">
                                         <div class="invalid-feedback">{{ errors.first('senha') }}</div>
                                     </div>
                                 </div>

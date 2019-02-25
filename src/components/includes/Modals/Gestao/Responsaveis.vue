@@ -31,7 +31,7 @@
                                 <a class="nav-link" id="pills-fornecedor-prefeitura-tab" data-toggle="pill" href="#pills-fornecedor-prefeitura" role="tab" aria-controls="pills-fornecedor-prefeitura" aria-selected="false">Prefeitura</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link" id="pills-responsavel-tab" data-toggle="pill" href="#pills-responsavel" role="tab" aria-controls="pills-responsavel" aria-selected="false">Responsável</a>
+                                <a class="nav-link" id="pills-responsavel-tab" data-toggle="pill" href="#pills-responsavel" role="tab" aria-controls="pills-responsavel" aria-selected="false">Responsável PDG (Empreendimento)</a>
                             </li>
                         </ul>
                         <div class="tab-content" id="pills-tabContent">
@@ -42,7 +42,7 @@
                                         <tr>
                                             <th scope="col">Número SAP</th>
                                             <th scope="col">Nome</th>
-                                            <th scope="col">Responsável PDG</th>
+                                            <th scope="col">Responsável Administradora</th>
                                             <th scope="col">CPF/CNPJ</th>
                                         </tr>
                                     </thead>
@@ -63,7 +63,7 @@
                                         <tr>
                                             <th scope="col">Número SAP</th>
                                             <th scope="col">Nome</th>
-                                            <th scope="col">Responsável PDG</th>
+                                            <th scope="col">Responsável F.SAP</th>
                                             <th scope="col">CPF/CNPJ</th>
                                         </tr>
                                     </thead>
@@ -84,7 +84,7 @@
                                         <tr>
                                             <th scope="col">Número SAP</th>
                                             <th scope="col">Nome</th>
-                                            <th scope="col">Responsável PDG</th>
+                                            <th scope="col">Responsável F.Água</th>
                                             <th scope="col">CPF/CNPJ</th>
                                         </tr>
                                     </thead>
@@ -105,7 +105,7 @@
                                         <tr>
                                             <th scope="col">Número SAP</th>
                                             <th scope="col">Nome</th>
-                                            <th scope="col">Responsável PDG</th>
+                                            <th scope="col">Responsável F.Luz</th>
                                             <th scope="col">CPF/CNPJ</th>
                                         </tr>
                                     </thead>
@@ -126,7 +126,7 @@
                                         <tr>
                                             <th scope="col">Número SAP</th>
                                             <th scope="col">Nome</th>
-                                            <th scope="col">Responsável PDG</th>
+                                            <th scope="col">Responsável Prefeitura</th>
                                             <th scope="col">CPF/CNPJ</th>
                                         </tr>
                                     </thead>

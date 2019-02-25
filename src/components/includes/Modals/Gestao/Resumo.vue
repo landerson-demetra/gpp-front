@@ -4,7 +4,7 @@
             <div class="modal-dialog modal-lg shadow" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="modalResumoLabel">Resumo <small class="opacity-small">[ {{ this.newPEP ? this.newPEP : 'Todos empreendimentos' }} ]</small></h5>
+                        <h5 class="modal-title" id="modalResumoLabel">Resumo <small class="opacity-small">[ {{ this.PEP ? this.PEP : 'Todos empreendimentos' }} ]</small></h5>
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                             <span aria-hidden="true">&times;</span>
                         </button>
@@ -19,7 +19,8 @@
                                     </div>
                                     <div class="card-body">
                                         <ul>
-                                            <li>Valor {{ name == 'Pago' ? 'pago' : 'principal' }}: R$ {{ count.total | currency }}</li>
+                                            <li>Valor principal: R$ {{ count.total | currency }}</li>
+                                            <li v-if="name == 'Pago'">Valor pago: R$ {{ count.valor_pago | currency }}</li>
                                             <li>Multa: R$ {{ count.multa | currency }}</li>
                                             <li>Juros: R$ {{ count.juros | currency }}</li>
                                             <li>Correção: R$ {{ count.correcao | currency }}</li>
@@ -77,22 +78,19 @@ export default {
     props: ['PEP'],
     data() {
         return {
-            newPEP: '',
             datas: false,
             isFetching: false
         }
     },
     watch: {
         PEP() {
-            this.newPEP = this.PEP.substring(0, 12)
-            resumo(this.newPEP).then(r => this.datas = r.results)
+            resumo(this.PEP).then(r => this.datas = r.results)
         }
     },
     methods: {
         onLoad() {
             if(this.PEP) {
-                this.newPEP = this.PEP.substring(0, 12)
-                resumo(this.newPEP).then(r => this.datas = r.results)
+                resumo(this.PEP).then(r => this.datas = r.results)
             } else {
                 resumo().then(r => this.datas = r.results)
             }
