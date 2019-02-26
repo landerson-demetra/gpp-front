@@ -15,7 +15,9 @@
                             <p><b>{{ this.datas.nome }}</b> - <b>{{ this.datas.departamento }}</b></p>
                         </div>
                         <div v-else>
-                            <form>
+                            <form v-on:submit.prevent="emitOkEvent">
+                                <input type="submit" hidden>
+
                                 <div class="row">
                                      <div class="form-group col-lg-6">
                                         <label for="nome">Nome</label>
@@ -44,11 +46,11 @@
                     <div class="modal-footer">
                         <div v-if="this.action !== 'Delete'">
                             <button type="button" class="btn btn-default" v-on:click="this.closeEvent" data-dismiss="modal">Fechar</button>
-                            <button v-on:click="this.emitOkEvent" type="button" class="btn btn-primary"><i class="fas fa-check"></i> Salvar</button>
+                            <button v-on:click="emitOkEvent" type="button" class="btn btn-primary"><i class="fas fa-check"></i> Salvar</button>
                         </div>
                         <div v-else>
                             <button type="button" class="btn btn-default" data-dismiss="modal">Não</button>
-                            <button v-if="this.action == 'Delete'" v-on:click="this.emitOkEvent" type="button" class="btn btn-danger"><i class="fas fa-trash"></i> Sim, tenho.</button>
+                            <button v-if="this.action == 'Delete'" v-on:click="emitOkEvent" type="button" class="btn btn-danger"><i class="fas fa-trash"></i> Sim, tenho.</button>
                         </div>
                     </div>
                 </div>

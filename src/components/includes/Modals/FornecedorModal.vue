@@ -12,10 +12,12 @@
                     <div class="modal-body">
                         <div v-if="this.action == 'Delete'">
                             <p>Você tem certeza que deseja deletar o cadastro de <b>{{ this.datas.nome }}</b> e todos os seus <b>contatos</b>?</p>
-                            <p><div class="badge badge-primary m-1 p-2" v-for="segmento in this.datas.segmentos">{{ segmento }}</div></p>
+                            <p><div class="badge badge-primary m-1 p-2" v-for="segmento in datas.segmentos">{{ segmento }}</div></p>
                         </div>
                         <div v-else>
-                            <form>
+                            <form v-on:submit.prevent="onSubmit">
+                                <input type="submit" hidden>
+
                                 <div class="row">
                                     <div class="form-group col-lg-8">
                                         <label for="name">Nome <span class="text-danger">*</span></label>
@@ -109,7 +111,7 @@
                         </div>
                         <div v-else>
                             <button type="button" class="btn btn-default" data-dismiss="modal">Não</button>
-                            <button v-if="this.action == 'Delete'" v-on:click="this.onSubmit" type="button" class="btn btn-danger"><i class="fas fa-trash"></i> Sim, tenho.</button>
+                            <button v-if="this.action == 'Delete'" v-on:click="onSubmit" type="button" class="btn btn-danger"><i class="fas fa-trash"></i> Sim, tenho.</button>
                         </div>
                     </div>
                 </div>

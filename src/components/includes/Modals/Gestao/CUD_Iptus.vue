@@ -14,7 +14,9 @@
                             <p>Você tem certeza que deseja deletar esse IPTU?</p>
                         </div>
                         <div v-else>
-                            <form>
+                            <form v-on:submit.prevent="onSubmit">
+                                <input type="submit" hidden>
+
                                 <div class="row">
                                     <div class="form-group col-lg-3">
                                         <label for="status">Status</label>

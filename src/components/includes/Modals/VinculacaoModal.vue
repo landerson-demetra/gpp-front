@@ -14,7 +14,9 @@
                             <p>Você tem certeza que deseja deletar a vinculação para o projeto <b>{{ this.datas.projeto }}</b>?</p>
                         </div>
                         <div v-else>
-                            <form v-on:submit="onSubmit">
+                            <form v-on:submit.prevent="onSubmit">
+                                <input type="submit" hidden>
+
                                 <div class="row">
                                     <div class="form-group col-md-8" v-if="this.action == 'Edit'">
                                         <label for="PEP">Projeto</label>
@@ -69,11 +71,11 @@
                     <div class="modal-footer">
                         <div v-if="this.action !== 'Delete'">
                             <button type="button" class="btn btn-default" v-on:click="this.onClose" data-dismiss="modal">Fechar</button>
-                            <button v-on:click="this.onSubmit" type="button" class="btn btn-primary"><i class="fas fa-check"></i> Salvar</button>
+                            <button v-on:click="onSubmit" type="button" class="btn btn-primary"><i class="fas fa-check"></i> Salvar</button>
                         </div>
                         <div v-else>
                             <button type="button" class="btn btn-default" data-dismiss="modal">Não</button>
-                            <button v-if="this.action == 'Delete'" v-on:click="this.onSubmit" type="button" class="btn btn-danger"><i class="fas fa-trash"></i> Sim, tenho.</button>
+                            <button v-if="this.action == 'Delete'" v-on:click="onSubmit" type="button" class="btn btn-danger"><i class="fas fa-trash"></i> Sim, tenho.</button>
                         </div>
                     </div>
                 </div>
