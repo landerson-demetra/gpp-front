@@ -49,8 +49,8 @@ Vue.component('v-select', vSelect)
 var numeral = require('numeral')
 
 /* [ Filtros ] */
-Vue.filter('numeral', (number, format) => {
-  return numeral(number).format('0,0')
+Vue.filter('numeral', (number, format = '0,0') => {
+  return numeral(number).format(format)
 })
 
 Vue.filter('cpfcnpj', (str) => {
