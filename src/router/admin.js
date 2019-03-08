@@ -7,6 +7,7 @@ import Empreendimentos from '@/components/Admin/Empreendimentos'
 import Relatorios from '@/components/Admin/Relatorios'
 import Permissoes from '@/components/Admin/Permissoes'
 import Importacoes from '@/components/Admin/Importacoes'
+import IRPC from '@/components/Admin/IRPC'
 
 export default [
     {
@@ -48,5 +49,10 @@ export default [
         path: 'importacoes',
         component: Importacoes,
         name: 'Importacoes'
+    },
+    {
+        path: 'irpc',
+        component: IRPC,
+        name: 'IRPC'
     }
 ]

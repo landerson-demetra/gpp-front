@@ -38,30 +38,30 @@
                                     </div>
                                     <div class="form-group col-md-6">
                                         <label for="Fornecedor">Fornecedor SAP – Cotas Condominiais</label>
-                                        <v-select v-model="FornecedorSap" id="ADM" placeholder="Selecione..." :options="fornecedores_sap">
+                                        <v-select v-model="FornecedorSap" id="Fornecedor" placeholder="Selecione..." :options="fornecedores_sap">
                                             <span slot="no-options">Nenhum fornecedor SAP encontrado.</span>
                                         </v-select>
                                     </div>
                                     <div class="form-group col-md-6">
-                                        <label for="Fornecedor">Fornecedor Água</label>
-                                        <v-select v-model="FornecedorAgua" id="ADM" placeholder="Selecione..." :options="fornecedores_agua">
+                                        <label for="FornecedorAgua">Fornecedor Água</label>
+                                        <v-select v-model="FornecedorAgua" id="FornecedorAgua" placeholder="Selecione..." :options="fornecedores_agua">
                                             <span slot="no-options">Nenhum fornecedor para água encontrado.</span>
                                         </v-select>
                                     </div>
                                     <div class="form-group col-md-6">
-                                        <label for="Fornecedor">Fornecedor Luz</label>
-                                        <v-select v-model="FornecedorLuz" id="ADM" placeholder="Selecione..." :options="fornecedores_luz">
+                                        <label for="FornecedorLuz">Fornecedor Luz</label>
+                                        <v-select v-model="FornecedorLuz" id="FornecedorLuz" placeholder="Selecione..." :options="fornecedores_luz">
                                             <span slot="no-options">Nenhum fornecedor para luz encontrado.</span>
                                         </v-select>
                                     </div>
                                     <div class="form-group col-md-6">
                                         <label for="Prefeitura">Prefeitura</label>
-                                        <v-select v-model="Prefeitura" id="ADM" placeholder="Selecione..." :options="prefeituras">
+                                        <v-select v-model="Prefeitura" id="Prefeitura" placeholder="Selecione..." :options="prefeituras">
                                             <span slot="no-options">Nenhuma prefeitura encontrada.</span>
                                         </v-select>
                                     </div>
                                     <div class="form-group col-md-12">
-                                        <label Responsavel="Prefeitura">Responsável</label>
+                                        <label for="Responsavel">Responsável PDG</label>
                                         <input v-model="Responsavel" class="form-control" id="Responsavel" placeholder="Nome do responsável..." type="text">
                                     </div>
                                  </div>

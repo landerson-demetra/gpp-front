@@ -436,7 +436,7 @@ export default {
                 }
 
                 if(r.results.founds > 0) {
-                    let text = r.results.founds > 1 ? r.results.founds + ' Vinculações já existiam para os empreendimentos selecionado.' : 'Empreendimento já vinculado.'
+                    let text = r.results.founds > 1 ? r.results.founds + ' Vinculações já existiam para os empreendimentos selecionados.' : 'Empreendimento já vinculado.'
                     this.$notify({ group: 'normal', type: 'warn', text: text })
                 }
             })
@@ -603,7 +603,7 @@ export default {
 }
 
 .checked{
-    background-color: #F1F1F1;
+    background-color: #F9F9F9;
     box-shadow: inset 0 0 .3em #CCC;
 }
 

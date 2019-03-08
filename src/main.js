@@ -1,3 +1,4 @@
+/* [ Main ] */
 import Vue from 'vue'
 import Vuex from 'vuex'
 import Bus from './bus'
@@ -54,20 +55,20 @@ Vue.filter('numeral', (number, format = '0,0') => {
 })
 
 Vue.filter('cpfcnpj', (str) => {
-  str = str.replace(/\D/g, '')
+    str = str.replace(/\D/g, '')
 
-  if (str.length <= 14) {
-    str = str.replace(/(\d{3})(\d)/, '$1.$2')
-    str = str.replace(/(\d{3})(\d)/, '$1.$2')
-    str = str.replace(/(\d{3})(\d{1,2})$/, '$1-$2')
-  } else {
-    str = str.replace(/^(\d{2})(\d)/, '$1.$2')
-    str = str.replace(/^(\d{2})\.(\d{3})(\d)/, '$1.$2.$3')
-    str = str.replace(/\.(\d{3})(\d)/, '.$1/$2')
-    str = str.replace(/(\d{4})(\d)/, '$1-$2')
-  }
+    if (str.length <= 14) {
+        str = str.replace(/(\d{3})(\d)/, '$1.$2')
+        str = str.replace(/(\d{3})(\d)/, '$1.$2')
+        str = str.replace(/(\d{3})(\d{1,2})$/, '$1-$2')
+    } else {
+        str = str.replace(/^(\d{2})(\d)/, '$1.$2')
+        str = str.replace(/^(\d{2})\.(\d{3})(\d)/, '$1.$2.$3')
+        str = str.replace(/\.(\d{3})(\d)/, '.$1/$2')
+        str = str.replace(/(\d{4})(\d)/, '$1-$2')
+    }
 
-  return str
+    return str
 })
 
 new Vue({
@@ -82,10 +83,10 @@ new Vue({
 
         _.forEach(event.messages, (v) => {
             this.$notify({
-              group: 'normal',
-              type: 'warn',
-              text: Array.isArray(v) ? v.join("\n") : v,
-              duration: 2000
+                group: 'normal',
+                type: 'warn',
+                text: Array.isArray(v) ? v.join("\n") : v,
+                duration: 2000
             })
         })
     })

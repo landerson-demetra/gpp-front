@@ -73,7 +73,7 @@ export default {
     }
   },
   computed: {
-    makeAuth: function() {
+    makeAuth() {
         return {
             grant_type: 'password',
             username: this.email,
