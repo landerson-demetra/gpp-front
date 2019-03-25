@@ -2,7 +2,7 @@
     <div class="gpp-admin-header">
         <div class="header-details bg-primary">
             <div class="container">
-                <p class="text-left">Olá, {{ profile.name }}! - Ultimo acesso (00/00 ás 00:00) | <a href="#meudadados" class="badge badge-primary text-white p-1"><i class="fas fa-user"></i> Meu dados</a> | <router-link :to="{ name: 'logout' }" title="Sair do sistema" class="badge badge-primary text-white p-1"><i class="fas fa-sign-out-alt"></i> Logout</router-link></p>
+                <p class="text-left">Olá, {{ profile.name }}! - Ultimo acesso (00/00 ás 00:00) | <a href="#meudadados" class="badge badge-primary text-white p-1"><i class="fas fa-user"></i> Meu dados</a> | <a href="#" data-toggle="modal" data-target="#modalIndices" class="badge badge-primary">Indíces</a> | <router-link :to="{ name: 'logout' }" title="Sair do sistema" class="badge badge-primary text-white p-1"><i class="fas fa-sign-out-alt"></i> Logout</router-link></p>
             </div>
         </div>
         <nav class="navbar navbar-expand-lg navbar-light bg-white shadow-lg">
@@ -44,7 +44,7 @@
                             </div>
                         </li>
                         <li class="nav-item">
-                            <router-link :to="{ name: 'IRPC' }" class="nav-link">%IRPC</router-link>
+                            <!-- <router-link :to="{ name: 'IRPC' }" class="nav-link">%IRPC</router-link> -->
                         </li>
                         <!-- <li class="nav-item">
                             <router-link :to="{ name: 'Permissoes' }" class="nav-link">Permissões</router-link>

@@ -10,6 +10,8 @@
             <router-view class="view"></router-view>
         </div>
 
+        <IndicesModal></IndicesModal>
+
         <!-- Footer -->
         <!-- <GppFooter></GppFooter> -->
     </div>
@@ -18,10 +20,11 @@
 <script>
 import GppHeader from './includes/GppHeader'
 import GppFooter from './includes/GppFooter'
+import IndicesModal from './includes/Modals/IndicesModal'
 
 export default {
     name: 'Painel',
-    components: { GppHeader, GppFooter }
+    components: { GppHeader, GppFooter, IndicesModal }
 }
 </script>
 
