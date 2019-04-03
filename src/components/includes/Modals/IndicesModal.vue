@@ -10,13 +10,14 @@
                         </button>
                     </div>
                     <div class="modal-body">
-                        <form method="POST" v-on:submit.prevent>
+                        <p>Estamos desenvolvendo a tela de índices de correção.</p>
+                        <!-- <form method="POST" v-on:submit.prevent>
                             <div class="row">
                                 <div class="form-group col-md-4">
                                     <input type="text" class="form-control" placeholder="Mês do índice...">
                                 </div>
                             </div>
-                        </form>
+                        </form> -->
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-default" data-dismiss="modal">Fechar</button>
