@@ -108,6 +108,10 @@
                                         <div class="invalid-feedback">{{ errors.first('data_pagamento') }}</div>
                                     </div>
                                 </div>
+
+                                <hr>
+
+                                <p class="text-muted"><strong>%IPCA acumulado:</strong> {{ this.per_ipca }}</p>
                             </form>
                         </div>
                     </div>
@@ -149,6 +153,7 @@ export default {
             Correcao: 0,
             Fonte: '',
             DataPGTO: '',
+            per_ipca: '',
             //
             Statuses: ['Aberto', 'Renegociado', 'Pago'],
             Fontes: ['Relatório', 'Projeção']
@@ -183,6 +188,7 @@ export default {
             this.Correcao = this.datas.correcao
             this.Fonte = this.datas.fonte
             this.DataPGTO = this.datas.data_pagamento
+            this.per_ipca = this.datas.per_ipca
         },
         reset(){
             this.Status = 'Aberto'

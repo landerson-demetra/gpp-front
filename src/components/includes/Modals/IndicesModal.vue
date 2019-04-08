@@ -10,27 +10,26 @@
                         </button>
                     </div>
                     <div class="modal-body">
-                        <p><strong>Em construção.</strong></p>
                         <form v-on:submit.prevent="onSubmit">
                             <div class="form-group">
                                 <label for="ano_indice">Selecione o ano base do índice:</label>
-                                <select id="ano_indice" class="form-control">
-                                    <option :value="2019">Ano base: 2019</option>
+                                <select v-model="selected_year" id="ano_indice" class="form-control">
+                                    <option v-for="year in years" :value="year">Ano base: {{ year }}</option>
                                 </select>
                             </div>
 
-                            <div v-for="month in monthsWithPer" class="form-row mb-3">
+                            <div v-if="loaded" v-for="yrdata in actual_datas" class="form-row mb-3">
                                 <div class="col">
-                                    <input v-model="month.month" type="text" class="form-control" placeholder="Mês">
+                                    <input v-model="yrdata.month" type="text" class="form-control" placeholder="Mês">
                                 </div>
                                 <div class="col">
-                                    <input v-model="month.value" v-mask="['#,#%','#,##%','##,##%','###']" type="text" class="form-control" placeholder="Valor Mensal (%)">
+                                    <input v-model="yrdata.percentual" type="text" class="form-control" placeholder="Valor Mensal (%)">
                                 </div>
                             </div>
                         </form>
                     </div>
                     <div class="modal-footer">
-                        <button v-on:click.prevent="onSubmit" data-dismiss="modal" type="button" class="btn btn-primary">Salvar</button>
+                        <button v-on:click.prevent="onSubmit" type="button" class="btn btn-primary">Salvar</button>
                     </div>
                 </div>
             </div>
@@ -47,17 +46,47 @@ export default {
     name: 'IndicesModal',
     components: { GridLoader },
     data: () => ({
+        years: [2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017, 2018, 2019],
         months: [],
-        monthsWithPer: []
+        selected_year: null,
+        actual_datas: [],
+        year_data: [],
+        monthsyear: [],
+        loaded: false
     }),
+    watch: {
+        selected_year() {
+            this.actual_datas = _.filter(this.monthsyear, item => item.year == this.selected_year)
+        }
+    },
     methods: {
         onSubmit() {
-            this.$notify({ group: 'normal', type: 'success', text: 'Dados salvos.' })
+            this.$http.post('indice', this.actual_datas)
+
+            this.$notify({ group: 'normal', type: 'success', text: 'Índices salvos com sucesso' })
+            $('.modal').modal('hide')
         }
     },
     mounted() {
         moment.locale('pt_BR')
-        moment.months().forEach((item) => this.monthsWithPer.push({ month: item, value: null }))
+
+        this.years.forEach(year => {
+            moment.months().forEach(month => {
+                this.monthsyear.push({ year, month, percentual: null, orig_date: moment().year(year).month(month).date(1).format('YYYY-MM-DD') })
+            })
+        })
+
+        this.$http.get('indice').then(r => {
+            this.selected_year = (new Date()).getFullYear()
+
+            r.data.results.forEach(indice => {
+                this.monthsyear.forEach((item, key) => {
+                    if(indice.date == item.orig_date) this.monthsyear[key]['percentual'] = indice.percentual
+                })
+            })
+
+            this.loaded = true
+        })
     }
 }
 </script>
