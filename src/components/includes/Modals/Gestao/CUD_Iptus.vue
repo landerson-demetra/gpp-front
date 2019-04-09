@@ -44,7 +44,7 @@
                                         <the-mask v-model="Periodo"
                                                   :mask="['##/##']"
                                                   :masked="true"
-                                                  v-validate="'required|date_format:MM/YY'"
+                                                  v-validate="'required|date_format:MM/yy'"
                                                   data-vv-as="Periodo"
                                                   name="periodo"
                                                   :class="{'is-invalid': errors.has('periodo')}"

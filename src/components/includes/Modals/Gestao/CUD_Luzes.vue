@@ -32,7 +32,7 @@
                                         <label for="periodo">Periodo (MM/YY) <span class="text-danger">*</span></label>
                                         <input v-model="Periodo"
                                                v-mask="['##/##']"
-                                               v-validate="'required|date_format:MM/YY'"
+                                               v-validate="'required|date_format:MM/yy'"
                                                data-vv-as="Periodo"
                                                name="periodo"
                                                :class="{'is-invalid': errors.has('periodo')}"
