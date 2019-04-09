@@ -43,7 +43,7 @@
                                         <label for="vencimento">Vencimento <span class="text-danger">*</span></label>
                                         <input v-model="Vencimento"
                                                v-mask="['##/##/####']"
-                                               v-validate="'required|date_format:DD/MM/YYYY'"
+                                               v-validate="'required|date_format:dd/MM/yyyy'"
                                                data-vv-as="Vencimento"
                                                name="vencimento"
                                                :class="{'is-invalid': errors.has('vencimento')}"

@@ -47,7 +47,7 @@
                                         <label for="vencimento">Vencimento <span class="text-danger">*</span></label>
                                         <input v-model="Vencimento"
                                                v-mask="['##/##/####']"
-                                               v-validate="'required|date_format:DD/MM/YYYY'"
+                                               v-validate="'required|date_format:dd/MM/yyyy'"
                                                data-vv-as="Vencimento"
                                                name="vencimento"
                                                :class="{'is-invalid': errors.has('vencimento')}"
@@ -99,7 +99,7 @@
                                         <label for="data_pagamento">Data de pagamento</label>
                                         <input v-model="DataPGTO"
                                                v-mask="['##/##/####']"
-                                               v-validate="Status == 'Pago' ? 'required|date_format:DD/MM/YYYY' : null"
+                                               v-validate="Status == 'Pago' ? 'required|date_format:dd/MM/yyyy' : null"
                                                data-vv-as="Data de pagamento"
                                                name="data_pagamento"
                                                :class="{'is-invalid': errors.has('data_pagamento')}"

@@ -56,7 +56,7 @@
                                         <the-mask v-model="Vencimento"
                                                   :mask="['##/##/####']"
                                                   :masked="true"
-                                                  v-validate="'required|date_format:DD/MM/YYYY'"
+                                                  v-validate="'required|date_format:dd/MM/yyyy'"
                                                   data-vv-as="Vencimento"
                                                   name="vencimento"
                                                   :class="{'is-invalid': errors.has('vencimento')}"
