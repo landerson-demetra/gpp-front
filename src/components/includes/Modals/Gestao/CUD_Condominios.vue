@@ -111,7 +111,7 @@
 
                                 <hr>
 
-                                <p class="text-muted"><strong>%IPCA acumulado:</strong> {{ this.per_ipca }}</p>
+                                <p class="text-muted"><strong>%IPCA acumulado:</strong> {{ this.per_ipca ? this.per_ipca : 0 }}</p>
                             </form>
                         </div>
                     </div>
