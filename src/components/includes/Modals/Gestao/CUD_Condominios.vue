@@ -86,7 +86,7 @@
                                     </div>
                                     <div class="form-group col-lg-4">
                                         <label for="correcao">Correção (%) <span class="text-danger">*</span></label>
-                                        <input v-model="Correcao" v-mask="['#%','##%','###%']" type="text" id="correcao" placeholder="Correção da parcela..." class="form-control">
+                                        <input disabled v-model="Correcao" v-mask="['#%','##%','###%']" type="text" id="correcao" placeholder="Correção da parcela..." class="form-control">
                                     </div>
                                     <div class="form-group col-lg-6">
                                         <label for="fonte">Fonte de dados <span class="text-danger">*</span></label>
