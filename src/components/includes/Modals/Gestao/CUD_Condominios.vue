@@ -202,6 +202,7 @@ export default {
             this.Correcao = 0
             this.Fonte = ''
             this.DataPGTO = ''
+            this.per_ipca = ''
         }
     },
     watch: {
