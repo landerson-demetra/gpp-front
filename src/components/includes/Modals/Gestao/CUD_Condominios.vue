@@ -85,8 +85,8 @@
                                         <input v-model="Juros" v-mask="['#%','##%','###%']" type="text" id="juros" placeholder="Juros da parcela..." class="form-control">
                                     </div>
                                     <div class="form-group col-lg-4">
-                                        <label for="correcao">Correção (%) <span class="text-danger">*</span></label>
-                                        <input disabled v-model="Correcao" v-mask="['#%','##%','###%']" type="text" id="correcao" placeholder="Correção da parcela..." class="form-control">
+                                        <label for="correcao">Correção IPCA (%)</label>
+                                        <input disabled v-model="Correcao" type="text" id="correcao" placeholder="%IPCA (auto.)..." class="form-control">
                                     </div>
                                     <div class="form-group col-lg-6">
                                         <label for="fonte">Fonte de dados <span class="text-danger">*</span></label>
@@ -108,10 +108,6 @@
                                         <div class="invalid-feedback">{{ errors.first('data_pagamento') }}</div>
                                     </div>
                                 </div>
-
-                                <hr>
-
-                                <p class="text-muted"><strong>%IPCA acumulado:</strong> {{ this.per_ipca ? this.per_ipca : 0 }}</p>
                             </form>
                         </div>
                     </div>
@@ -150,7 +146,7 @@ export default {
             ValorPago: '',
             Multa: 2,
             Juros: 1,
-            Correcao: 0,
+            Correcao: null,
             Fonte: '',
             DataPGTO: '',
             per_ipca: '',
@@ -185,7 +181,7 @@ export default {
             this.ValorPago = (this.datas.valor_pago ? this.datas.valor_pago : 0)
             this.Multa = this.datas.multa
             this.Juros = this.datas.juros
-            this.Correcao = this.datas.correcao
+            this.Correcao = this.datas.per_ipca
             this.Fonte = this.datas.fonte
             this.DataPGTO = this.datas.data_pagamento
             this.per_ipca = this.datas.per_ipca
@@ -222,7 +218,7 @@ export default {
                 valor_pago: this.ValorPago,
                 multa: parseInt(this.Multa),
                 juros: parseInt(this.Juros),
-                correcao: parseInt(this.Correcao),
+                correcao: parseInt(0),
                 fonte: this.Fonte ? this.Fonte : null,
                 data_pagamento: this.DataPGTO
             }
